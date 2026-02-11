@@ -27,6 +27,7 @@ export type GameAction =
     | {type: "END_SONG"}
     | {type: "ORIGINAL_GUESSES_SUBMIT"; guesses: Guess}
     | {type: "CIRCLE_GUESSES_SUBMIT"; playerId: string; guesses: Guess}
+    | {type: "VERIFY_ANSWERS"; correct: boolean}
     | {type: "REVEAL_ANSWERS"}
     | {type: "APPLY_DAMAGE_HEAL"}
     | {type: "CHECK_DEAD"}
@@ -59,9 +60,10 @@ export function GameReducer (
                 return game
             
             case "VERIFICATION":
-                //if artist and song name are correct, move to reveal results, else move to circle guess
+                if(action.type == "VERIFY_ANSWERS")
+                    return {...game, phase: action.correct ? "REVEAL_RESULTS" : "CIRCLE_GUESS"}
                 return game
-                
+
             case "CIRCLE_GUESS":
                 if(action.type == "REVEAL_ANSWERS")
                     return {...game, phase: "REVEAL_RESULTS"}
@@ -78,7 +80,11 @@ export function GameReducer (
                 return game
 
             case "CHECK_GAME_OVER":
-                //if all dead but 1, end game, if not, return SONG_PLAYING
-                return game
+                const alivePlayers = game.players.filter(p => p.alive)
+
+                if(alivePlayers.length == 1)
+                    return {...game, phase: "LOBBY"}
+
+                return {...game, phase: "SONG_PLAYING"}
         }
     }
