@@ -1,3 +1,4 @@
+//phases in game
 export type GamePhase =
     | "LOBBY"
     | "SONG_PLAYING"
@@ -8,6 +9,7 @@ export type GamePhase =
     | "APPLY_DAMAGE_HEAL"
     | "CHECK_GAME_OVER"
 
+//info about each player
 export interface Player {
     uid: number
     name: string
@@ -15,13 +17,28 @@ export interface Player {
     alive: boolean
 }
 
+//info about the game
 export interface Game {
     phase: GamePhase
     players: Player[]
     turnIndex: number
+    currentSong:{
+        name: string
+        artist: string
+        year: number
+        album: string
+        previewURL: string
+    } | null
+    originalGuesses: Record<number, Guess>
+    circleGuesses: Record<number, Guess>
+
+    answerRevealed: boolean
+    winner?: number | null
 }
 
+//action that can be used to move between phases
 export type GameAction =
+    | {type: "ADD_PLAYER"}
     | {type: "START_GAME"}
     | {type: "PLAY_SONG"}
     | {type: "END_SONG"}
@@ -32,6 +49,7 @@ export type GameAction =
     | {type: "APPLY_DAMAGE_HEAL"}
     | {type: "CHECK_DEAD"}
 
+//guess info
 export interface Guess {
     song?: string
     artist?: string
@@ -39,6 +57,7 @@ export interface Guess {
     album?: string
 }
 
+//logic to move from one phase to another using actions
 export function GameReducer (
     game: Game,
     action: GameAction
