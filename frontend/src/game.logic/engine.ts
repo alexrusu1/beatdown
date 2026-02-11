@@ -2,13 +2,14 @@ export type GamePhase =
     | "LOBBY"
     | "SONG_PLAYING"
     | "ORIGINAL_GUESS_TURN"
+    | "VERIFICATION"
     | "CIRCLE_GUESS"
     | "REVEAL_RESULTS"
     | "APPLY_DAMAGE_HEAL"
     | "CHECK_GAME_OVER"
 
 export interface Player {
-    id: number
+    uid: number
     name: string
     health: number
     alive: boolean
@@ -17,16 +18,16 @@ export interface Player {
 export interface Game {
     phase: GamePhase
     players: Player[]
-    turn: number
+    turnIndex: number
 }
 
 export type GameAction =
     | {type: "START_GAME"}
     | {type: "PLAY_SONG"}
     | {type: "END_SONG"}
-    | {type: "ORIGINAL_GUESSES"; guesses: Guess}
-    | {type: "CIRCLE_GUESSES"; playerId: string; guesses: Guess}
-    | {type: "VERIFY_ANSWERS"}
+    | {type: "ORIGINAL_GUESSES_SUBMIT"; guesses: Guess}
+    | {type: "CIRCLE_GUESSES_SUBMIT"; playerId: string; guesses: Guess}
+    | {type: "REVEAL_ANSWERS"}
     | {type: "APPLY_DAMAGE_HEAL"}
     | {type: "CHECK_DEAD"}
 
@@ -36,3 +37,48 @@ export interface Guess {
     year?: number
     album?: string
 }
+
+export function GameReducer (
+    game: Game,
+    action: GameAction
+): Game {
+        switch(game.phase){
+            case "LOBBY":
+                if(action.type == "START_GAME")
+                    return {...game, phase: "SONG_PLAYING"}
+                return game
+            
+            case "SONG_PLAYING":
+                if(action.type == "END_SONG")
+                    return {...game, phase: "ORIGINAL_GUESS_TURN"}
+                return game
+            
+            case "ORIGINAL_GUESS_TURN":
+                if(action.type == "ORIGINAL_GUESSES_SUBMIT")
+                    return {...game, phase: "VERIFICATION"}
+                return game
+            
+            case "VERIFICATION":
+                //if artist and song name are correct, move to reveal results, else move to circle guess
+                return game
+                
+            case "CIRCLE_GUESS":
+                if(action.type == "REVEAL_ANSWERS")
+                    return {...game, phase: "REVEAL_RESULTS"}
+                return game
+
+            case "REVEAL_RESULTS":
+                if(action.type == "APPLY_DAMAGE_HEAL")
+                    return {...game, phase: "APPLY_DAMAGE_HEAL"}
+                return game
+
+            case "APPLY_DAMAGE_HEAL":
+                if(action.type == "CHECK_DEAD")
+                    return {...game, phase: "CHECK_GAME_OVER"}
+                return game
+
+            case "CHECK_GAME_OVER":
+                //if all dead but 1, end game, if not, return SONG_PLAYING
+                return game
+        }
+    }
