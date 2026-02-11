@@ -2,76 +2,99 @@
 ---
 
 <div id="container">
-  <button id="playBtn">▶ Play</button>
+  <button id="playBtn">▶</button>
   <button id="newBtn">🎲 New Song</button>
   <audio id="player"></audio>
 </div>
 
 <script>
+
 document.addEventListener("DOMContentLoaded", () => {
     const playBtn = document.getElementById("playBtn") as HTMLButtonElement | null;
     const newBtn = document.getElementById("newBtn") as HTMLButtonElement | null;
     const player = document.getElementById("player") as HTMLAudioElement | null;
+
+    // Keep track of what we've already played in this session
+    const playedTrackIds = new Set<number>();
+    let availableSongs: any[] = [];
+
+    async function loadSongs() {
+      const searchTerm = "pop";
+      const limit = 200;
+      const url = `https://itunes.apple.com/search?term=${encodeURIComponent(
+        searchTerm
+      )}&media=music&entity=song&limit=${limit}`;
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (!data.results || data.results.length === 0) {
+        throw new Error("No results found 😢");
+      }
+
+      // Only keep songs with previews that we haven't played yet
+      availableSongs = data.results.filter(
+        (song: any) => song.previewUrl && !playedTrackIds.has(song.trackId)
+      );
+
+      if (availableSongs.length === 0) {
+        throw new Error("No new songs with previews available 😢");
+      }
+    }
+
+    async function getNextSong() {
+      if (availableSongs.length === 0) {
+        await loadSongs();
+      }
+
+      const index = Math.floor(Math.random() * availableSongs.length);
+      const [song] = availableSongs.splice(index, 1);
+      playedTrackIds.add(song.trackId);
+      return song;
+    }
 
     if (!playBtn || !newBtn || !player) return;
 
     playBtn.onclick = () => {
       if (player.paused) {
         player.play();
-        playBtn.textContent = "⏸ Pause";
+        playBtn.textContent = "⏸";
       } else {
         player.pause();
-        playBtn.textContent = "▶ Play";
+        playBtn.textContent = "▶";
       }
     };
 
     newBtn.onclick = async () => {
-      playBtn.textContent = "▶ Play";
+      playBtn.textContent = "▶";
       playBtn.disabled = true;
 
       try {
-        const searchTerm = "pop";
-        const limit = 200;
-        const url = `https://itunes.apple.com/search?term=${encodeURIComponent(searchTerm)}&media=music&entity=song&limit=${limit}`;
+        const song = await getNextSong();
 
-        const response = await fetch(url);
-        const data = await response.json();
+        console.log("Selected song:", {
+          name: song.trackName,
+          artist: song.artistName,
+          album: song.collectionName,
+          previewUrl: song.previewUrl
+        });
 
-        if (data.resultCount > 0) {
-          const randomIndex = Math.floor(Math.random() * data.results.length);
-          const randomSong = data.results[randomIndex];
+        player.src = song.previewUrl;
+        await player.play();
 
-          console.log("Selected song:", {
-            name: randomSong.trackName,
-            artist: randomSong.artistName,
-            album: randomSong.collectionName,
-            previewUrl: randomSong.previewUrl
-          });
-
-          if (!randomSong.previewUrl) {
-            alert("No preview available 😢");
-            playBtn.disabled = false;
-            return;
-          }
-
-          player.src = randomSong.previewUrl;
-          await player.play();
-
-          playBtn.textContent = "⏸ Pause";
-          playBtn.disabled = false;
-        } else {
-          alert("No results found 😢");
-          playBtn.disabled = false;
-        }
+        playBtn.textContent = "⏸";
+        playBtn.disabled = false;
       } catch (error) {
-        console.error("Error fetching data:", error);
-        alert("Error loading song 😢");
+        console.error("Error loading song:", error);
+        alert(
+          error instanceof Error ? error.message : "Error loading song 😢"
+        );
         playBtn.disabled = false;
       }
     };
 
     player.onended = () => {
-      playBtn.textContent = "▶ Play";
+      playBtn.textContent = "▶";
     };
   });
 
@@ -79,10 +102,67 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <style>
   #container {
+    margin: 1.5rem;
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    height: 10vh;
+  }
+
+  #playBtn {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: #00eaff;
+    background: #02000a;
+    text-shadow:
+      0 0 8px rgba(0, 234, 255, 0.9),
+      0 0 16px rgba(255, 0, 255, 0.7);
+    box-shadow:
+      0 0 20px rgba(0, 234, 255, 0.9),
+      0 0 45px rgba(255, 0, 255, 0.8);
+    outline: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  /* Neon circular ring */
+  /* #playBtn::before {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    background: conic-gradient(
+      from 120deg,
+      #00eaff,
+      #8b5cff,
+      #ff00ff,
+      #00eaff
+    );
+    opacity: 0.9;
+    z-index: -1;
+    filter: blur(1px);
+  } */
+
+  #playBtn:hover {
+    text-shadow:
+      0 0 12px rgba(0, 234, 255, 0.9),
+      0 0 24px rgba(255, 0, 255, 0.7);
+    box-shadow:
+      0 0 60px rgba(0, 234, 255, 0.9),
+      0 0 120px rgba(255, 0, 255, 0.8);
+  }
+
+
+
+  #newBtn {
+
   }
 </style>
