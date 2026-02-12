@@ -1,10 +1,10 @@
 ---
 ---
 
-<div id="container">
-  <button id="playBtn">▶</button>
-  <button id="newBtn">🎲 New Song</button>
-  <audio id="player"></audio>
+<div id="container">  
+    <button id="newBtn">🎲 New Song</button>
+    <button id="playBtn"> ▶</button>
+    <audio id="player"></audio>
 </div>
 
 <script>
@@ -104,10 +104,10 @@ document.addEventListener("DOMContentLoaded", () => {
   #container {
     margin: 1.5rem;
     display: flex;
+    flex-direction: column;
     gap: 1.5rem;
     align-items: center;
     justify-content: center;
-    height: 10vh;
   }
 
   #playBtn {
@@ -133,25 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
     transition: transform 0.15s ease, box-shadow 0.15s ease;
   }
 
-  /* Neon circular ring */
-  /* #playBtn::before {
-    content: "";
-    position: absolute;
-    inset: -6px;
-    border-radius: 50%;
-    background: conic-gradient(
-      from 120deg,
-      #00eaff,
-      #8b5cff,
-      #ff00ff,
-      #00eaff
-    );
-    opacity: 0.9;
-    z-index: -1;
-    filter: blur(1px);
-  } */
-
-  #playBtn:hover {
+    #playBtn:hover {
     text-shadow:
       0 0 12px rgba(0, 234, 255, 0.9),
       0 0 24px rgba(255, 0, 255, 0.7);
@@ -160,9 +142,42 @@ document.addEventListener("DOMContentLoaded", () => {
       0 0 120px rgba(255, 0, 255, 0.8);
   }
 
+  #playBtn:active {
+    transform: scale(0.95);
+  }
 
+    #newBtn {
+    font-family: "Tilt Neon", sans-serif;
+    margin-bottom: 20px;
+    position: relative;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: #00eaff;
+    background: #02000a;
+    text-shadow:
+      0 0 8px rgba(0, 234, 255, 0.9),
+      0 0 16px rgba(255, 0, 255, 0.7);
+    box-shadow:
+      0 0 20px rgba(0, 234, 255, 0.9),
+      0 0 45px rgba(255, 0, 255, 0.8);
+    outline: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
 
-  #newBtn {
-
+    #newBtn:hover {
+    text-shadow:
+      0 0 12px rgba(0, 234, 255, 0.9),
+      0 0 24px rgba(255, 0, 255, 0.7);
+    box-shadow:
+      0 0 60px rgba(0, 234, 255, 0.9),
+      0 0 120px rgba(255, 0, 255, 0.8);
+  }
+  #newBtn:active {
+    transform: scale(0.95);
   }
 </style>

@@ -1,6 +1,5 @@
 ---
 import Welcome from '../components/Welcome.astro';
-import SongPlayer from '../components/SongPlayer.astro'
 import Layout from '../layouts/Layout.astro';
 
 ---
@@ -8,12 +7,15 @@ import Layout from '../layouts/Layout.astro';
 <Layout>
 	<div id="container">
 		<Welcome />
-		<SongPlayer/>
+		<button onclick="window.location.href='game'" id="button">Join Game</button>
+		<button onclick="window.location.href='game'" id="button">Create Game</button>
 	</div>
 	
 </Layout>
 
+<script>
 
+</script>
 
 <style>
 
@@ -21,8 +23,44 @@ import Layout from '../layouts/Layout.astro';
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		justify-content: center;
-		height: 100vh;
+		height: 81.1438vh;
+		padding-top: 18.8562vh;
 	}
+
+	#button {
+    font-family: "Tilt Neon", sans-serif;
+    margin: 5vh;
+	width: 50vh;
+    position: relative;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: #00eaff;
+    background: #02000a;
+    text-shadow:
+      0 0 8px rgba(0, 234, 255, 0.9),
+      0 0 16px rgba(255, 0, 255, 0.7);
+    box-shadow:
+      0 0 20px rgba(0, 234, 255, 0.9),
+      0 0 45px rgba(255, 0, 255, 0.8);
+    outline: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+    #button:hover {
+    text-shadow:
+      0 0 12px rgba(0, 234, 255, 0.9),
+      0 0 24px rgba(255, 0, 255, 0.7);
+    box-shadow:
+      0 0 60px rgba(0, 234, 255, 0.9),
+      0 0 120px rgba(255, 0, 255, 0.8);
+  }
+  #button:active {
+    transform: scale(0.95);
+  }
 
 </style>
