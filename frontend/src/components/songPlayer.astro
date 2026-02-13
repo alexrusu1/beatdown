@@ -1,45 +1,61 @@
 ---
+interface Props {
+  gameCode?: string;
+}
+const { gameCode = "" } = Astro.props;
 ---
 
-<div id="container">  
+<div id="container" data-game-code={gameCode}>
     <button id="newBtn">🎲 New Song</button>
     <button id="playBtn"> ▶</button>
     <audio id="player"></audio>
 </div>
 
 <script>
+  import { ref, set, update, onValue } from "firebase/database";
+  import { realtimeDb } from "../libraries/firebase";
 
-document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", () => {
+    const container = document.getElementById("container");
     const playBtn = document.getElementById("playBtn") as HTMLButtonElement | null;
     const newBtn = document.getElementById("newBtn") as HTMLButtonElement | null;
     const player = document.getElementById("player") as HTMLAudioElement | null;
 
-    // Keep track of what we've already played in this session
+    const gameCode = container?.getAttribute("data-game-code") ?? "";
+
     const playedTrackIds = new Set<number>();
     let availableSongs: any[] = [];
+    let currentOffset = 0;
+    const PAGE_LIMIT = 200;
+    const SEARCH_TERM = "pop";
 
-    async function loadSongs() {
-      const searchTerm = "pop";
-      const limit = 200;
+    async function loadSongs(): Promise<void> {
       const url = `https://itunes.apple.com/search?term=${encodeURIComponent(
-        searchTerm
-      )}&media=music&entity=song&limit=${limit}`;
+        SEARCH_TERM
+      )}&media=music&entity=song&limit=${PAGE_LIMIT}&offset=${currentOffset}`;
 
       const response = await fetch(url);
       const data = await response.json();
 
       if (!data.results || data.results.length === 0) {
-        throw new Error("No results found 😢");
+        // We've paged past the end of the results
+        throw new Error("No more songs found 😢");
       }
 
-      // Only keep songs with previews that we haven't played yet
-      availableSongs = data.results.filter(
+      // Songs with previews we haven't played yet across all pages so far
+      const fresh = data.results.filter(
         (song: any) => song.previewUrl && !playedTrackIds.has(song.trackId)
       );
 
-      if (availableSongs.length === 0) {
-        throw new Error("No new songs with previews available 😢");
+      // Move offset forward for the *next* time we need a new batch
+      currentOffset += PAGE_LIMIT;
+
+      if (fresh.length === 0) {
+        // Everything in this page was already played; try the next page
+        return loadSongs();
       }
+
+      availableSongs = fresh;
     }
 
     async function getNextSong() {
@@ -55,6 +71,55 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!playBtn || !newBtn || !player) return;
 
+    if (gameCode) {
+      const currentSongRef = ref(realtimeDb, `games/${gameCode}/currentSong`);
+
+      onValue(currentSongRef, (snapshot) => {
+        const data = snapshot.val();
+        if (!data?.previewUrl) return;
+        if (player.src !== data.previewUrl) {
+          player.src = data.previewUrl;
+        }
+        if (data.isPlaying !== false) {
+          player.play().catch(() => {});
+          playBtn.textContent = "⏸";
+        } else {
+          player.pause();
+          playBtn.textContent = "▶";
+        }
+      });
+
+      playBtn.onclick = () => {
+        const nextPlaying = player.paused;
+        update(currentSongRef, { isPlaying: nextPlaying });
+      };
+
+      newBtn.onclick = async () => {
+        newBtn.disabled = true;
+        playBtn.textContent = "▶";
+        try {
+          const song = await getNextSong();
+          await set(currentSongRef, {
+            previewUrl: song.previewUrl,
+            trackName: song.trackName,
+            artistName: song.artistName,
+            startedAt: Date.now(),
+            isPlaying: true,
+          });
+        } catch (error) {
+          console.error("Error loading song:", error);
+          alert(error instanceof Error ? error.message : "Error loading song 😢");
+        }
+        newBtn.disabled = false;
+      };
+
+      player.onended = () => {
+        update(currentSongRef, { isPlaying: false });
+        playBtn.textContent = "▶";
+      };
+      return;
+    }
+
     playBtn.onclick = () => {
       if (player.paused) {
         player.play();
@@ -67,30 +132,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     newBtn.onclick = async () => {
       playBtn.textContent = "▶";
-      playBtn.disabled = true;
-
+      newBtn.disabled = true;
       try {
         const song = await getNextSong();
-
-        console.log("Selected song:", {
-          name: song.trackName,
-          artist: song.artistName,
-          album: song.collectionName,
-          previewUrl: song.previewUrl
-        });
-
         player.src = song.previewUrl;
         await player.play();
-
         playBtn.textContent = "⏸";
-        playBtn.disabled = false;
       } catch (error) {
         console.error("Error loading song:", error);
-        alert(
-          error instanceof Error ? error.message : "Error loading song 😢"
-        );
-        playBtn.disabled = false;
+        alert(error instanceof Error ? error.message : "Error loading song 😢");
       }
+      newBtn.disabled = false;
     };
 
     player.onended = () => {

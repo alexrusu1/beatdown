@@ -7,60 +7,213 @@ import Layout from '../layouts/Layout.astro';
 <Layout>
 	<div id="container">
 		<Welcome />
-		<button onclick="window.location.href='game'" id="button">Join Game</button>
-		<button onclick="window.location.href='game'" id="button">Create Game</button>
+		<div id="joinForm">
+			<label for="gameCode">Game code</label>
+			<input type="text" id="gameCode" placeholder="Enter code" maxlength="8" autocomplete="off" />
+			<button id="submitCodeBtn" type="button">Join Game</button>
+		</div>
+		<button id="createBtn" type="button">Create Game</button>
 	</div>
-	
 </Layout>
 
 <script>
+	import { ref, set, get, update } from "firebase/database";
+	import { realtimeDb } from "../libraries/firebase";
 
+	function generateRoomCode(length = 6): string {
+		const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		let result = "";
+		for (let i = 0; i < length; i++) {
+			result += chars[Math.floor(Math.random() * chars.length)];
+		}
+		return result;
+	}
+
+	function getOrCreateClientId(): string {
+		let id = typeof localStorage !== "undefined" ? localStorage.getItem("beatdown_client_id") : null;
+		if (!id) {
+			id = crypto.randomUUID?.() ?? `client_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+			try { localStorage.setItem("beatdown_client_id", id); } catch (_) {}
+		}
+		return id;
+	}
+
+	async function createGame(): Promise<string> {
+		const hostId = getOrCreateClientId();
+		let code = generateRoomCode();
+		const gameRef = ref(realtimeDb, `games/${code}`);
+		const snapshot = await get(gameRef);
+		// If code collision (unlikely), try again once
+		if (snapshot.exists()) {
+			code = generateRoomCode();
+		}
+		const finalRef = ref(realtimeDb, `games/${code}`);
+		await set(finalRef, {
+			hostId,
+			status: "waiting",
+			createdAt: Date.now(),
+			currentRound: 0,
+			players: {
+				[hostId]: { name: "Host", isHost: true, joinedAt: Date.now() },
+			},
+		});
+		return code;
+	}
+
+	async function joinGame(code: string): Promise<boolean> {
+		const normalizedCode = code.trim().toUpperCase();
+		if (!normalizedCode) return false;
+		const gameRef = ref(realtimeDb, `games/${normalizedCode}`);
+		const snapshot = await get(gameRef);
+		if (!snapshot.exists()) return false;
+		const playerId = getOrCreateClientId();
+		const playersRef = ref(realtimeDb, `games/${normalizedCode}/players/${playerId}`);
+		await set(playersRef, {
+			name: "Player",
+			isHost: false,
+			joinedAt: Date.now(),
+		});
+		return true;
+	}
+
+	document.addEventListener("DOMContentLoaded", () => {
+		const createBtn = document.getElementById("createBtn") as HTMLButtonElement | null;
+		const gameCodeInput = document.getElementById("gameCode") as HTMLInputElement | null;
+		const submitCodeBtn = document.getElementById("submitCodeBtn") as HTMLButtonElement | null;
+
+		if (!createBtn || !gameCodeInput || !submitCodeBtn) return;
+
+		createBtn.addEventListener("click", async () => {
+			createBtn.disabled = true;
+			try {
+				const code = await createGame();
+				window.location.href = `game?code=${encodeURIComponent(code)}`;
+			} catch (e) {
+				console.error(e);
+				alert("Failed to create game. Check your connection and try again.");
+				createBtn.disabled = false;
+			}
+		});
+
+		async function submitCode() {
+			if (!gameCodeInput || !submitCodeBtn) return;
+			const code = gameCodeInput.value.trim();
+			if (!code) return;
+			submitCodeBtn.disabled = true;
+			try {
+				const ok = await joinGame(code);
+				if (ok) {
+					window.location.href = `game?code=${encodeURIComponent(code.trim().toUpperCase())}`;
+				} else {
+					alert("Game not found. Check the code and try again.");
+					submitCodeBtn.disabled = false;
+				}
+			} catch (e) {
+				console.error(e);
+				alert("Failed to join game. Check your connection and try again.");
+				submitCodeBtn.disabled = false;
+			}
+		}
+
+		submitCodeBtn.addEventListener("click", submitCode);
+		gameCodeInput.addEventListener("keydown", (e) => {
+			if (e.key === "Enter") submitCode();
+		});
+	});
 </script>
 
 <style>
 
-	#container{
+	#container {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		height: 81.1438vh;
-		padding-top: 18.8562vh;
+		justify-content: center;
+		min-height: 100vh;
+		gap: 2rem;
 	}
 
-	#button {
-    font-family: "Tilt Neon", sans-serif;
-    margin: 5vh;
-	width: 50vh;
-    position: relative;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3rem;
-    color: #00eaff;
-    background: #02000a;
-    text-shadow:
-      0 0 8px rgba(0, 234, 255, 0.9),
-      0 0 16px rgba(255, 0, 255, 0.7);
-    box-shadow:
-      0 0 20px rgba(0, 234, 255, 0.9),
-      0 0 45px rgba(255, 0, 255, 0.8);
-    outline: none;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-  }
+	#createBtn,
+	#submitCodeBtn {
+		font-family: "Tilt Neon", sans-serif;
+		width: 50vh;
+		max-width: 320px;
+		position: relative;
+		border-radius: 10px;
+		border: none;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 3rem;
+		color: #00eaff;
+		background: #02000a;
+		text-shadow:
+			0 0 8px rgba(0, 234, 255, 0.9),
+			0 0 16px rgba(255, 0, 255, 0.7);
+		box-shadow:
+			0 0 20px rgba(0, 234, 255, 0.9),
+			0 0 45px rgba(255, 0, 255, 0.8);
+		outline: none;
+		transition: transform 0.15s ease, box-shadow 0.15s ease;
+	}
 
-    #button:hover {
-    text-shadow:
-      0 0 12px rgba(0, 234, 255, 0.9),
-      0 0 24px rgba(255, 0, 255, 0.7);
-    box-shadow:
-      0 0 60px rgba(0, 234, 255, 0.9),
-      0 0 120px rgba(255, 0, 255, 0.8);
-  }
-  #button:active {
-    transform: scale(0.95);
-  }
+	#createBtn:hover,
+	#submitCodeBtn:hover {
+		text-shadow:
+			0 0 12px rgba(0, 234, 255, 0.9),
+			0 0 24px rgba(255, 0, 255, 0.7);
+		box-shadow:
+			0 0 60px rgba(0, 234, 255, 0.9),
+			0 0 120px rgba(255, 0, 255, 0.8);
+	}
+
+	#createBtn:active,
+	#submitCodeBtn:active {
+		transform: scale(0.95);
+	}
+
+	#joinForm {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+		margin-bottom: 5vh;
+	}
+
+	#joinForm label {
+		font-family: "Tilt Neon", sans-serif;
+		color: #00eaff;
+		font-size: 1.25rem;
+		text-shadow: 0 0 8px rgba(0, 234, 255, 0.6);
+	}
+
+	#gameCode {
+		font-family: "Tilt Neon", sans-serif;
+		font-size: 1.5rem;
+		padding: 0.75rem 1rem;
+		width: 50vh;
+		max-width: 320px;
+		box-sizing: border-box;
+		border-radius: 10px;
+		border: 2px solid rgba(0, 234, 255, 0.5);
+		background: #02000a;
+		color: #00eaff;
+		outline: none;
+		box-shadow: 0 0 12px rgba(0, 234, 255, 0.3);
+	}
+
+	#gameCode::placeholder {
+		color: rgba(0, 234, 255, 0.5);
+	}
+
+	#gameCode:focus {
+		border-color: #00eaff;
+		box-shadow: 0 0 20px rgba(0, 234, 255, 0.6);
+	}
+
+	#submitCodeBtn {
+		padding: 0 1.5rem;
+	}
 
 </style>
