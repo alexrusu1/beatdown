@@ -1,0 +1,358 @@
+---
+interface Props {
+  gameCode?: string;
+}
+const { gameCode = "" } = Astro.props;
+---
+
+<div id="game-container" data-game-code={gameCode}>
+  <!-- Game Status Display -->
+  <div id="game-status"></div>
+
+  <!-- ADD PLAYER NAME INPUT -->
+  <div id="lobby-controls">
+    <input id="player-name" placeholder="Enter your name" />
+    <button id="add-player">Add Player</button>
+    <button id="start-game">Start Game</button>
+  </div>
+  
+  <!-- Player List -->
+  <div id="player-list"></div>
+  
+  <!-- Music Player Controls -->
+  <div id="music-controls">
+    <button id="newBtn">🎲 New Song</button>
+    <button id="playBtn">▶</button>
+    <audio id="player"></audio>
+  </div>
+
+  <!-- Guess Form -->
+  <div id="guess-form" style="display: none;">
+    <input id="song-input" placeholder="Song name" />
+    <input id="artist-input" placeholder="Artist" />
+    <input id="year-input" type="number" placeholder="Year" />
+    <input id="album-input" placeholder="Album" />
+    <button id="submit-guess">Submit Guess</button>
+  </div>
+  
+  <!-- Results Display -->
+  <div id="results"></div>
+  
+  <!-- Phase Control Buttons -->
+  <div id="phase-controls">
+    <button id="reveal-btn" style="display: none;">Reveal Answers</button>
+    <button id="resolve-btn" style="display: none;">Continue to Next Round</button>
+  </div>
+</div>
+
+<script>
+  import { ref, set, update, onValue } from "firebase/database";
+  import { realtimeDb } from "../libraries/firebase";
+  import { gameReducer, type Game, type GameAction } from "../game.logic/engine";
+  import { initEngineEffects, handleEngineEffects } from "../game.logic/engine.effects";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const container = document.getElementById("game-container");
+    const playBtn = document.getElementById("playBtn") as HTMLButtonElement;
+    const newBtn = document.getElementById("newBtn") as HTMLButtonElement;
+    const player = document.getElementById("player") as HTMLAudioElement;
+    const guessForm = document.getElementById("guess-form") as HTMLDivElement;
+    const submitGuessBtn = document.getElementById("submit-guess") as HTMLButtonElement;
+    const addPlayerBtn = document.getElementById("add-player") as HTMLButtonElement;
+    const startGameBtn = document.getElementById("start-game") as HTMLButtonElement;
+    const playerNameInput = document.getElementById("player-name") as HTMLInputElement;
+    
+    const gameCode = container?.getAttribute("data-game-code") ?? "";
+
+    // Song fetching logic (from MusicPlayer)
+    const playedTrackIds = new Set<number>();
+    let availableSongs: any[] = [];
+    let currentOffset = 0;
+    const PAGE_LIMIT = 200;
+    const SEARCH_TERM = "pop";
+
+    async function loadSongs(): Promise<void> {
+      const url = `https://itunes.apple.com/search?term=${encodeURIComponent(
+        SEARCH_TERM
+      )}&media=music&entity=song&limit=${PAGE_LIMIT}&offset=${currentOffset}`;
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (!data.results || data.results.length === 0) {
+        throw new Error("No more songs found 😢");
+      }
+
+      const fresh = data.results.filter(
+        (song: any) => song.previewUrl && !playedTrackIds.has(song.trackId)
+      );
+
+      currentOffset += PAGE_LIMIT;
+
+      if (fresh.length === 0) {
+        return loadSongs();
+      }
+
+      availableSongs = fresh;
+    }
+
+    async function getNextSong() {
+      if (availableSongs.length === 0) {
+        await loadSongs();
+      }
+
+      const index = Math.floor(Math.random() * availableSongs.length);
+      const [song] = availableSongs.splice(index, 1);
+      playedTrackIds.add(song.trackId);
+      
+      // Convert iTunes format to your Game format
+      return {
+        name: song.trackName,
+        artist: song.artistName,
+        year: new Date(song.releaseDate).getFullYear(),
+        album: song.collectionName || "Unknown Album",
+        previewURL: song.previewUrl
+      };
+    }
+
+    // Initialize game state
+    let game: Game = {
+      phase: "LOBBY",
+      players: [],
+      turnIndex: 0,
+      currentSong: null,
+      originalGuesses: {},
+      circleGuesses: {},
+      answerRevealed: false
+    };
+
+    let songPlayedThisRound = false;
+
+    function dispatch(action: GameAction) {
+      const prevGame = game;
+      game = gameReducer(game, action);
+      
+      // Handle side effects
+      handleEngineEffects(prevGame, game, player);
+      
+      // Update UI
+      renderGame();
+      
+      // Sync to Firebase if multiplayer
+      if (gameCode) {
+        const gameRef = ref(realtimeDb, `games/${gameCode}`);
+        set(gameRef, game);
+      }
+    }
+
+    // Initialize effects
+    initEngineEffects(player, () => game, dispatch);
+
+    // Firebase sync for multiplayer
+    if (gameCode) {
+      const gameRef = ref(realtimeDb, `games/${gameCode}`);
+      
+      onValue(gameRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          const prevGame = game;
+          game = data;
+          handleEngineEffects(prevGame, game, player);
+          renderGame();
+        }
+      });
+    }
+
+    // UI Event Handlers
+    // ADD PLAYER HANDLER
+    addPlayerBtn.addEventListener("click", () => {
+      const name = playerNameInput.value.trim();
+      if (!name) {
+        alert("Please enter a name");
+        return;
+      }
+      
+      dispatch({
+        type: "ADD_PLAYER",
+        player: {
+          uid: Date.now(), // Simple unique ID
+          name: name
+        }
+      });
+      
+      playerNameInput.value = ""; // Clear input
+    });
+
+    // START GAME HANDLER
+    startGameBtn.addEventListener("click", () => {
+      if (game.players.length < 2) {
+        alert("Need at least 2 players to start!");
+        return;
+      }
+      dispatch({ type: "START_GAME" });
+    });
+
+    newBtn.onclick = async () => {
+  console.log("🎲 New Song button clicked");
+  console.log("Current phase:", game.phase);
+  
+  if (game.phase !== "SONG_PLAYING") {
+    console.log("❌ Cannot load song - wrong phase");
+    return;
+  }
+  
+  // ADD THIS CHECK:
+  if (songPlayedThisRound) {
+    console.log("❌ Song already played this round");
+    return;
+  }
+  
+  newBtn.disabled = true;
+  
+  try {
+    const song = await getNextSong();
+    console.log("✅ Got song:", song);
+    
+    // Dispatch to update game state
+    dispatch({ type: "PLAY_SONG", song });
+    
+    // Simple direct play (like SongPlayer does)
+    player.src = song.previewURL;
+    await player.play();
+    playBtn.textContent = "⏸";
+    console.log("✅ Audio playing!");
+    
+    songPlayedThisRound = true;
+    
+  } catch (error) {
+    console.error("Error loading song:", error);
+    alert(error instanceof Error ? error.message : "Error loading song 😢");
+  }
+  
+  newBtn.disabled = false;
+};
+
+    playBtn.onclick = () => {
+      if (player.paused) {
+        player.play();
+        playBtn.textContent = "⏸";
+      } else {
+        player.pause();
+        playBtn.textContent = "▶";
+      }
+    };
+
+    submitGuessBtn.onclick = () => {
+      const song = (document.getElementById("song-input") as HTMLInputElement).value;
+      const artist = (document.getElementById("artist-input") as HTMLInputElement).value;
+      const year = parseInt((document.getElementById("year-input") as HTMLInputElement).value);
+      const album = (document.getElementById("album-input") as HTMLInputElement).value;
+
+      const currentPlayer = game.players[game.turnIndex];
+      
+      if (game.phase === "ORIGINAL_GUESS_TURN") {
+        dispatch({
+          type: "ORIGINAL_GUESS_SUBMIT",
+          guesses: { song, artist, year, album }
+        });
+      } else if (game.phase === "CIRCLE_GUESS_TURN") {
+        dispatch({
+          type: "CIRCLE_GUESS_SUBMIT",
+          playerId: currentPlayer.uid, // You'll need to track current user's ID
+          guesses: { song, artist, year, album }
+        });
+      }
+    };
+
+    // PHASE PROGRESSION BUTTONS
+    const revealBtn = document.getElementById("reveal-btn") as HTMLButtonElement;
+    const resolveBtn = document.getElementById("resolve-btn") as HTMLButtonElement;
+
+    revealBtn?.addEventListener("click", () => {
+      dispatch({ type: "REVEAL_ANSWERS" });
+    });
+
+    resolveBtn?.addEventListener("click", () => {
+      dispatch({ type: "RESOLVE_ROUND" });
+      setTimeout(() => renderGame(), 10);
+    });
+
+    // Render game state to UI
+    function renderGame() {
+      const statusEl = document.getElementById("game-status");
+      const playerListEl = document.getElementById("player-list");
+      const resultsEl = document.getElementById("results");
+      const lobbyControls = document.getElementById("lobby-controls");
+      const revealBtn = document.getElementById("reveal-btn") as HTMLButtonElement;
+      const resolveBtn = document.getElementById("resolve-btn") as HTMLButtonElement;
+
+      if (!statusEl || !playerListEl || !resultsEl) return;
+
+      // ADD THIS: Reset song flag when entering SONG_PLAYING phase
+      if (game.phase === "SONG_PLAYING" && songPlayedThisRound) {
+        songPlayedThisRound = false;
+      }
+
+      // HIDE LOBBY CONTROLS WHEN GAME STARTS
+      if (lobbyControls) {
+        lobbyControls.style.display = game.phase === "LOBBY" ? "block" : "none";
+      }
+
+      // Update phase display
+      statusEl.textContent = `Phase: ${game.phase}`;
+
+      // Show whose turn it is
+      if (game.phase !== "LOBBY" && game.players.length > 0) {
+        const currentPlayer = game.players[game.turnIndex];
+        statusEl.textContent += ` | Turn: ${currentPlayer.name}`;
+      }
+
+      // Update player list
+      playerListEl.innerHTML = game.players
+        .map(p => `<div>${p.name}: ${p.health}HP ${p.alive ? "✓" : "💀"}</div>`)
+        .join("");
+
+      // Show/hide guess form based on phase
+      if (game.phase === "ORIGINAL_GUESS_TURN" || game.phase === "CIRCLE_GUESS_TURN") {
+        guessForm.style.display = "block";
+      } else {
+        guessForm.style.display = "none";
+      }
+
+      // Show results
+      if (game.phase === "REVEAL_RESULTS" && game.currentSong) {
+        resultsEl.innerHTML = `
+          <h3>Answer:</h3>
+          <p>Song: ${game.currentSong.name}</p>
+          <p>Artist: ${game.currentSong.artist}</p>
+          <p>Year: ${game.currentSong.year}</p>
+          <p>Album: ${game.currentSong.album}</p>
+        `;
+      } else {
+        resultsEl.innerHTML = "";
+      }
+
+      // Show game over screen
+      if (game.phase === "GAME_OVER") {
+        const winner = game.players.find(p => p.uid === game.winner);
+        resultsEl.innerHTML = `
+          <h2>🎉 Game Over! 🎉</h2>
+          <p>${winner ? `${winner.name} wins!` : "No winner"}</p>
+        `;
+      }
+
+      // Control button visibility based on phase
+      if (revealBtn) revealBtn.style.display = 
+        game.phase === "WAITING_TO_REVEAL" ? "block" : "none";
+      
+      if (resolveBtn) resolveBtn.style.display = 
+        game.phase === "REVEAL_RESULTS" ? "block" : "none";
+
+      // Enable/disable music controls based on phase
+      newBtn.disabled = game.phase !== "SONG_PLAYING" || songPlayedThisRound;
+    }  // ← Function closes HERE, not earlier
+
+    // Initial render
+    renderGame();
+  });
+</script>
