@@ -41,6 +41,7 @@ export interface Game {
   phase: GamePhase;
   players: Player[];
   turnIndex: number;
+  circleGuessIndex?: number;
   currentSong: Song | null;
   originalGuesses: Record<number, Guess>;
   circleGuesses: Record<number, Guess>;
@@ -62,24 +63,87 @@ export type GameAction =
 
 // ──────────────────────────────────────────────── Helpers
 
+// Spelling Tolerance
+function levenshteinDistance(a: string, b: string): number {
+  const matrix: number[][] = [];
+
+  for (let i = 0; i <= b.length; i++) {
+    matrix[i] = [i];
+  }
+
+  for (let j = 0; j <= a.length; j++) {
+    matrix[0][j] = j;
+  }
+
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      if (b.charAt(i - 1) === a.charAt(j - 1)) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j - 1] + 1,
+          matrix[i][j - 1] + 1,
+          matrix[i - 1][j] + 1
+        );
+      }
+    }
+  }
+
+  return matrix[b.length][a.length];
+}
+
+function isSimilar(guess: string, correct: string, threshold: number = 0.8): boolean {
+  const g = guess.toLowerCase().trim();
+  const c = correct.toLowerCase().trim();
+  
+  // Exact match
+  if (g === c) return true;
+  
+  // Calculate similarity ratio
+  const distance = levenshteinDistance(g, c);
+  const maxLength = Math.max(g.length, c.length);
+  const similarity = 1 - distance / maxLength;
+  
+  return similarity >= threshold;
+}
 
 function calculateAccuracy(
   guess: Guess,
   correct: Song
 ): number {
   let score = 0;
-  if (guess.song?.toLowerCase() === correct.name.toLowerCase()) score += 30;
-  if (guess.artist?.toLowerCase() === correct.artist.toLowerCase()) score += 30;
-  if (guess.year === correct.year) score += 20;
-  if (guess.album?.toLowerCase() === correct.album.toLowerCase()) score += 20;
+  
+  // Song name - allow 80% similarity
+  if (guess.song && isSimilar(guess.song, correct.name, 0.8)) score += 30;
+  
+  // Artist - allow 80% similarity
+  if (guess.artist && isSimilar(guess.artist, correct.artist, 0.8)) score += 30;
+  
+  // Year - partial points based on proximity
+  if (guess.year !== undefined) {
+    const yearDiff = Math.abs(guess.year - correct.year);
+    if (yearDiff === 0) {
+      score += 20; // Exact year
+    } else if (yearDiff <= 2) {
+      score += 15; // 1-2 year off
+    } else if (yearDiff <= 5) {
+      score += 10; // 3-5 years off
+    } else if (yearDiff <= 10) {
+      score += 5; // 6-10 years off
+    }
+    // More than 10 years off = 0 points
+  }
+  
+  // Album - allow 80% similarity
+  if (guess.album && isSimilar(guess.album, correct.album, 0.8)) score += 20;
+  
   return score;
 }
 
-
 function isWinningGuess(guess: Guess, correct: Song): boolean {
   return (
-    guess.song?.toLowerCase() === correct.name.toLowerCase() &&
-    guess.artist?.toLowerCase() === correct.artist.toLowerCase()
+    guess.song !== undefined && isSimilar(guess.song, correct.name, 0.8) &&
+    guess.artist !== undefined && isSimilar(guess.artist, correct.artist, 0.8)
   );
 }
 
@@ -133,39 +197,97 @@ export function gameReducer(game: Game, action: GameAction): Game {
       if (action.type !== "ORIGINAL_GUESS_SUBMIT" || !game.currentSong)
         return game;
 
-
       const originalPlayer = game.players[game.turnIndex];
       const instantWin = isWinningGuess(action.guesses, game.currentSong);
+      const acc = calculateAccuracy(action.guesses, game.currentSong);
 
+      // If instant win OR high accuracy (>= 60), skip circle guessing
+      if (instantWin || acc >= 60) {
+        return {
+          ...game,
+          originalGuesses: { [originalPlayer.uid]: action.guesses },
+          phase: "REVEAL_RESULTS"
+        };
+      }
+
+      // Low accuracy (< 60): move to circle guessing
+      let firstCircleIndex = (game.turnIndex + 1) % game.players.length;
+      while (
+        !game.players[firstCircleIndex].alive || 
+        game.players[firstCircleIndex].uid === originalPlayer.uid
+      ) {
+        firstCircleIndex = (firstCircleIndex + 1) % game.players.length;
+      }
 
       return {
         ...game,
         originalGuesses: { [originalPlayer.uid]: action.guesses },
-        phase: instantWin ? "REVEAL_RESULTS" : "CIRCLE_GUESS_TURN"
+        circleGuessIndex: firstCircleIndex,
+        phase: "CIRCLE_GUESS_TURN"
       };
 
 
     // ───────── CIRCLE GUESS
     case "CIRCLE_GUESS_TURN":
-    if (action.type !== "CIRCLE_GUESS_SUBMIT") return game;
+      if (action.type !== "CIRCLE_GUESS_SUBMIT") return game;
+      if (!game.currentSong) return game; // Add safety check
 
-    const originalUid = game.players[game.turnIndex].uid;
-    if (action.playerId === originalUid) return game;
-    if (game.circleGuesses[action.playerId]) return game;
-
-    const nextCircle = {
+      const originalUid = game.players[game.turnIndex].uid;
+      if (action.playerId === originalUid) return game;
+      
+      // Initialize circleGuessIndex if not set
+      const circleIndex = game.circleGuessIndex ?? (game.turnIndex + 1) % game.players.length;
+      
+      // Find the next alive player who isn't the original guesser
+      let expectedIndex = circleIndex;
+      while (
+        !game.players[expectedIndex].alive || 
+        game.players[expectedIndex].uid === originalUid
+      ) {
+        expectedIndex = (expectedIndex + 1) % game.players.length;
+      }
+      
+      const expectedPlayer = game.players[expectedIndex];
+      
+      // Only accept guess from the expected player
+      if (action.playerId !== expectedPlayer.uid) return game;
+      
+      const nextCircle = {
         ...game.circleGuesses,
         [action.playerId]: action.guesses
-    };
+      };
 
-    const aliveCount = game.players.filter(p => p.alive).length - 1;
-    const allGuessed = Object.keys(nextCircle).length >= aliveCount;
+      // CHECK ACCURACY OF THIS GUESS
+      const guessAcc = calculateAccuracy(action.guesses, game.currentSong);
+      
+      // If this circle guess has >= 60 accuracy, reveal immediately
+      if (guessAcc >= 60) {
+        return {
+          ...game,
+          circleGuesses: nextCircle,
+          circleGuessIndex: undefined,
+          phase: "WAITING_TO_REVEAL"
+        };
+      }
 
-    return {
+      const aliveCount = game.players.filter(p => p.alive).length - 1;
+      const allGuessed = Object.keys(nextCircle).length >= aliveCount;
+      
+      // Move to next player in circle
+      let nextCircleIndex = (expectedIndex + 1) % game.players.length;
+      while (
+        !game.players[nextCircleIndex].alive || 
+        game.players[nextCircleIndex].uid === originalUid
+      ) {
+        nextCircleIndex = (nextCircleIndex + 1) % game.players.length;
+      }
+
+      return {
         ...game,
         circleGuesses: nextCircle,
+        circleGuessIndex: allGuessed ? undefined : nextCircleIndex,
         phase: allGuessed ? "WAITING_TO_REVEAL" : game.phase
-    };
+      };
 
     // ───────── WAITING TO REVEAL (add this after CIRCLE_GUESS_TURN)
     case "WAITING_TO_REVEAL":
@@ -175,7 +297,7 @@ export function gameReducer(game: Game, action: GameAction): Game {
     return game;
 
     // ───────── REVEAL
-case "REVEAL_RESULTS":  
+  case "REVEAL_RESULTS":  
   if (action.type === "RESOLVE_ROUND") {
     if (!game.currentSong) return game;
 
@@ -187,8 +309,8 @@ case "REVEAL_RESULTS":
     const origGuess = game.originalGuesses[originalUidReveal];
     if (origGuess) {
       const acc = calculateAccuracy(origGuess, song);
-      if (acc >= 80) {
-        const dmg = 20 + Math.floor((acc - 80) / 2);
+      if (acc >= 60) {
+        const dmg = 20 + Math.floor((acc - 60) / 2);
         players = players.map(p =>
           p.alive && p.uid !== originalUidReveal
             ? { ...p, health: Math.max(0, p.health - dmg) }
@@ -199,7 +321,7 @@ case "REVEAL_RESULTS":
 
     Object.entries(game.circleGuesses).forEach(([uid, guess]) => {
       const acc = calculateAccuracy(guess, song);
-      const heal = Math.floor(acc / 10);
+      const heal = Math.floor(acc / 5);
       players = players.map(p =>
         p.uid === Number(uid) && p.alive
           ? { ...p, health: Math.min(100, p.health + heal) }
