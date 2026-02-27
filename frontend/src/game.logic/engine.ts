@@ -13,12 +13,12 @@ export type GamePhase =
 
 
 export interface Player {
-  uid: number;
+  uid: string | number;   // uid stored as string from Firebase
   name: string;
   health: number;
   alive: boolean;
+  isHost?: boolean;       // identifies the creator/host of the room
 }
-
 
 export interface Guess {
   song?: string;
@@ -34,6 +34,7 @@ export interface Song {
   year: number;
   album: string;
   previewURL: string;
+  isPlaying?: boolean; // used for multiplayer playback sync
 }
 
 
@@ -55,6 +56,7 @@ export type GameAction =
   | { type: "START_GAME" }
   | { type: "PLAY_SONG"; song: Song }
   | { type: "END_SONG" }
+  | { type: "SET_PLAYING"; playing: boolean }
   | { type: "ORIGINAL_GUESS_SUBMIT"; guesses: Guess }
   | { type: "CIRCLE_GUESS_SUBMIT"; playerId: number; guesses: Guess }
   | { type: "REVEAL_ANSWERS" }
@@ -184,10 +186,18 @@ export function gameReducer(game: Game, action: GameAction): Game {
     // ───────── SONG_PLAYING
     case "SONG_PLAYING":
       if (action.type === "PLAY_SONG") {
-        return { ...game, currentSong: action.song };
+        // when a song is chosen we assume it begins playing immediately
+        return { ...game, currentSong: { ...action.song, isPlaying: true } };
       }
       if (action.type === "END_SONG") {
         return { ...game, phase: "ORIGINAL_GUESS_TURN" };
+      }
+      if (action.type === "SET_PLAYING") {
+        if (!game.currentSong) return game;
+        return {
+          ...game,
+          currentSong: { ...game.currentSong, isPlaying: action.playing }
+        };
       }
       return game;
 

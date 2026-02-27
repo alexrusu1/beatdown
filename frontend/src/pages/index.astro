@@ -200,19 +200,35 @@ import Layout from '../layouts/Layout.astro';
 	async function createGame(name: string): Promise<string> {
 		const hostId = await ensureAuthenticatedUserUid();
 		let code = generateRoomCode();
-		const gameRef = ref(realtimeDb, `games/${code}`);
-		const snapshot = await get(gameRef);
-		if (snapshot.exists()) {
+		let gameRef = ref(realtimeDb, `games/${code}`);
+		let snapshot = await get(gameRef);
+		// ensure unique code
+		while (snapshot.exists()) {
 			code = generateRoomCode();
+			gameRef = ref(realtimeDb, `games/${code}`);
+			snapshot = await get(gameRef);
 		}
-		const playersRef = ref(realtimeDb, `games/${code}/players/${hostId}`);
-        await set(playersRef, {
-            name: name,
-            isHost: true,
-            joinedAt: Date.now(),
-            health: 100,
-            alive: true
-        });
+
+		// write full initial game state in one shot
+		const initialState = {
+			phase: "LOBBY",
+			turnIndex: 0,
+			currentSong: null,
+			originalGuesses: {},
+			circleGuesses: {},
+			answerRevealed: false,
+			players: {
+				[hostId]: {
+					name: name,
+					isHost: true,
+					joinedAt: Date.now(),
+					health: 100,
+					alive: true
+				}
+			}
+		};
+
+		await set(gameRef, initialState);
 		return code;
 	}
 
@@ -231,6 +247,18 @@ import Layout from '../layouts/Layout.astro';
         }
 
         const gameData = snapshot.val();
+        // if this is an old game there may be missing metadata; patch minimal defaults
+        const defaults: any = {};
+        if (gameData.phase === undefined) defaults.phase = "LOBBY";
+        if (gameData.turnIndex === undefined) defaults.turnIndex = 0;
+        if (gameData.currentSong === undefined) defaults.currentSong = null;
+        if (gameData.originalGuesses === undefined) defaults.originalGuesses = {};
+        if (gameData.circleGuesses === undefined) defaults.circleGuesses = {};
+        if (gameData.answerRevealed === undefined) defaults.answerRevealed = false;
+        if (Object.keys(defaults).length) {
+            await update(gameRef, defaults);
+        }
+
         if (gameData.players && gameData.players[playerId]) {
             console.log("Player already in game:", playerId);
             return true;

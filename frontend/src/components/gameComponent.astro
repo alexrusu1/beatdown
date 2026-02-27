@@ -83,33 +83,17 @@ const { gameCode = "" } = Astro.props;
     const submitGuessBtn = document.getElementById("submit-guess") as HTMLButtonElement;
     const startGameBtn = document.getElementById("start-game") as HTMLButtonElement;
     const gameCode = container?.getAttribute("data-game-code") ?? "";
-    const playerListDiv = document.getElementById("player-list") as HTMLDivElement;
-
     if (!gameCode) {
       console.error("No game code found");
       return;
     }
 
-    const playersRef = ref(realtimeDb, `games/${gameCode}/players`);
-    onValue(playersRef, (snapshot) => {
-      const playersData = snapshot.val();
-      if (!playersData) {
-        playerListDiv.innerHTML = "<p>No players yet</p>";
-        return;
-      }
+    // we'll rely solely on the full game object subscription below;
+    // the separate playersRef listener was overwriting the same DOM
+    // element and causing race/visibility issues when new players joined.
 
-      // Convert players object to array and render
-      const playersList = Object.entries(playersData).map(([uid, player]: any) => {
-        return `
-          <div class="player-item">
-            <span class="player-name">${player.name || "Unknown"}</span>
-            <span class="player-health">${player.health || 100} HP</span>
-          </div>
-        `;
-      });
+    // (keep the element reference around in renderGame where it's used)
 
-      playerListDiv.innerHTML = playersList.join("");
-    });
 
     // Song fetching logic (from MusicPlayer)
     const playedTrackIds = new Set<number>();
@@ -173,22 +157,48 @@ const { gameCode = "" } = Astro.props;
       answerRevealed: false
     };
 
+    // helper to figure out whose turn it is to guess
+    function getActiveGuesserId(): string | null {
+      // during listening the original guesser is the 'active' player
+      if (game.phase === "SONG_PLAYING") {
+        return game.players[game.turnIndex]?.uid ?? null;
+      }
+      if (game.phase === "ORIGINAL_GUESS_TURN") {
+        return game.players[game.turnIndex]?.uid ?? null;
+      }
+      if (game.phase === "CIRCLE_GUESS_TURN" && game.circleGuessIndex !== undefined) {
+        return game.players[game.circleGuessIndex]?.uid ?? null;
+      }
+      return null;
+    }
+
     let songPlayedThisRound = false;
 
     function dispatch(action: GameAction) {
       const prevGame = game;
       game = gameReducer(game, action);
-      
+
       // Handle side effects
       handleEngineEffects(prevGame, game, player);
-      
+
       // Update UI
       renderGame();
-      
+
       // Sync to Firebase if multiplayer
       if (gameCode) {
         const gameRef = ref(realtimeDb, `games/${gameCode}`);
-        set(gameRef, game);
+        // Firestore/RealtimeDB rejects undefined values.  Use stringify
+        // to remove them, but also explicitly delete the property just in
+        // case something weird slips through.
+        let gameToWrite: any = JSON.parse(JSON.stringify(game));
+        if (gameToWrite.circleGuessIndex === undefined) {
+          delete gameToWrite.circleGuessIndex;
+        }
+        try {
+          set(gameRef, gameToWrite);
+        } catch (err) {
+          console.error("Failed to sync game to Firebase", err, gameToWrite);
+        }
       }
     }
 
@@ -203,20 +213,51 @@ const { gameCode = "" } = Astro.props;
         const data = snapshot.val();
         if (data) {
           const prevGame = game;
-          
-          const playersArray = data.players
-          ? Object.keys(data.players).map(uid => ({
-              uid: uid, // Attach the UID as a property within the player object
-              ...data.players[uid]
-            }))
-          : []; // If no players, ensure it's an empty array
 
+          // sanitize players list from firebase object
+          const playersArray = data.players
+            ? Object.entries(data.players)
+                .filter(([, p]) => p != null)
+                .map(([uid, playerObj]) => ({
+                  uid: uid.toString(), // always use string uid
+                  ...playerObj
+                }))
+            : [];
+
+          // clamp index values to avoid bad accesses
+          if (game.turnIndex >= playersArray.length || game.turnIndex < 0) {
+            console.warn("Firebase sync: turnIndex out of bounds, resetting to 0", game.turnIndex, playersArray.length);
+            game.turnIndex = 0;
+          }
+          if (
+            game.circleGuessIndex !== undefined &&
+            (game.circleGuessIndex >= playersArray.length || game.circleGuessIndex < 0)
+          ) {
+            console.warn(
+              "Firebase sync: circleGuessIndex out of bounds, resetting to 0",
+              game.circleGuessIndex,
+              playersArray.length
+            );
+            game.circleGuessIndex = 0;
+          }
+
+          // build new game state with defaults for missing fields
           game = {
-            ...data, // Copy all other properties from Firebase
-            players: playersArray // Assign the transformed players array
+            phase: data.phase ?? "LOBBY",
+            players: playersArray,
+            turnIndex: data.turnIndex ?? 0,
+            circleGuessIndex: data.circleGuessIndex,
+            currentSong: data.currentSong ?? null,
+            originalGuesses: data.originalGuesses || {},
+            circleGuesses: data.circleGuesses || {},
+            answerRevealed: data.answerRevealed ?? false,
+            winner: data.winner ?? undefined
           };
 
           console.log("Local game.players after Firebase update and transformation:", game.players);
+          if (playersArray.length !== prevGame.players.length) {
+            console.log("Players count changed from", prevGame.players.length, "to", playersArray.length);
+          }
 
           handleEngineEffects(prevGame, game, player);
           renderGame();
@@ -240,51 +281,59 @@ const { gameCode = "" } = Astro.props;
     newBtn.onclick = async () => {
   console.log("🎲 New Song button clicked");
   console.log("Current phase:", game.phase);
-  
+
+  // only host may pick the next song when playing
+  const me = game.players.find(p => p.uid === myPlayerId);
+  if (gameCode && !me?.isHost) {
+    console.log("🔒 not host, ignoring new-song request");
+    return;
+  }
+
   if (game.phase !== "SONG_PLAYING") {
     console.log("❌ Cannot load song - wrong phase");
     return;
   }
-  
-  // ADD THIS CHECK:
+
   if (songPlayedThisRound) {
     console.log("❌ Song already played this round");
     return;
   }
-  
+
   newBtn.disabled = true;
-  
+
   try {
     const song = await getNextSong();
     console.log("✅ Got song:", song);
-    
+
     // Dispatch to update game state
     dispatch({ type: "PLAY_SONG", song });
-    
-    // Simple direct play (like SongPlayer does)
+
+    // local playback will also be driven by engine.effects when new state arrives
+    // but we can optimistically start now
     player.src = song.previewURL;
     await player.play();
     playBtn.textContent = "⏸";
     console.log("✅ Audio playing!");
-    
+
     songPlayedThisRound = true;
-    
   } catch (error) {
     console.error("Error loading song:", error);
     alert(error instanceof Error ? error.message : "Error loading song 😢");
   }
-  
+
   newBtn.disabled = false;
 };
 
     playBtn.onclick = () => {
-      if (player.paused) {
-        player.play();
-        playBtn.textContent = "⏸";
-      } else {
-        player.pause();
-        playBtn.textContent = "▶";
+      // only the active guesser may toggle play/pause
+      const activeId = getActiveGuesserId();
+      if (gameCode && myPlayerId !== activeId) {
+        console.log("🔒 play/pause disabled for non-active player");
+        return;
       }
+      // toggle play state via reducer so it syncs to Firebase
+      const currentlyPlaying = game.currentSong?.isPlaying ?? false;
+      dispatch({ type: "SET_PLAYING", playing: !currentlyPlaying });
     };
 
     submitGuessBtn.onclick = () => {
@@ -298,15 +347,16 @@ const { gameCode = "" } = Astro.props;
       const year = parseInt(yearInput.value);
       const album = albumInput.value;
 
+      const activeId = getActiveGuesserId();
       if (game.phase === "ORIGINAL_GUESS_TURN") {
+        if (activeId !== myPlayerId) return; // ignore others
         dispatch({
           type: "ORIGINAL_GUESS_SUBMIT",
           guesses: { song, artist, year, album }
         });
       } else if (game.phase === "CIRCLE_GUESS_TURN" && game.circleGuessIndex !== undefined) {
-        // Use the current circle player's ID for testing
+        if (activeId !== myPlayerId) return;
         const currentCirclePlayer = game.players[game.circleGuessIndex];
-        
         dispatch({
           type: "CIRCLE_GUESS_SUBMIT",
           playerId: currentCirclePlayer.uid,
@@ -358,31 +408,39 @@ const { gameCode = "" } = Astro.props;
         lobbyControls.style.display = game.phase === "LOBBY" ? "block" : "none";
       }
 
-      // Update phase display
-      statusEl.textContent = `Phase: ${game.phase}`;
+      // Update phase display (fallback to LOBBY if DB missing)
+      const phaseDisplay = game.phase || "LOBBY";
+      statusEl.textContent = `Phase: ${phaseDisplay}`;
 
     if (game.phase !== "LOBBY" && game.players.length > 0) {
-    const currentPlayer = game.players[game.turnIndex];
-    statusEl.textContent += ` | Original Guesser: ${currentPlayer.name}`;
-    
-    // Show circle guesser
-    if (game.phase === "CIRCLE_GUESS_TURN" && game.circleGuessIndex !== undefined) {
-      const circlePlayer = game.players[game.circleGuessIndex];
-      statusEl.textContent += ` | Circle Turn: ${circlePlayer.name}`;
-    }
+      // make sure indices are valid to avoid undefined access
+      if (game.turnIndex >= game.players.length || game.turnIndex < 0) {
+        console.warn("renderGame: turnIndex out of bounds", game.turnIndex, game.players.length);
+      }
+      const currentPlayer = game.players[game.turnIndex] || { name: "(none)" };
+      statusEl.textContent += ` | Original Guesser: ${currentPlayer.name}`;
+      
+      // Show circle guesser
+      if (game.phase === "CIRCLE_GUESS_TURN" && game.circleGuessIndex !== undefined) {
+        if (game.circleGuessIndex >= game.players.length || game.circleGuessIndex < 0) {
+          console.warn("renderGame: circleGuessIndex out of bounds", game.circleGuessIndex, game.players.length);
+        }
+        const circlePlayer = game.players[game.circleGuessIndex] || { name: "(none)" };
+        statusEl.textContent += ` | Circle Turn: ${circlePlayer.name}`;
+      }
     }
 
       // Update player list
       playerListEl.innerHTML = game.players
-        .map(p => `<div>${p.name}: ${p.health}HP ${p.alive ? "✓" : "💀"}</div>`)
+        .map(p => `<div>${p?.name || "(no name)"}: ${p?.health ?? 0}HP ${p?.alive ? "✓" : "💀"}</div>`)
         .join("");
 
-      // Show/hide guess form based on phase
-      if (game.phase === "ORIGINAL_GUESS_TURN") {
-        // For testing: show form for the turn player
-        guessForm.style.display = "block";
-      } else if (game.phase === "CIRCLE_GUESS_TURN" && game.circleGuessIndex !== undefined) {
-        // For testing: show form for the circle turn player
+      // Show/hide guess form based on phase *and* active guesser
+      const activeId = getActiveGuesserId();
+      if (
+        (game.phase === "ORIGINAL_GUESS_TURN" || game.phase === "CIRCLE_GUESS_TURN") &&
+        activeId === myPlayerId
+      ) {
         guessForm.style.display = "block";
       } else {
         guessForm.style.display = "none";
@@ -417,8 +475,23 @@ const { gameCode = "" } = Astro.props;
       if (resolveBtn) resolveBtn.style.display = 
         game.phase === "REVEAL_RESULTS" ? "block" : "none";
 
-      // Enable/disable music controls based on phase
-      newBtn.disabled = game.phase !== "SONG_PLAYING" || songPlayedThisRound;
+      // Enable/disable music controls based on phase, host status and active guesser
+      const me = game.players.find(p => p.uid === myPlayerId);
+      const isHost = me?.isHost;
+      // activeId already computed above when showing the guess form
+      // only host can shuffle; only active guesser can play/pause
+      newBtn.disabled =
+        game.phase !== "SONG_PLAYING" ||
+        songPlayedThisRound ||
+        (gameCode ? !isHost : false);
+      playBtn.disabled = gameCode ? myPlayerId !== activeId : false;
+
+      // reflect play button based on state
+      if (game.currentSong?.isPlaying) {
+        playBtn.textContent = "⏸";
+      } else {
+        playBtn.textContent = "▶";
+      }
     }  // ← Function closes HERE, not earlier
 
     // Initial render
