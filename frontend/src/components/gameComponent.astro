@@ -11,8 +11,6 @@ const { gameCode = "" } = Astro.props;
 
   <!-- ADD PLAYER NAME INPUT -->
   <div id="lobby-controls">
-    <input id="player-name" placeholder="Enter your name" />
-    <button id="add-player">Add Player</button>
     <button id="start-game">Start Game</button>
   </div>
   
@@ -46,10 +44,35 @@ const { gameCode = "" } = Astro.props;
 </div>
 
 <script>
-  import { ref, set, update, onValue } from "firebase/database";
-  import { realtimeDb } from "../libraries/firebase";
   import { gameReducer, type Game, type GameAction } from "../game.logic/engine";
   import { initEngineEffects, handleEngineEffects } from "../game.logic/engine.effects";
+  import { onAuthStateChanged } from "firebase/auth"; // Import authentication functions
+  import type { User } from "firebase/auth"
+  import { ref, set, onValue, push, update } from "firebase/database"; // Import Realtime Database specific functions
+  import { realtimeDb, analytics, auth } from "../libraries/firebase";
+
+  let currentUser: User | null = null; // Declare currentUser globally
+  let myPlayerId: string | null = null; // To store the UID of the current user's player
+
+  onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in.
+    currentUser = user;
+    myPlayerId = user.uid; // Store the UID
+    console.log("Game component: Authenticated user UID:", myPlayerId);
+
+    // You can now use `myPlayerId` in your game logic.
+    // For example, if you need to perform an action specific to the current player:
+    // displayPlayerSpecificUI(myPlayerId);
+  } else {
+    // User is signed out or anonymous session expired.
+    currentUser = null;
+    myPlayerId = null;
+    console.warn("Game component: No user authenticated. User might have signed out or session expired.");
+    // You might want to redirect to the landing page or prompt for re-authentication
+  }
+  });
+
 
   document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById("game-container");
@@ -58,11 +81,35 @@ const { gameCode = "" } = Astro.props;
     const player = document.getElementById("player") as HTMLAudioElement;
     const guessForm = document.getElementById("guess-form") as HTMLDivElement;
     const submitGuessBtn = document.getElementById("submit-guess") as HTMLButtonElement;
-    const addPlayerBtn = document.getElementById("add-player") as HTMLButtonElement;
     const startGameBtn = document.getElementById("start-game") as HTMLButtonElement;
-    const playerNameInput = document.getElementById("player-name") as HTMLInputElement;
-    
     const gameCode = container?.getAttribute("data-game-code") ?? "";
+    const playerListDiv = document.getElementById("player-list") as HTMLDivElement;
+
+    if (!gameCode) {
+      console.error("No game code found");
+      return;
+    }
+
+    const playersRef = ref(realtimeDb, `games/${gameCode}/players`);
+    onValue(playersRef, (snapshot) => {
+      const playersData = snapshot.val();
+      if (!playersData) {
+        playerListDiv.innerHTML = "<p>No players yet</p>";
+        return;
+      }
+
+      // Convert players object to array and render
+      const playersList = Object.entries(playersData).map(([uid, player]: any) => {
+        return `
+          <div class="player-item">
+            <span class="player-name">${player.name || "Unknown"}</span>
+            <span class="player-health">${player.health || 100} HP</span>
+          </div>
+        `;
+      });
+
+      playerListDiv.innerHTML = playersList.join("");
+    });
 
     // Song fetching logic (from MusicPlayer)
     const playedTrackIds = new Set<number>();
@@ -127,7 +174,6 @@ const { gameCode = "" } = Astro.props;
     };
 
     let songPlayedThisRound = false;
-    let myPlayerId: number | null = null;
 
     function dispatch(action: GameAction) {
       const prevGame = game;
@@ -157,36 +203,30 @@ const { gameCode = "" } = Astro.props;
         const data = snapshot.val();
         if (data) {
           const prevGame = game;
-          game = data;
+          
+          const playersArray = data.players
+          ? Object.keys(data.players).map(uid => ({
+              uid: uid, // Attach the UID as a property within the player object
+              ...data.players[uid]
+            }))
+          : []; // If no players, ensure it's an empty array
+
+          game = {
+            ...data, // Copy all other properties from Firebase
+            players: playersArray // Assign the transformed players array
+          };
+
+          console.log("Local game.players after Firebase update and transformation:", game.players);
+
           handleEngineEffects(prevGame, game, player);
           renderGame();
+        } else {
+          console.warn("Game data is null or undefined from Firebase.");
         }
       });
     }
 
     // UI Event Handlers
-    // ADD PLAYER HANDLER
-    // ADD PLAYER HANDLER (around line 168)
-    addPlayerBtn.addEventListener("click", () => {
-      const name = playerNameInput.value.trim();
-      if (!name) {
-        alert("Please enter a name");
-        return;
-      }
-      
-      const uid = Date.now(); // Simple unique ID
-      myPlayerId = uid; // ← ADD THIS LINE - Save this player's ID
-      
-      dispatch({
-        type: "ADD_PLAYER",
-        player: {
-          uid: uid,  // ← Use the uid variable
-          name: name
-        }
-      });
-      
-      playerNameInput.value = ""; // Clear input
-    });
 
     // START GAME HANDLER
     startGameBtn.addEventListener("click", () => {
@@ -296,6 +336,9 @@ const { gameCode = "" } = Astro.props;
 
     // Render game state to UI
     function renderGame() {
+      
+      console.log("Rendering game. Current players in renderGame():", game.players);
+
       const statusEl = document.getElementById("game-status");
       const playerListEl = document.getElementById("player-list");
       const resultsEl = document.getElementById("results");

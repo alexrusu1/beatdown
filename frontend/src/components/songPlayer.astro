@@ -12,8 +12,22 @@ const { gameCode = "" } = Astro.props;
 </div>
 
 <script>
-  import { ref, set, update, onValue } from "firebase/database";
-  import { realtimeDb } from "../libraries/firebase";
+
+  import { initializeApp } from "firebase/app";
+  import { getDatabase, ref, set, onValue, push, update } from "firebase/database"; // Import Realtime Database specific functions
+
+  const firebaseConfig = {
+  apiKey: "YOUR_API_KEY", // Replace with your actual API Key
+  authDomain: "beatdown-397a5.firebaseapp.com",
+  databaseURL: "https://beatdown-397a5-default-rtdb.firebaseio.com", // Your database URL
+  projectId: "beatdown-397a5",
+  storageBucket: "beatdown-397a5.appspot.com",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID", // Replace with your actual ID
+  appId: "YOUR_APP_ID", // Replace with your actual App ID
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
 
   document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById("container");
@@ -72,9 +86,9 @@ const { gameCode = "" } = Astro.props;
     if (!playBtn || !newBtn || !player) return;
 
     if (gameCode) {
-      const currentSongRef = ref(realtimeDb, `games/${gameCode}/currentSong`);
+      const currentSongRef = ref(database, `games/${gameCode}/currentSong`);
 
-      onValue(currentSongRef, (snapshot) => {
+      onValue(currentSongRef, (snapshot: any) => {
         const data = snapshot.val();
         if (!data?.previewUrl) return;
         if (player.src !== data.previewUrl) {

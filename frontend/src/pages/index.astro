@@ -5,20 +5,81 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout>
+
 	<div id="container">
 		<Welcome />
-		<div id="joinForm">
-			<label for="gameCode">Game code</label>
-			<input type="text" id="gameCode" placeholder="Enter code" maxlength="8" autocomplete="off" />
-			<button id="submitCodeBtn" type="button">Join Game</button>
+		<!-- Player Name Input -->
+		<div id="name-section">
+			<input 
+				type="text" 
+				id="player-name" 
+				placeholder="Enter your name"
+				maxlength="20"
+			/>
 		</div>
-		<button id="createBtn" type="button">Create Game</button>
+
+        <!-- will be shown during name step -->
+        <button id="submitNameBtn" type="button" style="display:none">Submit Name</button>
+
+        <div id="joinForm">
+            <input 
+                type="text" 
+                id="gameCode" 
+                placeholder="Enter game code"
+                maxlength="6"
+            />
+            <button id="submitCodeBtn" type="button">Join Game</button>
+        </div>
+        <button id="createBtn" type="button">Create Game</button>
 	</div>
 </Layout>
 
 <script>
 	import { ref, set, get, update } from "firebase/database";
-	import { realtimeDb } from "../libraries/firebase";
+	import { realtimeDb, auth } from "../libraries/firebase";
+	import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
+	import type { User } from "firebase/auth"
+
+	let currentUser: User | null = null;
+	let playerName: string = "";
+
+	onAuthStateChanged(auth, (user) => {
+		currentUser = user;
+		if (user) {
+			console.log("Landing page authenticated as:", user.uid);
+		} else {
+			console.log("Landing page not authenticated.");
+			signInAnonymously(auth)
+				.then(userCredential => {
+					currentUser = userCredential.user;
+					console.log("Signed in anonymously during auth state change:", currentUser.uid);
+				})
+				.catch(error => {
+					console.error("Error signing in anonymously during auth state change:", error);
+					alert("Could not authenticate. Please check your internet connection.");
+				});
+		}
+	});
+
+
+	async function ensureAuthenticatedUserUid(): Promise<string> {
+        
+		await new Promise(resolve => setTimeout(resolve, 50)); // Wait a bit before checking again
+
+		if (!currentUser) {
+			try {
+				const userCredential = await signInAnonymously(auth);
+				currentUser = userCredential.user;
+			} catch (error) {
+				console.error("Anonymous sign-in failed on landing page:", error);
+				throw new Error("Authentication required to join or create a game.");
+			}
+		}
+		if (!currentUser?.uid) {
+			throw new Error("Authenticated user has no UID.");
+		}
+		return currentUser.uid;
+	}
 
 	function generateRoomCode(length = 6): string {
 		const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -29,101 +90,167 @@ import Layout from '../layouts/Layout.astro';
 		return result;
 	}
 
-	function getOrCreateClientId(): string {
-		let id = typeof localStorage !== "undefined" ? localStorage.getItem("beatdown_client_id") : null;
-		if (!id) {
-			id = crypto.randomUUID?.() ?? `client_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-			try { localStorage.setItem("beatdown_client_id", id); } catch (_) {}
-		}
-		return id;
-	}
+	document.addEventListener("DOMContentLoaded", () => {
+        const playerNameInput = document.getElementById("player-name") as HTMLInputElement;
+        const nameSection = document.getElementById("name-section") as HTMLDivElement;
+        const submitNameBtn = document.getElementById("submitNameBtn") as HTMLButtonElement;
+        const createBtn = document.getElementById("createBtn") as HTMLButtonElement;
+        const gameCodeInput = document.getElementById("gameCode") as HTMLInputElement;
+        const submitCodeBtn = document.getElementById("submitCodeBtn") as HTMLButtonElement;
+        const joinForm = document.getElementById("joinForm") as HTMLDivElement;
 
-	async function createGame(): Promise<string> {
-		const hostId = getOrCreateClientId();
+        if (!createBtn || !gameCodeInput || !submitCodeBtn || !playerNameInput || !nameSection || !submitNameBtn || !joinForm) return;
+
+        // make sure inline style matches the CSS hiding so computed checks are reliable
+        nameSection.style.display = "none";
+        submitNameBtn.style.display = "none";
+
+        // Update playerName when input changes
+        playerNameInput.addEventListener("input", (e) => {
+            playerName = (e.target as HTMLInputElement).value.trim();
+        });
+
+        // state tracking for two-step flows
+        let pendingCode = "";            // holds code when join flow started
+        let awaitingNameFor: "create" | "join" | "" = "";
+
+        function showNameInput() {
+            // hide everything except name section and submit name button
+            nameSection.style.display = "block";
+            createBtn.style.display = "none";
+            joinForm.style.display = "none";
+
+            submitNameBtn.style.display = "inline-block";
+            playerNameInput.focus();
+        }
+
+        createBtn.addEventListener("click", async () => {
+            const hidden = getComputedStyle(nameSection).display === "none";
+            // first click should reveal the name field if hidden
+            if (hidden) {
+                awaitingNameFor = "create";
+                showNameInput();
+                return;
+            }
+            // after this point, createBtn will be hidden so this branch won't run again
+        });
+
+        async function submitCode() {
+            // helper flow when name already entered and pendingCode set
+            if (!gameCodeInput || !submitCodeBtn) return;
+
+            const hidden = getComputedStyle(nameSection).display === "none";
+            // if name is not yet visible we are in validation stage
+            if (hidden) {
+                const code = gameCodeInput.value.trim();
+                if (!code) return;
+                // check existence
+                const exists = await checkCodeExists(code);
+                if (!exists) {
+                    alert("Game not found");
+                    return;
+                }
+                pendingCode = code.toUpperCase();
+                awaitingNameFor = "join";
+                showNameInput();
+                return;
+            }
+            // won't reach here; submitCodeBtn is hidden once name input shown
+        }
+
+        submitCodeBtn.addEventListener("click", submitCode);
+
+        // final submission after entering name
+        submitNameBtn.addEventListener("click", async () => {
+            if (!playerName) {
+                alert("Please enter your name");
+                return;
+            }
+            submitNameBtn.disabled = true;
+            try {
+                if (awaitingNameFor === "create") {
+                    const code = await createGame(playerName);
+                    window.location.href = `game?code=${encodeURIComponent(code)}`;
+                } else if (awaitingNameFor === "join") {
+                    const code = pendingCode;
+                    const ok = await joinGame(code, playerName);
+                    if (ok) {
+                        window.location.href = `game?code=${encodeURIComponent(code)}`;
+                    } else {
+                        alert("Game not found or you're already in it.");
+                        submitNameBtn.disabled = false;
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Failed to proceed. Check your connection and try again.");
+                submitNameBtn.disabled = false;
+            }
+        });
+
+        async function checkCodeExists(code: string): Promise<boolean> {
+            const normalized = code.trim().toUpperCase();
+            if (!normalized) return false;
+            const gameRef = ref(realtimeDb, `games/${normalized}`);
+            const snapshot = await get(gameRef);
+            return snapshot.exists();
+        }
+    });
+
+	async function createGame(name: string): Promise<string> {
+		const hostId = await ensureAuthenticatedUserUid();
 		let code = generateRoomCode();
 		const gameRef = ref(realtimeDb, `games/${code}`);
 		const snapshot = await get(gameRef);
-		// If code collision (unlikely), try again once
 		if (snapshot.exists()) {
 			code = generateRoomCode();
 		}
-		const finalRef = ref(realtimeDb, `games/${code}`);
-		await set(finalRef, {
-			hostId,
-			status: "waiting",
-			createdAt: Date.now(),
-			currentRound: 0,
-			players: {
-				[hostId]: { name: "Host", isHost: true, joinedAt: Date.now() },
-			},
-		});
+		const playersRef = ref(realtimeDb, `games/${code}/players/${hostId}`);
+        await set(playersRef, {
+            name: name,
+            isHost: true,
+            joinedAt: Date.now(),
+            health: 100,
+            alive: true
+        });
 		return code;
 	}
 
-	async function joinGame(code: string): Promise<boolean> {
-		const normalizedCode = code.trim().toUpperCase();
-		if (!normalizedCode) return false;
-		const gameRef = ref(realtimeDb, `games/${normalizedCode}`);
-		const snapshot = await get(gameRef);
-		if (!snapshot.exists()) return false;
-		const playerId = getOrCreateClientId();
-		const playersRef = ref(realtimeDb, `games/${normalizedCode}/players/${playerId}`);
-		await set(playersRef, {
-			name: "Player",
-			isHost: false,
-			joinedAt: Date.now(),
-		});
-		return true;
-	}
 
-	document.addEventListener("DOMContentLoaded", () => {
-		const createBtn = document.getElementById("createBtn") as HTMLButtonElement | null;
-		const gameCodeInput = document.getElementById("gameCode") as HTMLInputElement | null;
-		const submitCodeBtn = document.getElementById("submitCodeBtn") as HTMLButtonElement | null;
+    async function joinGame(code: string, name: string): Promise<boolean> {
+        const normalizedCode = code.trim().toUpperCase();
+        if (!normalizedCode) return false;
 
-		if (!createBtn || !gameCodeInput || !submitCodeBtn) return;
+        const playerId = await ensureAuthenticatedUserUid();
+        const gameRef = ref(realtimeDb, `games/${normalizedCode}`);
+        const snapshot = await get(gameRef);
 
-		createBtn.addEventListener("click", async () => {
-			createBtn.disabled = true;
-			try {
-				const code = await createGame();
-				window.location.href = `game?code=${encodeURIComponent(code)}`;
-			} catch (e) {
-				console.error(e);
-				alert("Failed to create game. Check your connection and try again.");
-				createBtn.disabled = false;
-			}
-		});
+        if (!snapshot.exists()) {
+            console.log("Game does not exist:", normalizedCode);
+            return false;
+        }
 
-		async function submitCode() {
-			if (!gameCodeInput || !submitCodeBtn) return;
-			const code = gameCodeInput.value.trim();
-			if (!code) return;
-			submitCodeBtn.disabled = true;
-			try {
-				const ok = await joinGame(code);
-				if (ok) {
-					window.location.href = `game?code=${encodeURIComponent(code.trim().toUpperCase())}`;
-				} else {
-					alert("Game not found. Check the code and try again.");
-					submitCodeBtn.disabled = false;
-				}
-			} catch (e) {
-				console.error(e);
-				alert("Failed to join game. Check your connection and try again.");
-				submitCodeBtn.disabled = false;
-			}
-		}
+        const gameData = snapshot.val();
+        if (gameData.players && gameData.players[playerId]) {
+            console.log("Player already in game:", playerId);
+            return true;
+        }
 
-		submitCodeBtn.addEventListener("click", submitCode);
-		gameCodeInput.addEventListener("keydown", (e) => {
-			if (e.key === "Enter") submitCode();
-		});
-	});
+        const playersRef = ref(realtimeDb, `games/${normalizedCode}/players/${playerId}`);
+        await set(playersRef, {
+            name: name,
+            isHost: false,
+            joinedAt: Date.now(),
+            health: 100,
+            alive: true
+        });
+        return true;
+    }
+    
 </script>
 
 <style>
-
+	
 	#container {
 		display: flex;
 		flex-direction: column;
@@ -216,4 +343,29 @@ import Layout from '../layouts/Layout.astro';
 		padding: 0 1.5rem;
 	}
 
+    #name-section {
+        margin-bottom: 20px;
+		display: none;
+    }
+
+    #player-name {
+        padding: 10px;
+        font-size: 16px;
+        border: 2px solid rgba(0, 234, 255, 0.5);
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border-radius: 4px;
+        width: 200px;
+        text-align: center;
+    }
+
+    #player-name:focus {
+        outline: none;
+        border-color: rgba(0, 234, 255, 0.9);
+        box-shadow: 0 0 10px rgba(0, 234, 255, 0.5);
+    }
+
+    #player-name::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
 </style>

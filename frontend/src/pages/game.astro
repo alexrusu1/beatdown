@@ -1,6 +1,8 @@
 ---
-import GameComponent from '../components/game.astro';
+import GameComponent from '../components/gameComponent.astro';
 import Layout from '../layouts/Layout.astro';
+
+export const prerender = false;    // or set `output: "server"` in astro.config.mjs
 
 const gameCode = Astro.url.searchParams.get("code") ?? "";
 ---
@@ -13,6 +15,8 @@ const gameCode = Astro.url.searchParams.get("code") ?? "";
 </Layout>
 
 <script>
+
+  	// pass it into your island if you need to
 </script>
 
 <style>
@@ -25,7 +29,7 @@ const gameCode = Astro.url.searchParams.get("code") ?? "";
 		font-optical-sizing: auto;
   		font-weight: 400;
   		font-style: normal;
-		font-size: 500px;
+		font-size: 50px;
 		text-shadow:
 			0 0 12px rgba(0, 234, 255, 0.9),
 			0 0 24px rgba(255, 0, 255, 0.7);
