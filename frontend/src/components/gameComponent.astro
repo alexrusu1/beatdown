@@ -21,6 +21,7 @@ const { gameCode = "" } = Astro.props;
   <div id="music-controls">
     <button id="newBtn">🎲 New Song</button>
     <button id="playBtn">▶</button>
+    <button id="skip-btn" style="display:none">⏭ Skip</button>
     <audio id="player"></audio>
   </div>
 
@@ -78,6 +79,7 @@ const { gameCode = "" } = Astro.props;
     const container = document.getElementById("game-container");
     const playBtn = document.getElementById("playBtn") as HTMLButtonElement;
     const newBtn = document.getElementById("newBtn") as HTMLButtonElement;
+    const skipBtn = document.getElementById("skip-btn") as HTMLButtonElement;
     const player = document.getElementById("player") as HTMLAudioElement;
     const guessForm = document.getElementById("guess-form") as HTMLDivElement;
     const submitGuessBtn = document.getElementById("submit-guess") as HTMLButtonElement;
@@ -269,8 +271,10 @@ const { gameCode = "" } = Astro.props;
 
     // UI Event Handlers
 
-    // START GAME HANDLER
+// START GAME HANDLER (redundant but left for context)
     startGameBtn.addEventListener("click", () => {
+      const host = game.players.find(p => p.isHost);
+      if (host?.uid !== myPlayerId) return; // only host may start
       if (game.players.length < 2) {
         alert("Need at least 2 players to start!");
         return;
@@ -334,6 +338,15 @@ const { gameCode = "" } = Astro.props;
       // toggle play state via reducer so it syncs to Firebase
       const currentlyPlaying = game.currentSong?.isPlaying ?? false;
       dispatch({ type: "SET_PLAYING", playing: !currentlyPlaying });
+    };
+
+    skipBtn.onclick = () => {
+      // only host may skip
+      const host = game.players.find(p => p.isHost);
+      if (gameCode && host?.uid !== myPlayerId) return;
+      if (game.phase === "SONG_PLAYING") {
+        dispatch({ type: "END_SONG" });
+      }
     };
 
     submitGuessBtn.onclick = () => {
@@ -406,6 +419,11 @@ const { gameCode = "" } = Astro.props;
       // HIDE LOBBY CONTROLS WHEN GAME STARTS
       if (lobbyControls) {
         lobbyControls.style.display = game.phase === "LOBBY" ? "block" : "none";
+      }
+      // disable the start button for non-hosts even when visible
+      const host = game.players.find(p => p.isHost);
+      if (startGameBtn) {
+        startGameBtn.disabled = host?.uid !== myPlayerId || game.players.length < 2;
       }
 
       // Update phase display (fallback to LOBBY if DB missing)
@@ -485,6 +503,14 @@ const { gameCode = "" } = Astro.props;
         songPlayedThisRound ||
         (gameCode ? !isHost : false);
       playBtn.disabled = gameCode ? myPlayerId !== activeId : false;
+
+      // show skip button only during song playing and only for host
+      if (skipBtn) {
+        skipBtn.style.display =
+          game.phase === "SONG_PLAYING" && (isHost || !gameCode)
+            ? "inline-block"
+            : "none";
+      }
 
       // reflect play button based on state
       if (game.currentSong?.isPlaying) {
