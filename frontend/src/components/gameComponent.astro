@@ -19,7 +19,6 @@ const { gameCode = "" } = Astro.props;
   
   <!-- Music Player Controls -->
   <div id="music-controls">
-    <button id="newBtn">🎲 New Song</button>
     <button id="playBtn">▶</button>
     <button id="skip-btn" style="display:none">⏭ Skip</button>
     <audio id="player"></audio>
@@ -55,30 +54,11 @@ const { gameCode = "" } = Astro.props;
   let currentUser: User | null = null; // Declare currentUser globally
   let myPlayerId: string | null = null; // To store the UID of the current user's player
 
-  onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // User is signed in.
-    currentUser = user;
-    myPlayerId = user.uid; // Store the UID
-    console.log("Game component: Authenticated user UID:", myPlayerId);
-
-    // You can now use `myPlayerId` in your game logic.
-    // For example, if you need to perform an action specific to the current player:
-    // displayPlayerSpecificUI(myPlayerId);
-  } else {
-    // User is signed out or anonymous session expired.
-    currentUser = null;
-    myPlayerId = null;
-    console.warn("Game component: No user authenticated. User might have signed out or session expired.");
-    // You might want to redirect to the landing page or prompt for re-authentication
-  }
-  });
 
 
   document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById("game-container");
     const playBtn = document.getElementById("playBtn") as HTMLButtonElement;
-    const newBtn = document.getElementById("newBtn") as HTMLButtonElement;
     const skipBtn = document.getElementById("skip-btn") as HTMLButtonElement;
     const player = document.getElementById("player") as HTMLAudioElement;
     const guessForm = document.getElementById("guess-form") as HTMLDivElement;
@@ -174,7 +154,8 @@ const { gameCode = "" } = Astro.props;
       return null;
     }
 
-    let songPlayedThisRound = false;
+    // retained for legacy logic but no longer tied to UI
+  let songPlayedThisRound = false;
 
     function dispatch(action: GameAction) {
       const prevGame = game;
@@ -204,6 +185,40 @@ const { gameCode = "" } = Astro.props;
       }
     }
 
+    // helper to load song when phase is SONG_PLAYING and none yet
+    async function maybeLoadSong() {
+      console.log("maybeLoadSong invoked", { phase: game.phase, currentSong: !!game.currentSong, myPlayerId });
+      if (!myPlayerId) return;
+      if (game.phase === "SONG_PLAYING" && !game.currentSong) {
+        const origGuesserId = game.players[game.turnIndex]?.uid;
+        const host = game.players.find(p => p.isHost)?.uid;
+        if (myPlayerId === origGuesserId || myPlayerId === host) {
+          console.log("maybeLoadSong deciding to fetch (orig or host)", { origGuesserId, host });
+          try {
+            const song = await getNextSong();
+            dispatch({ type: "PLAY_SONG", song: { ...song, isPlaying: false } });
+          } catch (err) {
+            console.error("Failed to load initial song", err);
+          }
+        } else {
+          console.log("maybeLoadSong - not authorized to fetch", { origGuesserId, host });
+        }
+      }
+    }
+
+    // authentication observer moved inside DOMContentLoaded so dispatch is available
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        currentUser = user;
+        myPlayerId = user.uid; // Store the UID
+        console.log("Game component: Authenticated user UID:", myPlayerId);
+        maybeLoadSong(); // try load if phase already started
+      } else {
+        currentUser = null;
+        myPlayerId = null;
+        console.warn("Game component: No user authenticated. User might have signed out or session expired.");
+      }
+    });
     // Initialize effects
     initEngineEffects(player, () => game, dispatch);
 
@@ -262,6 +277,10 @@ const { gameCode = "" } = Astro.props;
           }
 
           handleEngineEffects(prevGame, game, player);
+          // if we're in SONG_PLAYING and still have no song, check again
+          if (game.phase === "SONG_PLAYING" && !game.currentSong) {
+            maybeLoadSong();
+          }
           renderGame();
         } else {
           console.warn("Game data is null or undefined from Firebase.");
@@ -282,51 +301,7 @@ const { gameCode = "" } = Astro.props;
       dispatch({ type: "START_GAME" });
     });
 
-    newBtn.onclick = async () => {
-  console.log("🎲 New Song button clicked");
-  console.log("Current phase:", game.phase);
 
-  // only host may pick the next song when playing
-  const me = game.players.find(p => p.uid === myPlayerId);
-  if (gameCode && !me?.isHost) {
-    console.log("🔒 not host, ignoring new-song request");
-    return;
-  }
-
-  if (game.phase !== "SONG_PLAYING") {
-    console.log("❌ Cannot load song - wrong phase");
-    return;
-  }
-
-  if (songPlayedThisRound) {
-    console.log("❌ Song already played this round");
-    return;
-  }
-
-  newBtn.disabled = true;
-
-  try {
-    const song = await getNextSong();
-    console.log("✅ Got song:", song);
-
-    // Dispatch to update game state
-    dispatch({ type: "PLAY_SONG", song });
-
-    // local playback will also be driven by engine.effects when new state arrives
-    // but we can optimistically start now
-    player.src = song.previewURL;
-    await player.play();
-    playBtn.textContent = "⏸";
-    console.log("✅ Audio playing!");
-
-    songPlayedThisRound = true;
-  } catch (error) {
-    console.error("Error loading song:", error);
-    alert(error instanceof Error ? error.message : "Error loading song 😢");
-  }
-
-  newBtn.disabled = false;
-};
 
     playBtn.onclick = () => {
       // only the active guesser may toggle play/pause
@@ -341,14 +316,13 @@ const { gameCode = "" } = Astro.props;
     };
 
     skipBtn.onclick = () => {
-      // only host may skip
-      const host = game.players.find(p => p.isHost);
-      if (gameCode && host?.uid !== myPlayerId) return;
+      // only the original guesser may skip
+      const origId = game.players[game.turnIndex]?.uid;
+      if (gameCode && origId !== myPlayerId) return;
       if (game.phase === "SONG_PLAYING") {
         dispatch({ type: "END_SONG" });
       }
     };
-
     submitGuessBtn.onclick = () => {
       const songInput = document.getElementById("song-input") as HTMLInputElement;
       const artistInput = document.getElementById("artist-input") as HTMLInputElement;
@@ -420,10 +394,15 @@ const { gameCode = "" } = Astro.props;
       if (lobbyControls) {
         lobbyControls.style.display = game.phase === "LOBBY" ? "block" : "none";
       }
-      // disable the start button for non-hosts even when visible
+      // show / hide start button and disable for non-hosts
       const host = game.players.find(p => p.isHost);
       if (startGameBtn) {
-        startGameBtn.disabled = host?.uid !== myPlayerId || game.players.length < 2;
+        if (host?.uid !== myPlayerId) {
+          startGameBtn.style.display = "none";
+        } else {
+          startGameBtn.style.display = "inline-block";
+        }
+        startGameBtn.disabled = game.players.length < 2;
       }
 
       // Update phase display (fallback to LOBBY if DB missing)
@@ -448,9 +427,12 @@ const { gameCode = "" } = Astro.props;
       }
     }
 
-      // Update player list
+      // Update player list, marking host
       playerListEl.innerHTML = game.players
-        .map(p => `<div>${p?.name || "(no name)"}: ${p?.health ?? 0}HP ${p?.alive ? "✓" : "💀"}</div>`)
+        .map(p => {
+          const label = `${p?.name || "(no name)"}${p?.isHost ? " (host)" : ""}`;
+          return `<div>${label}: ${p?.health ?? 0}HP ${p?.alive ? "✓" : "💀"}</div>`;
+        })
         .join("");
 
       // Show/hide guess form based on phase *and* active guesser
@@ -497,17 +479,19 @@ const { gameCode = "" } = Astro.props;
       const me = game.players.find(p => p.uid === myPlayerId);
       const isHost = me?.isHost;
       // activeId already computed above when showing the guess form
-      // only host can shuffle; only active guesser can play/pause
-      newBtn.disabled =
-        game.phase !== "SONG_PLAYING" ||
-        songPlayedThisRound ||
-        (gameCode ? !isHost : false);
       playBtn.disabled = gameCode ? myPlayerId !== activeId : false;
 
-      // show skip button only during song playing and only for host
+      // hide play button when not listening
+      playBtn.style.display = game.phase === "SONG_PLAYING" ? "inline-block" : "none";
+
+      // show skip button only when a song is loaded and only for the original
+      // guesser (turn player) while listening
+      const origGuesserId = game.players[game.turnIndex]?.uid;
       if (skipBtn) {
         skipBtn.style.display =
-          game.phase === "SONG_PLAYING" && (isHost || !gameCode)
+          game.phase === "SONG_PLAYING" &&
+          game.currentSong &&
+          origGuesserId === myPlayerId
             ? "inline-block"
             : "none";
       }

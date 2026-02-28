@@ -186,8 +186,12 @@ export function gameReducer(game: Game, action: GameAction): Game {
     // ───────── SONG_PLAYING
     case "SONG_PLAYING":
       if (action.type === "PLAY_SONG") {
-        // when a song is chosen we assume it begins playing immediately
-        return { ...game, currentSong: { ...action.song, isPlaying: true } };
+        // respect provided playing flag or default to false (so guesser must
+        // hit play)
+        return {
+          ...game,
+          currentSong: { ...action.song, isPlaying: action.song.isPlaying ?? false }
+        };
       }
       if (action.type === "END_SONG") {
         return { ...game, phase: "ORIGINAL_GUESS_TURN" };
