@@ -178,7 +178,15 @@ const { gameCode = "" } = Astro.props;
           delete gameToWrite.circleGuessIndex;
         }
         try {
-          set(gameRef, gameToWrite);
+            // Ensure players are stored in Firebase as an object keyed by uid
+            if (Array.isArray(gameToWrite.players)) {
+              const playersObj: any = {};
+              for (const p of gameToWrite.players) {
+                if (p && p.uid !== undefined) playersObj[p.uid] = p;
+              }
+              gameToWrite.players = playersObj;
+            }
+            set(gameRef, gameToWrite);
         } catch (err) {
           console.error("Failed to sync game to Firebase", err, gameToWrite);
         }
