@@ -13,22 +13,6 @@ const { gameCode = "" } = Astro.props;
 
 <script>
 
-  import { initializeApp } from "firebase/app";
-  import { getDatabase, ref, set, onValue, push, update } from "firebase/database"; // Import Realtime Database specific functions
-
-  const firebaseConfig = {
-  apiKey: "YOUR_API_KEY", // Replace with your actual API Key
-  authDomain: "beatdown-397a5.firebaseapp.com",
-  databaseURL: "https://beatdown-397a5-default-rtdb.firebaseio.com", // Your database URL
-  projectId: "beatdown-397a5",
-  storageBucket: "beatdown-397a5.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID", // Replace with your actual ID
-  appId: "YOUR_APP_ID", // Replace with your actual App ID
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const database = getDatabase(app);
-
   document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById("container");
     const playBtn = document.getElementById("playBtn") as HTMLButtonElement | null;

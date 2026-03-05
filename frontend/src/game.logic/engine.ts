@@ -48,6 +48,8 @@ export interface Game {
   circleGuesses: Record<number, Guess>;
   answerRevealed: boolean;
   winner?: number | null;
+  /** optional list of enabled categories (pop, Hip-Hop/rap, R&B/soul, dance) */
+  categories?: string[];
 }
 
 
@@ -61,6 +63,7 @@ export type GameAction =
   | { type: "CIRCLE_GUESS_SUBMIT"; playerId: number; guesses: Guess }
   | { type: "REVEAL_ANSWERS" }
   | { type: "RESOLVE_ROUND" }
+  | { type: "SET_CATEGORIES"; categories: string[] }
 
 
 // ──────────────────────────────────────────────── Helpers
@@ -167,6 +170,13 @@ export function gameReducer(game: Game, action: GameAction): Game {
         };
       }
 
+      if (action.type === "SET_CATEGORIES") {
+        // update the set of allowed categories in lobby
+        return {
+          ...game,
+          categories: [...action.categories]
+        };
+      }
 
       if (action.type === "START_GAME" && game.players.length >= 2) {
         return {
