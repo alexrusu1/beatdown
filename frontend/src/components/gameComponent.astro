@@ -17,6 +17,7 @@ const { gameCode = "" } = Astro.props;
       <label><input type="checkbox" id="category-hiphop"> Hip-Hop/Rap</label>
       <label><input type="checkbox" id="category-rnb"> R&B/Soul</label>
       <label><input type="checkbox" id="category-dance"> Dance</label>
+      <label><input type="checkbox" id="category-alternative"> Alternative</label>
     </div>
     <button id="start-game">Start Game</button>
   </div>
@@ -256,7 +257,8 @@ const { gameCode = "" } = Astro.props;
         { id: 'category-pop', value: 'pop' },
         { id: 'category-hiphop', value: 'hiphop' },
         { id: 'category-rnb', value: 'rnb' },
-        { id: 'category-dance', value: 'dance' }
+        { id: 'category-dance', value: 'dance' },
+        { id: 'category-alternative', value: 'alternative' }
       ];
       
       checkboxes.forEach(({ id, value }) => {
@@ -289,7 +291,7 @@ const { gameCode = "" } = Astro.props;
     }
 
     // Initialize category checkboxes
-    const categoryCheckboxes = ['category-pop', 'category-hiphop', 'category-rnb', 'category-dance'];
+    const categoryCheckboxes = ['category-pop', 'category-hiphop', 'category-rnb', 'category-dance', 'category-alternative'];
     categoryCheckboxes.forEach(id => {
       const checkbox = document.getElementById(id) as HTMLInputElement;
       if (checkbox) {
@@ -502,7 +504,8 @@ const { gameCode = "" } = Astro.props;
           'pop': 'category-pop',
           'hiphop': 'category-hiphop', 
           'rnb': 'category-rnb',
-          'dance': 'category-dance'
+          'dance': 'category-dance',
+          'alternative': 'category-alternative'
         };
         
         const host = game.players.find(p => p.isHost);

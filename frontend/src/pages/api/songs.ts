@@ -19,30 +19,8 @@ function filterSongsByCategories(songsData: any[], categories: string[]) {
       if (lowerCat === 'dance' || lowerCat === 'electronic' || lowerCat === 'edm') {
         return categories.includes('dance');
       }
-      if (lowerCat === 'pop' && categories.includes('dance')) {
-        const danceHits = [
-          'uptown funk', 'happy', 'can\'t stop the feeling', 'shake it off',
-          'blinding lights', 'don\'t start now', 'levitating', 'good 4 u',
-          'butter', 'permission to dance', 'butterfly', 'dynamite',
-          'dancing queen', 'stayin alive', 'i wanna dance with somebody',
-          'billie jean', 'thriller', 'beat it', 'bad', 'smooth criminal',
-          'black or white', 'remember the time', 'you are not alone',
-          'earth song', 'they don\'t care about us', 'blood on the dance floor',
-          'ghost', 'heartbreaker', 'invincible', 'you rock my world',
-          'cry', 'whatever happens', 'unbreakable', 'xscape',
-          'michael jackson', 'mj', 'jackson 5', 'abc', 'i want you back',
-          'the love you save', 'signed sealed delivered', 'superstition',
-          'sir duke', 'i wish', 'part time lover', 'overjoyed', 'lately',
-          'just a fool', 'do i do', 'ordinary pain', 'sweet love',
-          'is it you', 'strawberry letter 23', 'i can\'t stand it',
-          'stevie wonder', 'wonder', 'marvin gaye', 'let\'s get it on',
-          'sexual healing', 'heard it through the grapevine', 'what\'s going on',
-          'inner city blues', 'trouble man', 'save the children',
-          'whats going on', 'mercy mercy me', 'i heard it through the grapevine'
-        ];
-        const songTitle = song.displayName.toLowerCase();
-        const songArtist = song.displayArtists ? song.displayArtists.toLowerCase() : '';
-        return danceHits.some(hit => songTitle.includes(hit) || songArtist.includes(hit));
+      if (lowerCat.includes('alternative') || lowerCat.includes('alt') || lowerCat.includes('indie')) {
+        return categories.includes('alternative');
       }
       if (lowerCat === 'pop') {
         return categories.includes('pop');

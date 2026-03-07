@@ -2,7 +2,10 @@ import requests
 import json
 import re
 import os
+import time
 from datetime import datetime
+import csv
+from urllib.parse import quote_plus
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_FILE = os.path.normpath(os.path.join(SCRIPT_DIR, "..", "data", "songs.json"))
@@ -15,7 +18,7 @@ RESULTS_PER_REQUEST = 200
 # ----------------------------
 
 def normalize(text):
-    text = re.sub(r"[^a-z0-9\s]", "", text.lower()).strip()
+    text = re.sub(r"[^a-z0-9\s.,\'\"!?\/-@%]", "", text.lower()).strip()
     return re.sub(r"\s+", " ", text).strip()
 
 
@@ -23,7 +26,7 @@ def normalize(text):
 def clean_title(title):
     title = re.sub(r"\(.*?\)", "", title)  # remove parentheses
     title = re.sub(r"\[.*?\]", "", title)  # remove brackets
-    title = re.sub(r"feat\.|ft\.|featuring", "", title, flags=re.IGNORECASE)
+    title = re.sub(r"\b(feat\.|ft\.|featuring|with|prod\.)\b.*", "", title, flags=re.IGNORECASE)
     return normalize(title)
 
 
@@ -189,32 +192,71 @@ def load_existing_songs():
 # ----------------------------
 
 def fetch_songs(target_total, existing_songs, existing_keys, terms="", search_name=""):
-    terms.replace(" ", "+")
-    SEARCH_TERMS = [
-        terms,
-    ]
+    # Normalize and URL-encode terms
+    terms = quote_plus(terms or "")
+    SEARCH_TERMS = [terms]
 
     songs = []
     current_total = len(existing_songs)
 
     for term in SEARCH_TERMS:
 
-        if search_name == "":
-            print(f"Searching: {term}")
-            url = (
-            "https://itunes.apple.com/search"
-            f"?term={term}&entity=song&limit=200"
-            )
-        else:
+        # Prefer passing an explicit search_name (individual song) when provided
+        if search_name:
+            q = quote_plus(search_name)
             print(f"Searching: {search_name}")
-            search_name.replace(" ", "+")
-            url = (
-                "https://itunes.apple.com/search"
-            f"?term={search_name}&entity=song"
-            )
+            url = f"https://itunes.apple.com/search?term={q}&entity=song&limit={RESULTS_PER_REQUEST}"
+        else:
+            display_term = term or "(empty)"
+            print(f"Searching: {display_term}")
+            url = f"https://itunes.apple.com/search?term={term}&entity=song&limit={RESULTS_PER_REQUEST}"
 
-        response = requests.get(url)
-        data = response.json()
+        # Robust network handling with retries/backoff
+        try_count = 0
+        max_retries = 3
+        while True:
+            try:
+                response = requests.get(url, timeout=10)
+            except requests.RequestException as e:
+                try_count += 1
+                print(f"Request failed ({try_count}/{max_retries}): {e}")
+                if try_count >= max_retries:
+                    print("Skipping this term after repeated network errors.")
+                    data = {"results": []}
+                    break
+                time.sleep(1 * try_count)
+                continue
+
+            if response.status_code != 200:
+                print(f"Non-200 response {response.status_code} for url: {url}")
+                # show small snippet for debugging
+                snippet = (response.text or "")[:200]
+                print("Response snippet:", snippet)
+                try_count += 1
+                if try_count >= max_retries:
+                    print("Skipping this term after repeated non-200 responses.")
+                    data = {"results": []}
+                    break
+                time.sleep(1 * try_count)
+                continue
+
+            # Try to parse JSON; handle HTML/error pages gracefully
+            try:
+                data = response.json()
+            except (json.JSONDecodeError, ValueError) as e:
+                print("Failed to decode JSON response:", e)
+                # show small snippet to help debug (may be HTML or rate-limit message)
+                snippet = (response.text or "")[:500]
+                print("Response snippet (first 500 chars):\n", snippet)
+                try_count += 1
+                if try_count >= max_retries:
+                    print("Skipping this term after repeated invalid responses.")
+                    data = {"results": []}
+                    break
+                time.sleep(1 * try_count)
+                continue
+            break
+
 
         for result in data.get("results", []):
 
@@ -289,6 +331,7 @@ def fetch_songs(target_total, existing_songs, existing_keys, terms="", search_na
 
             if search_name != "":
                 return songs
+            
 
     return songs
 
@@ -302,9 +345,37 @@ def main():
     existing_songs, existing_keys = load_existing_songs()
 
     target_total = TOTAL_SONGS
+    choice = 0
 
-    print("Fetching new songs...")
-    new_songs = fetch_songs(target_total, existing_songs, existing_keys, "R&B")
+    while(choice != 1 and choice != 2 and choice != 3):
+        choice = int(input("What would you like to do?\n" \
+        "1: load songs based on a genre\n" \
+        "2: load individual songs\n" \
+        "3: load songs from a csv file\n"))
+
+    search_term = ""
+    search_genre = ""
+
+    if choice == 1:
+        search_genre = input("enter a genre: ")
+        print("Fetching new songs...")
+        new_songs = fetch_songs(target_total, existing_songs, existing_keys, search_genre, search_term)
+    elif choice == 2:
+        search_term = input("enter a song name and artist: ")
+        new_songs = fetch_songs(target_total, existing_songs, existing_keys, search_genre, search_term)
+    elif choice == 3:
+        new_songs = []
+        csv_file = input("what is the path of the csv file?\n")
+        with open(csv_file, mode='r', newline='', encoding='utf-8') as file:
+            csv_reader = csv.DictReader(file)
+            for row in csv_reader:
+                search_term = row['Track Name'] + " " + row['Artist Name(s)']
+                new_songs += fetch_songs(target_total, existing_songs, existing_keys, search_genre, search_term)
+                if len(new_songs) % 20 == 0:
+                    print("waiting 20 seconds to avoid reaching API call limit")
+                    time.sleep(20)
+
+
 
     all_songs = existing_songs + new_songs
 
