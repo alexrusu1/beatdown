@@ -205,11 +205,11 @@ def fetch_songs(target_total, existing_songs, existing_keys, terms="", search_na
         if search_name:
             q = quote_plus(search_name)
             print(f"Searching: {search_name}")
-            url = f"https://itunes.apple.com/search?term={q}&entity=song&limit={RESULTS_PER_REQUEST}"
+            url = f"https://itunes.apple.com/search?term={q}&entity=song&limit={1}&explicit=Yes"
         else:
             display_term = term or "(empty)"
             print(f"Searching: {display_term}")
-            url = f"https://itunes.apple.com/search?term={term}&entity=song&limit={RESULTS_PER_REQUEST}"
+            url = f"https://itunes.apple.com/search?term={term}&entity=song&limit={RESULTS_PER_REQUEST}&explicit=Yes"
 
         # Robust network handling with retries/backoff
         try_count = 0
