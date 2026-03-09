@@ -10,7 +10,7 @@ from urllib.parse import quote_plus
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_FILE = os.path.normpath(os.path.join(SCRIPT_DIR, "..", "data", "songs.json"))
 TOTAL_SONGS = 10000
-RESULTS_PER_REQUEST = 200
+RESULTS_PER_REQUEST = 50
 
 
 # ----------------------------
@@ -343,6 +343,7 @@ def fetch_songs(target_total, existing_songs, existing_keys, terms="", search_na
 def main():
     print("Loading existing songs...")
     existing_songs, existing_keys = load_existing_songs()
+    print("existing songs: " + str(len(existing_songs)))
 
     target_total = TOTAL_SONGS
     choice = 0

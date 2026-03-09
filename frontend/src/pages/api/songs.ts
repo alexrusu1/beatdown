@@ -25,6 +25,9 @@ function filterSongsByCategories(songsData: any[], categories: string[]) {
       if (lowerCat === 'pop') {
         return categories.includes('pop');
       }
+      if (lowerCat === 'rock' || lowerCat === 'soft rock' || lowerCat === 'hard rock') {
+        return categories.includes('rock');
+      }
       return false;
     });
   });
