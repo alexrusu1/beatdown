@@ -372,7 +372,7 @@ def main():
                 search_term = row['Track Name'] + " " + row['Artist Name(s)']
                 new_songs += fetch_songs(target_total, existing_songs, existing_keys, search_genre, search_term)
                 if len(new_songs) % 20 == 0:
-                    print("waiting 20 seconds to avoid reaching API call limit")
+                    print("waiting 20 seconds to avoid reaching API call limit...")
                     time.sleep(20)
 
 
