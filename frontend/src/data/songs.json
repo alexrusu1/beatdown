@@ -126,44 +126,20 @@
     ]
   },
   {
-    "displayName": "Pop",
-    "answerNames": [
-      "Pop",
-      "Pop"
-    ],
-    "answerName": "Pop",
-    "album": "Kiss All The Time. Disco, Occasionally.",
-    "albumAnswers": [
-      "kiss all the time disco occasionally",
-      "Kiss All The Time. Disco, Occasionally."
-    ],
-    "albumAnswer": "kiss all the time disco occasionally",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/07/41/6a/07416a78-38b9-2d47-7ce8-8a52a44c510f/196874010112.jpg/600x600bb.jpg",
-    "year": null,
-    "displayArtists": "Harry Styles",
-    "artists": [
-      "harry styles"
-    ],
-    "previewUrl": null,
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
     "displayName": "Señorita",
     "answerNames": [
-      "seorita",
+      "senorita",
       "Señorita"
     ],
-    "answerName": "seorita",
+    "answerName": "senorita",
     "album": "Señorita - Single",
     "albumAnswers": [
-      "seorita",
-      "seorita single",
-      "seorita  single",
+      "senorita",
+      "senorita single",
+      "senorita  single",
       "Señorita - Single"
     ],
-    "albumAnswer": "seorita  single",
+    "albumAnswer": "senorita  single",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/46/fe/4a/46fe4a39-feb4-7b8b-97b9-0187d49a46bd/19UMGIM53914.rgb.jpg/600x600bb.jpg",
     "year": 2019,
     "displayArtists": "Shawn Mendes & Camila Cabello",
@@ -648,7 +624,7 @@
     "answerName": "let me go",
     "album": "Let Me Go (feat. Florida Georgia Line & watt) - Single",
     "albumAnswers": [
-      "let me go   single",
+      "let me go - single",
       "let me go feat florida georgia line watt",
       "let me go feat florida georgia line watt single",
       "Let Me Go (feat. Florida Georgia Line & watt) - Single"
@@ -1539,7 +1515,8 @@
     "displayArtists": "Nico & Vinz",
     "artists": [
       "nico",
-      "vinz"
+      "vinz",
+      "nico & vinz"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/6d/e4/52/6de452cc-25cb-ed4c-a5be-7c3398e42f00/mzaf_5174604099377275023.plus.aac.p.m4a",
     "categories": [
@@ -2415,30 +2392,6 @@
     ]
   },
   {
-    "displayName": "Shake It Off",
-    "answerNames": [
-      "shake it off",
-      "Shake It Off"
-    ],
-    "answerName": "shake it off",
-    "album": "The Emancipation Of Mimi",
-    "albumAnswers": [
-      "the emancipation of mimi",
-      "The Emancipation Of Mimi"
-    ],
-    "albumAnswer": "the emancipation of mimi",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/34/66/31/346631f0-dc0e-500f-7cb8-537e7523e022/15UMGIM78299.rgb.jpg/600x600bb.jpg",
-    "year": 2005,
-    "displayArtists": "Mariah Carey",
-    "artists": [
-      "mariah carey"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ef/d1/47/efd147e0-5465-22c9-6728-cd3d48ebd01b/mzaf_5763018265710480467.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
     "displayName": "Jar of Hearts",
     "answerNames": [
       "jar of hearts",
@@ -2611,61 +2564,6 @@
     ]
   },
   {
-    "displayName": "Señorita",
-    "answerNames": [
-      "seorita",
-      "Señorita"
-    ],
-    "answerName": "seorita",
-    "album": "Señorita - Single",
-    "albumAnswers": [
-      "seorita",
-      "seorita single",
-      "seorita  single",
-      "Señorita - Single"
-    ],
-    "albumAnswer": "seorita  single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/46/fe/4a/46fe4a39-feb4-7b8b-97b9-0187d49a46bd/19UMGIM53914.rgb.jpg/600x600bb.jpg",
-    "year": 2019,
-    "displayArtists": "Shawn Mendes & Camila Cabello",
-    "artists": [
-      "shawn mendes",
-      "camila cabello"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/cf/06/d6/cf06d6fd-f7a0-2898-8363-67688df6c14f/mzaf_8234301186390421644.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "Work from Home (feat. Ty Dolla $ign)",
-    "answerNames": [
-      "work from home",
-      "work from home feat ty dolla ign",
-      "Work from Home (feat. Ty Dolla $ign)"
-    ],
-    "answerName": "work from home",
-    "album": "7/27 (Deluxe)",
-    "albumAnswers": [
-      "727",
-      "727 deluxe",
-      "727 deluxe deluxe",
-      "7/27 (Deluxe)"
-    ],
-    "albumAnswer": "727",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/73/3b/da/733bda99-d0c8-02b2-db8f-ae9a87a5d933/886445740448.jpg/600x600bb.jpg",
-    "year": 2016,
-    "displayArtists": "Fifth Harmony",
-    "artists": [
-      "ty dolla ign",
-      "fifth harmony"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/24/6e/5d/246e5dce-5f1c-0ae2-505e-baf0b3d348c4/mzaf_8211215710006623606.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
     "displayName": "Say Something (feat. Chris Stapleton)",
     "answerNames": [
       "say something",
@@ -2687,205 +2585,6 @@
       "chris stapleton"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/73/4c/6d/734c6d4e-3906-f48b-6e69-56cfb4615d68/mzaf_12604481431824317433.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "Let Me Go (feat. Florida Georgia Line & watt)",
-    "answerNames": [
-      "let me go",
-      "let me go feat florida georgia line  watt",
-      "Let Me Go (feat. Florida Georgia Line & watt)"
-    ],
-    "answerName": "let me go",
-    "album": "Let Me Go (feat. Florida Georgia Line & watt) - Single",
-    "albumAnswers": [
-      "let me go   single",
-      "let me go feat florida georgia line  watt",
-      "let me go feat florida georgia line  watt single",
-      "let me go feat florida georgia line  watt  single",
-      "let me go feat florida georgia line  watt feat florida georgia line  watt",
-      "Let Me Go (feat. Florida Georgia Line & watt) - Single"
-    ],
-    "albumAnswer": "let me go   single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/e9/92/98/e992981c-60cc-7b2b-301f-c37186a5079f/17UM1IM25255.rgb.jpg/600x600bb.jpg",
-    "year": 2017,
-    "displayArtists": "Hailee Steinfeld & Alesso",
-    "artists": [
-      "hailee steinfeld",
-      "florida georgia line",
-      "alesso",
-      "watt"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/49/64/0c/49640c5c-af57-60a0-1e34-45b257f39c2f/mzaf_1021822633845206576.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "Starving (feat. Zedd)",
-    "answerNames": [
-      "starving",
-      "starving feat zedd",
-      "Starving (feat. Zedd)"
-    ],
-    "answerName": "starving",
-    "album": "Starving (feat. Zedd) - Single",
-    "albumAnswers": [
-      "starving   single",
-      "starving feat zedd",
-      "starving feat zedd single",
-      "starving feat zedd  single",
-      "starving feat zedd feat zedd",
-      "Starving (feat. Zedd) - Single"
-    ],
-    "albumAnswer": "starving   single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/15/16/a7/1516a71c-4d85-57c8-41ea-e937867bbc15/16UMGIM56252.rgb.jpg/600x600bb.jpg",
-    "year": 2015,
-    "displayArtists": "Hailee Steinfeld & Grey",
-    "artists": [
-      "grey",
-      "hailee steinfeld",
-      "zedd"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/fd/f2/1f/fdf21f99-70d0-e1ac-3be6-c72c631be649/mzaf_14535211982156657470.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "My Oh My (feat. DaBaby)",
-    "answerNames": [
-      "my oh my",
-      "my oh my feat dababy",
-      "My Oh My (feat. DaBaby)"
-    ],
-    "answerName": "my oh my",
-    "album": "Romance",
-    "albumAnswers": [
-      "romance",
-      "Romance"
-    ],
-    "albumAnswer": "romance",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/c5/d5/7e/c5d57e36-4270-8730-d009-5e82a71016f7/886448121220.jpg/600x600bb.jpg",
-    "year": 2019,
-    "displayArtists": "Camila Cabello",
-    "artists": [
-      "dababy",
-      "camila cabello"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/71/9e/db/719edb5e-d1b1-9672-9c7b-a47ac552d548/mzaf_18099107644637247616.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "Fortnight (feat. Post Malone)",
-    "answerNames": [
-      "fortnight",
-      "fortnight feat post malone",
-      "Fortnight (feat. Post Malone)"
-    ],
-    "answerName": "fortnight",
-    "album": "THE TORTURED POETS DEPARTMENT: THE ANTHOLOGY",
-    "albumAnswers": [
-      "the tortured poets department the anthology",
-      "THE TORTURED POETS DEPARTMENT: THE ANTHOLOGY"
-    ],
-    "albumAnswer": "the tortured poets department the anthology",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a4/86/59/a486593a-53c9-1c2a-5122-8f25339f7359/24UMGIM44778.rgb.jpg/600x600bb.jpg",
-    "year": 2024,
-    "displayArtists": "Taylor Swift",
-    "artists": [
-      "taylor swift",
-      "post malone"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/6a/d8/d1/6ad8d1f0-a747-d646-20d1-8c8dfb0bce3a/mzaf_190295342267799968.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "Am I Wrong",
-    "answerNames": [
-      "am i wrong",
-      "Am I Wrong"
-    ],
-    "answerName": "am i wrong",
-    "album": "Black Star Elephant",
-    "albumAnswers": [
-      "black star elephant",
-      "Black Star Elephant"
-    ],
-    "albumAnswer": "black star elephant",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/38/35/35/38353599-968c-26b8-4dee-8f20ebee46d1/093624932772.jpg/600x600bb.jpg",
-    "year": 2013,
-    "displayArtists": "Nico & Vinz",
-    "artists": [
-      "vinz",
-      "nico"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/6d/e4/52/6de452cc-25cb-ed4c-a5be-7c3398e42f00/mzaf_5174604099377275023.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "Bang Bang",
-    "answerNames": [
-      "bang bang",
-      "Bang Bang"
-    ],
-    "answerName": "bang bang",
-    "album": "Bang Bang - Single",
-    "albumAnswers": [
-      "bang bang",
-      "bang bang single",
-      "bang bang  single",
-      "Bang Bang - Single"
-    ],
-    "albumAnswer": "bang bang  single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/ce/81/a0/ce81a0d7-6beb-16bc-2b98-a6b6a9b0faff/14UMGIM31140.rgb.jpg/600x600bb.jpg",
-    "year": 2014,
-    "displayArtists": "Jessie J, Ariana Grande & Nicki Minaj",
-    "artists": [
-      "nicki minaj",
-      "ariana grande",
-      "jessie j"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e0/f9/05/e0f905d9-ecb8-778b-5be4-6389476a8511/mzaf_14917492324789195708.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "Con Altura (feat. El Guincho)",
-    "answerNames": [
-      "con altura",
-      "con altura feat el guincho",
-      "Con Altura (feat. El Guincho)"
-    ],
-    "answerName": "con altura",
-    "album": "Con Altura (feat. El Guincho) - Single",
-    "albumAnswers": [
-      "con altura   single",
-      "con altura feat el guincho",
-      "con altura feat el guincho single",
-      "con altura feat el guincho  single",
-      "con altura feat el guincho feat el guincho",
-      "Con Altura (feat. El Guincho) - Single"
-    ],
-    "albumAnswer": "con altura   single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/82/72/d5/8272d5ad-49b7-f80a-59ec-0160215d2b86/886447616925.jpg/600x600bb.jpg",
-    "year": 2019,
-    "displayArtists": "ROSALÍA & J Balvin",
-    "artists": [
-      "j balvin",
-      "rosala",
-      "el guincho"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/9c/38/ff/9c38ff38-455d-f477-999b-7568184c6f25/mzaf_15437150768562178188.plus.aac.p.m4a",
     "categories": [
       "Pop"
     ]
@@ -3049,64 +2748,6 @@
     ]
   },
   {
-    "displayName": "Let Me Go (feat. Florida Georgia Line & watt)",
-    "answerNames": [
-      "let me go",
-      "let me go feat florida georgia line  watt",
-      "Let Me Go (feat. Florida Georgia Line & watt)"
-    ],
-    "answerName": "let me go",
-    "album": "Let Me Go (feat. Florida Georgia Line & watt) - Single",
-    "albumAnswers": [
-      "let me go   single",
-      "let me go feat florida georgia line  watt",
-      "let me go feat florida georgia line  watt single",
-      "let me go feat florida georgia line  watt  single",
-      "let me go feat florida georgia line  watt feat florida georgia line  watt",
-      "Let Me Go (feat. Florida Georgia Line & watt) - Single"
-    ],
-    "albumAnswer": "let me go   single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/e9/92/98/e992981c-60cc-7b2b-301f-c37186a5079f/17UM1IM25255.rgb.jpg/600x600bb.jpg",
-    "year": 2017,
-    "displayArtists": "Hailee Steinfeld & Alesso",
-    "artists": [
-      "alesso",
-      "watt",
-      "hailee steinfeld",
-      "florida georgia line"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/49/64/0c/49640c5c-af57-60a0-1e34-45b257f39c2f/mzaf_1021822633845206576.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "Beautiful People (feat. Khalid)",
-    "answerNames": [
-      "beautiful people",
-      "beautiful people feat khalid",
-      "Beautiful People (feat. Khalid)"
-    ],
-    "answerName": "beautiful people",
-    "album": "No.6 Collaborations Project",
-    "albumAnswers": [
-      "no6 collaborations project",
-      "No.6 Collaborations Project"
-    ],
-    "albumAnswer": "no6 collaborations project",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/ba/e2/2a/bae22a5e-c878-da64-0ecc-4a3584a1a139/190295411411.jpg/600x600bb.jpg",
-    "year": 2019,
-    "displayArtists": "Ed Sheeran",
-    "artists": [
-      "ed sheeran",
-      "khalid"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/79/fd/08/79fd084c-bbec-f02c-c7a7-98a7c4b70c51/mzaf_11310003524059832509.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
     "displayName": "Never Forget You",
     "answerNames": [
       "never forget you",
@@ -3182,121 +2823,6 @@
       "juice wrld"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/05/52/eb/0552eb60-3566-ad4b-0b67-cea235576f0c/mzaf_2843475365445427272.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "Let Me Go (feat. Florida Georgia Line & watt)",
-    "answerNames": [
-      "let me go",
-      "let me go feat florida georgia line  watt",
-      "Let Me Go (feat. Florida Georgia Line & watt)"
-    ],
-    "answerName": "let me go",
-    "album": "Let Me Go (feat. Florida Georgia Line & watt) - Single",
-    "albumAnswers": [
-      "let me go   single",
-      "let me go feat florida georgia line  watt",
-      "let me go feat florida georgia line  watt single",
-      "let me go feat florida georgia line  watt  single",
-      "let me go feat florida georgia line  watt feat florida georgia line  watt",
-      "Let Me Go (feat. Florida Georgia Line & watt) - Single"
-    ],
-    "albumAnswer": "let me go   single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/e9/92/98/e992981c-60cc-7b2b-301f-c37186a5079f/17UM1IM25255.rgb.jpg/600x600bb.jpg",
-    "year": 2017,
-    "displayArtists": "Hailee Steinfeld & Alesso",
-    "artists": [
-      "watt",
-      "alesso",
-      "florida georgia line",
-      "hailee steinfeld"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/49/64/0c/49640c5c-af57-60a0-1e34-45b257f39c2f/mzaf_1021822633845206576.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "Bang Bang",
-    "answerNames": [
-      "bang bang",
-      "Bang Bang"
-    ],
-    "answerName": "bang bang",
-    "album": "Bang Bang - Single",
-    "albumAnswers": [
-      "bang bang",
-      "bang bang single",
-      "bang bang  single",
-      "Bang Bang - Single"
-    ],
-    "albumAnswer": "bang bang  single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/ce/81/a0/ce81a0d7-6beb-16bc-2b98-a6b6a9b0faff/14UMGIM31140.rgb.jpg/600x600bb.jpg",
-    "year": 2014,
-    "displayArtists": "Jessie J, Ariana Grande & Nicki Minaj",
-    "artists": [
-      "ariana grande",
-      "jessie j",
-      "nicki minaj"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e0/f9/05/e0f905d9-ecb8-778b-5be4-6389476a8511/mzaf_14917492324789195708.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "South of the Border (feat. Camila Cabello & Cardi B)",
-    "answerNames": [
-      "south of the border",
-      "south of the border feat camila cabello  cardi b",
-      "South of the Border (feat. Camila Cabello & Cardi B)"
-    ],
-    "answerName": "south of the border",
-    "album": "No.6 Collaborations Project",
-    "albumAnswers": [
-      "no6 collaborations project",
-      "No.6 Collaborations Project"
-    ],
-    "albumAnswer": "no6 collaborations project",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/ba/e2/2a/bae22a5e-c878-da64-0ecc-4a3584a1a139/190295411411.jpg/600x600bb.jpg",
-    "year": 2019,
-    "displayArtists": "Ed Sheeran",
-    "artists": [
-      "ed sheeran",
-      "cardi b",
-      "camila cabello"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/18/5c/c8/185cc818-ce4e-8789-7b33-88bfd35de3af/mzaf_16453604079127258361.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "Feel This Moment (feat. Christina Aguilera)",
-    "answerNames": [
-      "feel this moment",
-      "feel this moment feat christina aguilera",
-      "Feel This Moment (feat. Christina Aguilera)"
-    ],
-    "answerName": "feel this moment",
-    "album": "Global Warming: Meltdown (Deluxe Version)",
-    "albumAnswers": [
-      "global warming meltdown",
-      "global warming meltdown deluxe version",
-      "global warming meltdown deluxe version deluxe version",
-      "Global Warming: Meltdown (Deluxe Version)"
-    ],
-    "albumAnswer": "global warming meltdown",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/1b/c5/af/1bc5af7d-ba57-a2a2-02ce-5a07c1a1074b/886444305686.jpg/600x600bb.jpg",
-    "year": 2012,
-    "displayArtists": "Pitbull",
-    "artists": [
-      "pitbull",
-      "christina aguilera"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/00/58/ce/0058ceda-46ec-fe93-d3fc-9aa6605bfd05/mzaf_1276257855083678260.plus.aac.p.m4a",
     "categories": [
       "Pop"
     ]
@@ -3382,64 +2908,6 @@
       "rosala"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/9c/38/ff/9c38ff38-455d-f477-999b-7568184c6f25/mzaf_15437150768562178188.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "Starving (feat. Zedd)",
-    "answerNames": [
-      "starving",
-      "starving feat zedd",
-      "Starving (feat. Zedd)"
-    ],
-    "answerName": "starving",
-    "album": "Starving (feat. Zedd) - Single",
-    "albumAnswers": [
-      "starving   single",
-      "starving feat zedd",
-      "starving feat zedd single",
-      "starving feat zedd  single",
-      "starving feat zedd feat zedd",
-      "Starving (feat. Zedd) - Single"
-    ],
-    "albumAnswer": "starving   single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/15/16/a7/1516a71c-4d85-57c8-41ea-e937867bbc15/16UMGIM56252.rgb.jpg/600x600bb.jpg",
-    "year": 2015,
-    "displayArtists": "Hailee Steinfeld & Grey",
-    "artists": [
-      "hailee steinfeld",
-      "grey",
-      "zedd"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/fd/f2/1f/fdf21f99-70d0-e1ac-3be6-c72c631be649/mzaf_14535211982156657470.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "South of the Border (feat. Camila Cabello & Cardi B)",
-    "answerNames": [
-      "south of the border",
-      "south of the border feat camila cabello  cardi b",
-      "South of the Border (feat. Camila Cabello & Cardi B)"
-    ],
-    "answerName": "south of the border",
-    "album": "No.6 Collaborations Project",
-    "albumAnswers": [
-      "no6 collaborations project",
-      "No.6 Collaborations Project"
-    ],
-    "albumAnswer": "no6 collaborations project",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/ba/e2/2a/bae22a5e-c878-da64-0ecc-4a3584a1a139/190295411411.jpg/600x600bb.jpg",
-    "year": 2019,
-    "displayArtists": "Ed Sheeran",
-    "artists": [
-      "camila cabello",
-      "ed sheeran",
-      "cardi b"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/18/5c/c8/185cc818-ce4e-8789-7b33-88bfd35de3af/mzaf_16453604079127258361.plus.aac.p.m4a",
     "categories": [
       "Pop"
     ]
@@ -4136,6 +3604,7 @@
     "displayName": "Can't Hold Us (feat. Ray Dalton)",
     "answerNames": [
       "cant hold us",
+      "can't hold us",
       "Can't Hold Us (feat. Ray Dalton)"
     ],
     "answerName": "cant hold us",
@@ -13988,31 +13457,6 @@
     ]
   },
   {
-    "displayName": "Can't Hold Us (feat. Ray Dalton)",
-    "answerNames": [
-      "can't hold us",
-      "Can't Hold Us (feat. Ray Dalton)"
-    ],
-    "answerName": "can't hold us",
-    "album": "The Heist",
-    "albumAnswers": [
-      "the heist"
-    ],
-    "albumAnswer": "the heist",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/5e/5f/81/5e5f81c7-849e-63f6-6ffd-8801145bfd97/707541525398.jpg/600x600bb.jpg",
-    "year": 2011,
-    "displayArtists": "Macklemore & Ryan Lewis",
-    "artists": [
-      "ray dalton",
-      "macklemore",
-      "ryan lewis"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/71/bb/72/71bb7251-2e3c-0e02-8cd6-8e4a0218c398/mzaf_17925527612221098407.plus.aac.p.m4a",
-    "categories": [
-      "Hip-Hop/Rap"
-    ]
-  },
-  {
     "displayName": "Drops of Jupiter (Tell Me)",
     "answerNames": [
       "drops of jupiter",
@@ -14993,39 +14437,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/3d/fb/78/3dfb7866-f377-e7b7-c1c5-386c4a9890b0/mzaf_7197950411543212266.plus.aac.p.m4a",
     "categories": [
       "Pop"
-    ]
-  },
-  {
-    "displayName": "How I Feel (Am I Wrong)",
-    "answerNames": [
-      "how i feel",
-      "how i feel am i wrong",
-      "How I Feel (Am I Wrong)"
-    ],
-    "answerName": "how i feel",
-    "album": "How I Feel (Am I Wrong) - Single",
-    "albumAnswers": [
-      "how i feel",
-      "how i feel single",
-      "how i feel am i wrong",
-      "how i feel am i wrong - single",
-      "How I Feel (Am I Wrong) - Single"
-    ],
-    "albumAnswer": "how i feel - single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5b/60/53/5b6053cb-c0e7-6e44-1d4e-e2b5a9d99bcd/5021732773746.jpg/600x600bb.jpg",
-    "year": 2025,
-    "displayArtists": "Faul & Wad, Nico & Vinz, ALTÉGO & Old Jim",
-    "artists": [
-      "nico",
-      "faul",
-      "altgo",
-      "vinz",
-      "old jim",
-      "wad"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e5/d4/24/e5d424ad-5ceb-0317-532e-a44d4789266e/mzaf_8207165555000112838.plus.aac.p.m4a",
-    "categories": [
-      "Dance"
     ]
   },
   {
@@ -16212,7 +15623,7 @@
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d3/5b/d9/d35bd9a3-d105-95d8-ba29-0f5c6b8e764b/mzaf_7609183394807520180.plus.aac.p.m4a",
     "categories": [
-     "rock"
+      "rock"
     ]
   },
   {
@@ -17458,36 +16869,6 @@
       "justin timberlake"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/07/e1/a2/07e1a210-52da-0a10-ed26-4e885ccaebdc/mzaf_3460180998281086974.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "Midnight Summer Jam / Say Something (feat. Chris Stapleton) [Live at the BRITs]",
-    "answerNames": [
-      "midnight summer jam / say something",
-      "midnight summer jam / say something live at the brits",
-      "Midnight Summer Jam / Say Something (feat. Chris Stapleton) [Live at the BRITs]"
-    ],
-    "answerName": "midnight summer jam / say something",
-    "album": "Midnight Summer Jam / Say Something (feat. Chris Stapleton) [Live at the BRITs] - Single",
-    "albumAnswers": [
-      "midnight summer jam / say something",
-      "midnight summer jam / say something single",
-      "midnight summer jam / say something live at the brits",
-      "midnight summer jam / say something feat. chris stapleton",
-      "midnight summer jam / say something feat. chris stapleton live at the brits - single",
-      "Midnight Summer Jam / Say Something (feat. Chris Stapleton) [Live at the BRITs] - Single"
-    ],
-    "albumAnswer": "midnight summer jam / say something - single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/c2/cf/ca/c2cfca54-c7df-225e-8fc3-fb08335e6c9c/dj.jlflyslp.jpg/600x600bb.jpg",
-    "year": 2018,
-    "displayArtists": "Justin Timberlake",
-    "artists": [
-      "justin timberlake",
-      "chris stapleton live at the brits"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/b9/ce/b9/b9ceb93f-d930-d4e1-fc73-ed6dce5de7ea/mzaf_7391130707209686124.plus.aac.p.m4a",
     "categories": [
       "Pop"
     ]
@@ -19484,37 +18865,6 @@
     ]
   },
   {
-    "displayName": "Don't Let Me Down (feat. Daya) [W&W Remix]",
-    "answerNames": [
-      "don't let me down",
-      "don't let me down ww remix",
-      "Don't Let Me Down (feat. Daya) [W&W Remix]"
-    ],
-    "answerName": "don't let me down",
-    "album": "Don't Let Me Down (feat. Daya) [Remixes] - EP",
-    "albumAnswers": [
-      "don't let me down",
-      "don't let me down ep",
-      "don't let me down remixes",
-      "don't let me down feat. daya",
-      "don't let me down feat. daya remixes - ep",
-      "Don't Let Me Down (feat. Daya) [Remixes] - EP"
-    ],
-    "albumAnswer": "don't let me down - ep",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music20/v4/40/1d/0a/401d0a4f-6afe-1548-f4c8-6e8de3ff1e2b/886446009742.jpg/600x600bb.jpg",
-    "year": 2016,
-    "displayArtists": "The Chainsmokers",
-    "artists": [
-      "w remix",
-      "the chainsmokers",
-      "daya w"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/83/62/1c/83621cd0-a39a-8af9-bc4e-cfc72d6e2347/mzaf_5206108168310816077.plus.aac.p.m4a",
-    "categories": [
-      "Dance"
-    ]
-  },
-  {
     "displayName": "Who Do You Love",
     "answerNames": [
       "who do you love"
@@ -20514,37 +19864,6 @@
       "benson boone"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/32/16/02/321602ab-f602-6050-9036-d7ba4a6f6a2d/mzaf_937026474752606199.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "South of the Border (feat. Camila Cabello & Cardi B) [Andy Jarvis Remix]",
-    "answerNames": [
-      "south of the border",
-      "south of the border andy jarvis remix",
-      "South of the Border (feat. Camila Cabello & Cardi B) [Andy Jarvis Remix]"
-    ],
-    "answerName": "south of the border",
-    "album": "South of the Border (feat. Camila Cabello & Cardi B) [Andy Jarvis Remix] - Single",
-    "albumAnswers": [
-      "south of the border",
-      "south of the border single",
-      "south of the border andy jarvis remix",
-      "south of the border feat. camila cabello cardi b",
-      "south of the border feat. camila cabello cardi b andy jarvis remix - single",
-      "South of the Border (feat. Camila Cabello & Cardi B) [Andy Jarvis Remix] - Single"
-    ],
-    "albumAnswer": "south of the border - single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/0e/97/b1/0e97b154-98bd-e166-7373-3bde3bb43143/190295294298.jpg/600x600bb.jpg",
-    "year": 2019,
-    "displayArtists": "Ed Sheeran",
-    "artists": [
-      "cardi b andy jarvis remix",
-      "camila cabello",
-      "ed sheeran"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/ca/41/ee/ca41ee04-f3ba-27bf-5d80-99baac419639/mzaf_18172863136344648768.plus.aac.p.m4a",
     "categories": [
       "Pop"
     ]
@@ -21770,7 +21089,7 @@
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/2b/56/63/2b5663bb-bcbd-d473-7dec-73b79e69fb5e/mzaf_6350802765925673419.plus.aac.p.m4a",
     "categories": [
-     "rock"
+      "rock"
     ]
   },
   {
@@ -23240,7 +22559,7 @@
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/bb/13/76/bb1376a7-4db0-ed68-c1a6-d0278cc4b320/mzaf_17832584344687833283.plus.aac.p.m4a",
     "categories": [
-     "rock"
+      "rock"
     ]
   },
   {
@@ -24513,30 +23832,6 @@
     ]
   },
   {
-    "displayName": "Walls Could Talk (Live From Webster Hall)",
-    "answerNames": [
-      "walls could talk",
-      "walls could talk live from webster hall",
-      "Walls Could Talk (Live From Webster Hall)"
-    ],
-    "answerName": "walls could talk",
-    "album": "Vol. I",
-    "albumAnswers": [
-      "vol. i"
-    ],
-    "albumAnswer": "vol. i",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/25/ef/a4/25efa459-5705-f9aa-eb8f-812f8d80c902/22UMGIM67474.rgb.jpg/600x600bb.jpg",
-    "year": 2022,
-    "displayArtists": "Halsey",
-    "artists": [
-      "halsey"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/04/9d/8d/049d8d04-6416-2d78-6178-d398358311fe/mzaf_15731084783577826435.plus.aac.p.m4a",
-    "categories": [
-      "Alternative"
-    ]
-  },
-  {
     "displayName": "Feel It Still",
     "answerNames": [
       "feel it still"
@@ -25697,30 +24992,6 @@
     ]
   },
   {
-    "displayName": "Drops of Jupiter (Live)",
-    "answerNames": [
-      "drops of jupiter",
-      "drops of jupiter live",
-      "Drops of Jupiter (Live)"
-    ],
-    "answerName": "drops of jupiter",
-    "album": "Speak Now - World Tour Live",
-    "albumAnswers": [
-      "speak now - world tour live"
-    ],
-    "albumAnswer": "speak now - world tour live",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/9b/0c/f1/9b0cf19d-a19e-1d54-0775-9d90a63b3419/00843930006021.rgb.jpg/600x600bb.jpg",
-    "year": 2011,
-    "displayArtists": "Taylor Swift",
-    "artists": [
-      "taylor swift"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/d3/7e/da/d37edae3-a8ca-9f94-8a1a-1a30ee119a56/mzaf_15325750712643640122.plus.aac.p.m4a",
-    "categories": [
-      "Country"
-    ]
-  },
-  {
     "displayName": "Crazy",
     "answerNames": [
       "crazy"
@@ -25863,30 +25134,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/0d/13/b2/0d13b278-ab52-c328-1833-25b3d5e6e0ee/mzaf_7364391142160063955.plus.aac.p.m4a",
     "categories": [
       "Pop"
-    ]
-  },
-  {
-    "displayName": "Bang Bang (feat. Adam Levine)",
-    "answerNames": [
-      "bang bang",
-      "Bang Bang (feat. Adam Levine)"
-    ],
-    "answerName": "bang bang",
-    "album": "Troubadour",
-    "albumAnswers": [
-      "troubadour"
-    ],
-    "albumAnswer": "troubadour",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/40/0c/c1/400cc179-975f-2176-926c-f804c78fd1e2/00602527454559.rgb.jpg/600x600bb.jpg",
-    "year": 2009,
-    "displayArtists": "K'naan",
-    "artists": [
-      "adam levine",
-      "k'naan"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/c4/3e/0a/c43e0ac4-30e6-e27b-9701-c7dc390438a4/mzaf_586604921719500572.plus.aac.p.m4a",
-    "categories": [
-      "Hip-Hop/Rap"
     ]
   },
   {
@@ -36960,7 +36207,6 @@
       "Hip-Hop/Rap"
     ]
   },
-
   {
     "displayName": "The Way I Are (feat. Keri Hilson & D.O.E.)",
     "answerNames": [
@@ -50355,7 +49601,7 @@
     "categories": [
       "Pop"
     ]
-  }, 
+  },
   {
     "displayName": "Here With Me",
     "answerNames": [
@@ -51061,7 +50307,7 @@
     "categories": [
       "Alternative"
     ]
-  }
+  },
   {
     "displayName": "Party Monster",
     "answerNames": [
@@ -51700,6 +50946,657 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/f5/a3/d0/f5a3d08a-635d-dc15-4c3f-ad8a04246d80/mzaf_17059298264221524369.plus.aac.p.m4a",
     "categories": [
       "Alternative"
+    ]
+  },
+  {
+    "displayName": "drivers license",
+    "answerNames": [
+      "drivers license"
+    ],
+    "answerName": "drivers license",
+    "album": "SOUR",
+    "albumAnswers": [
+      "sour"
+    ],
+    "albumAnswer": "sour",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/02/ed/8c/02ed8cab-c089-2fdd-7ce6-ab334a9a4e19/21UMGIM26093.rgb.jpg/600x600bb.jpg",
+    "year": 2021,
+    "displayArtists": "Olivia Rodrigo",
+    "artists": [
+      "olivia rodrigo"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/36/62/61/366261be-0996-d73d-de6f-03417867c800/mzaf_8201528327761821135.plus.aac.p.m4a",
+    "categories": [
+      "Pop"
+    ]
+  },
+  {
+    "displayName": "bad guy",
+    "answerNames": [
+      "bad guy"
+    ],
+    "answerName": "bad guy",
+    "album": "WHEN WE ALL FALL ASLEEP, WHERE DO WE GO?",
+    "albumAnswers": [
+      "when we all fall asleep, where do we go?"
+    ],
+    "albumAnswer": "when we all fall asleep, where do we go?",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/1a/37/d1/1a37d1b1-8508-54f2-f541-bf4e437dda76/19UMGIM05028.rgb.jpg/600x600bb.jpg",
+    "year": 2019,
+    "displayArtists": "Billie Eilish",
+    "artists": [
+      "billie eilish"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c3/87/1f/c3871f7e-3260-d615-1c66-5fdca2c3a48f/mzaf_10721331211699880949.plus.aac.p.m4a",
+    "categories": [
+      "Alternative"
+    ]
+  },
+  {
+    "displayName": "Sports car",
+    "answerNames": [
+      "sports car"
+    ],
+    "answerName": "sports car",
+    "album": "So Close To What",
+    "albumAnswers": [
+      "so close to what"
+    ],
+    "albumAnswer": "so close to what",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/51/8a/29/518a29f3-5915-662a-d861-663e6d0fbfe4/196872648911.jpg/600x600bb.jpg",
+    "year": 2025,
+    "displayArtists": "Tate McRae",
+    "artists": [
+      "tate mcrae"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3b/86/08/3b860886-596f-66a8-6681-e7ff87600959/mzaf_4836637305805666758.plus.aac.p.m4a",
+    "categories": [
+      "Pop"
+    ]
+  },
+  {
+    "displayName": "That’s So True",
+    "answerNames": [
+      "thats so true",
+      "That’s So True"
+    ],
+    "answerName": "thats so true",
+    "album": "The Secret of Us (Deluxe)",
+    "albumAnswers": [
+      "the secret of us",
+      "the secret of us deluxe",
+      "The Secret of Us (Deluxe)"
+    ],
+    "albumAnswer": "the secret of us",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d2/f8/99/d2f89987-d2a5-45a5-1746-c0841c7e9843/24UM1IM17286.rgb.jpg/600x600bb.jpg",
+    "year": 2024,
+    "displayArtists": "Gracie Abrams",
+    "artists": [
+      "gracie abrams"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/78/8e/4a/788e4a19-be05-f1c0-b978-32f1eafce125/mzaf_12345407237074138192.plus.aac.p.m4a",
+    "categories": [
+      "Pop"
+    ]
+  },
+  {
+    "displayName": "I Love You, I'm Sorry",
+    "answerNames": [
+      "i love you, i'm sorry"
+    ],
+    "answerName": "i love you, i'm sorry",
+    "album": "The Secret of Us",
+    "albumAnswers": [
+      "the secret of us"
+    ],
+    "albumAnswer": "the secret of us",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2a/3a/f3/2a3af30e-04e3-37f0-0d2e-5303d72f7229/24UMGIM43488.rgb.jpg/600x600bb.jpg",
+    "year": 2024,
+    "displayArtists": "Gracie Abrams",
+    "artists": [
+      "gracie abrams"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b0/dd/7b/b0dd7b82-a04f-97f2-13ca-340b71dfb488/mzaf_17168728024459220612.plus.aac.p.m4a",
+    "categories": [
+      "Pop"
+    ]
+  },
+  {
+    "displayName": "Stateside (with Zara Larsson)",
+    "answerNames": [
+      "stateside",
+      "stateside with zara larsson",
+      "Stateside (with Zara Larsson)"
+    ],
+    "answerName": "stateside",
+    "album": "Fancy Some More?",
+    "albumAnswers": [
+      "fancy some more?"
+    ],
+    "albumAnswer": "fancy some more?",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/b0/d2/bb/b0d2bb76-41a2-1bb1-586c-107b63e4181d/5026854077819.jpg/600x600bb.jpg",
+    "year": 2025,
+    "displayArtists": "PinkPantheress",
+    "artists": [
+      "zara larsson",
+      "pinkpantheress"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/5e/0b/8e/5e0b8e5f-1a32-7f1f-3b77-1d008e6e0c1e/mzaf_17111867416921804819.plus.aac.p.m4a",
+    "categories": [
+      "Pop"
+    ]
+  },
+  {
+    "displayName": "Manchild",
+    "answerNames": [
+      "manchild"
+    ],
+    "answerName": "manchild",
+    "album": "Manchild - Single",
+    "albumAnswers": [
+      "manchild",
+      "manchild single",
+      "Manchild - Single"
+    ],
+    "albumAnswer": "manchild single",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/ae/c6/58/aec6589c-f5cf-0d81-2727-bc8775e34049/25UMGIM76990.rgb.jpg/600x600bb.jpg",
+    "year": 2025,
+    "displayArtists": "Sabrina Carpenter",
+    "artists": [
+      "sabrina carpenter"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/0f/b9/7d/0fb97d62-b093-2c58-a6d4-c20d987dd2c9/mzaf_9158363594364887027.plus.aac.p.m4a",
+    "categories": [
+      "Pop"
+    ]
+  },
+  {
+    "displayName": "Espresso",
+    "answerNames": [
+      "espresso",
+      "espresso on vacation version",
+      "Espresso (On Vacation Version)"
+    ],
+    "answerName": "espresso",
+    "album": "Short N Sweet",
+    "albumAnswers": [
+      "espresso ep",
+      "short n sweet"
+    ],
+    "albumAnswer": "espresso ep",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/57/e8/7b/57e87ba0-5057-9bb9-c247-ce7dbe426e89/24UMGIM55213.rgb.jpg/600x600bb.jpg",
+    "year": 2024,
+    "displayArtists": "Sabrina Carpenter",
+    "artists": [
+      "sabrina carpenter"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e9/4d/02/e94d0230-11ee-ef94-d2cf-a5d547bd73f4/mzaf_554140808559155562.plus.aac.p.m4a",
+    "categories": [
+      "Pop"
+    ]
+  },
+  {
+    "displayName": "Please Please Please",
+    "answerNames": [
+      "please please please"
+    ],
+    "answerName": "please please please",
+    "album": "Short n' Sweet",
+    "albumAnswers": [
+      "short n' sweet"
+    ],
+    "albumAnswer": "short n' sweet",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a1/1c/ca/a11ccab6-7d4c-e041-d028-998bcebeb709/24UMGIM61704.rgb.jpg/600x600bb.jpg",
+    "year": 2024,
+    "displayArtists": "Sabrina Carpenter",
+    "artists": [
+      "sabrina carpenter"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/97/06/58/97065890-7970-725a-1595-5045d4b110b1/mzaf_7668784443609724903.plus.aac.p.m4a",
+    "categories": [
+      "Pop"
+    ]
+  },
+  {
+    "displayName": "Heather",
+    "answerNames": [
+      "heather"
+    ],
+    "answerName": "heather",
+    "album": "Kid Krow",
+    "albumAnswers": [
+      "kid krow"
+    ],
+    "albumAnswer": "kid krow",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/18/08/a1/1808a1be-b5a9-5e69-583d-b8a357efd760/19UM1IM12338.rgb.jpg/600x600bb.jpg",
+    "year": 2020,
+    "displayArtists": "Conan Gray",
+    "artists": [
+      "conan gray"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/df/b0/08/dfb008d8-bd86-4091-21d5-8216881e3414/mzaf_5288004330582456914.plus.aac.p.m4a",
+    "categories": [
+      "Pop"
+    ]
+  },
+  {
+    "displayName": "Memories",
+    "answerNames": [
+      "memories"
+    ],
+    "answerName": "memories",
+    "album": "Superache",
+    "albumAnswers": [
+      "memories",
+      "memories single",
+      "Memories - Single",
+      "superache"
+    ],
+    "albumAnswer": "memories single",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/13/eb/23/13eb23c3-ac62-f3c1-46f9-2d6f56a01b66/22UMGIM34487.rgb.jpg/600x600bb.jpg",
+    "year": 2022,
+    "displayArtists": "Conan Gray",
+    "artists": [
+      "conan gray"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e2/ee/49/e2ee49c1-6509-5213-665e-bda0761d7864/mzaf_10097291751443274521.plus.aac.p.m4a",
+    "categories": [
+      "Pop"
+    ]
+  },
+  {
+    "displayName": "Born to Die",
+    "answerNames": [
+      "born to die"
+    ],
+    "answerName": "born to die",
+    "album": "Born to Die",
+    "albumAnswers": [
+      "born to die"
+    ],
+    "albumAnswer": "born to die",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/5f/d9/63/5fd96387-45fa-6b94-afd8-7b2c4a24a93b/11UMGIM38959.rgb.jpg/600x600bb.jpg",
+    "year": 2011,
+    "displayArtists": "Lana Del Rey",
+    "artists": [
+      "lana del rey"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/68/ae/78/68ae78bf-62f3-1265-38f5-a907ecb46f7e/mzaf_8700054924527140553.plus.aac.p.m4a",
+    "categories": [
+      "Alternative"
+    ]
+  },
+  {
+    "displayName": "happier",
+    "answerNames": [
+      "happier"
+    ],
+    "answerName": "happier",
+    "album": "SOUR",
+    "albumAnswers": [
+      "sour"
+    ],
+    "albumAnswer": "sour",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/02/ed/8c/02ed8cab-c089-2fdd-7ce6-ab334a9a4e19/21UMGIM26093.rgb.jpg/600x600bb.jpg",
+    "year": 2021,
+    "displayArtists": "Olivia Rodrigo",
+    "artists": [
+      "olivia rodrigo"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4d/17/85/4d17858d-b001-d33c-1c25-6761b3286540/mzaf_7847579171692049058.plus.aac.p.m4a",
+    "categories": [
+      "Pop"
+    ]
+  },
+  {
+    "displayName": "Supercut",
+    "answerNames": [
+      "supercut"
+    ],
+    "answerName": "supercut",
+    "album": "Melodrama",
+    "albumAnswers": [
+      "melodrama"
+    ],
+    "albumAnswer": "melodrama",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/8d/0d/15/8d0d1532-493b-52ec-6a29-a239ced6931b/17UMGIM81023.rgb.jpg/600x600bb.jpg",
+    "year": 2017,
+    "displayArtists": "Lorde",
+    "artists": [
+      "lorde"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/fb/10/93/fb1093b0-ebdd-41ea-7412-6195b868bc18/mzaf_16686823053102149553.plus.aac.p.m4a",
+    "categories": [
+      "Alternative"
+    ]
+  },
+  {
+    "displayName": "CHIHIRO",
+    "answerNames": [
+      "chihiro"
+    ],
+    "answerName": "chihiro",
+    "album": "HIT ME HARD AND SOFT",
+    "albumAnswers": [
+      "hit me hard and soft"
+    ],
+    "albumAnswer": "hit me hard and soft",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/92/9f/69/929f69f1-9977-3a44-d674-11f70c852d1b/24UMGIM36186.rgb.jpg/600x600bb.jpg",
+    "year": 2024,
+    "displayArtists": "Billie Eilish",
+    "artists": [
+      "billie eilish"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/30/41/6b/30416b6a-a895-a8e5-0b92-6206fff0bb0a/mzaf_12575392156288065852.plus.aac.p.m4a",
+    "categories": [
+      "Alternative"
+    ]
+  },
+  {
+    "displayName": "What Was I Made For? (From The Motion Picture \"Barbie\")",
+    "answerNames": [
+      "what was i made for?",
+      "what was i made for? from the motion picture \"barbie\"",
+      "What Was I Made For? (From The Motion Picture \"Barbie\")"
+    ],
+    "answerName": "what was i made for?",
+    "album": "What Was I Made For? (From The Motion Picture \"Barbie\") - Single",
+    "albumAnswers": [
+      "what was i made for?",
+      "what was i made for? single",
+      "what was i made for? from the motion picture \"barbie\"",
+      "what was i made for? from the motion picture \"barbie\" single",
+      "What Was I Made For? (From The Motion Picture \"Barbie\") - Single"
+    ],
+    "albumAnswer": "what was i made for? single",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/7d/64/76/7d64761e-a9b3-6754-8ae1-b457338beead/23UMGIM77779.rgb.jpg/600x600bb.jpg",
+    "year": 2023,
+    "displayArtists": "Billie Eilish",
+    "artists": [
+      "billie eilish"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/4e/89/79/4e8979d0-31cc-d2c7-751d-9c5368f53885/mzaf_8166853517153482173.plus.aac.p.m4a",
+    "categories": [
+      "Alternative"
+    ]
+  },
+  {
+    "displayName": "Happier Than Ever",
+    "answerNames": [
+      "happier than ever"
+    ],
+    "answerName": "happier than ever",
+    "album": "Happier Than Ever",
+    "albumAnswers": [
+      "happier than ever"
+    ],
+    "albumAnswer": "happier than ever",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/02/b7/6d/02b76dd3-4006-bc65-9f33-33b70a95222a/21UMGIM36684.rgb.jpg/600x600bb.jpg",
+    "year": 2021,
+    "displayArtists": "Billie Eilish",
+    "artists": [
+      "billie eilish"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/0a/57/c9/0a57c9db-8368-ad4b-1648-49a621650822/mzaf_6359646670728179887.plus.aac.p.m4a",
+    "categories": [
+      "Alternative"
+    ]
+  },
+  {
+    "displayName": "when the party's over",
+    "answerNames": [
+      "when the party's over"
+    ],
+    "answerName": "when the party's over",
+    "album": "WHEN WE ALL FALL ASLEEP, WHERE DO WE GO?",
+    "albumAnswers": [
+      "when we all fall asleep, where do we go?"
+    ],
+    "albumAnswer": "when we all fall asleep, where do we go?",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/1a/37/d1/1a37d1b1-8508-54f2-f541-bf4e437dda76/19UMGIM05028.rgb.jpg/600x600bb.jpg",
+    "year": 2018,
+    "displayArtists": "Billie Eilish",
+    "artists": [
+      "billie eilish"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/2a/ba/44/2aba4410-ba71-89ce-e075-10120409c31c/mzaf_16887001963655152332.plus.aac.p.m4a",
+    "categories": [
+      "Alternative"
+    ]
+  },
+  {
+    "displayName": "HOT TO GO!",
+    "answerNames": [
+      "hot to go!"
+    ],
+    "answerName": "hot to go!",
+    "album": "The Rise and Fall of a Midwest Princess",
+    "albumAnswers": [
+      "the rise and fall of a midwest princess"
+    ],
+    "albumAnswer": "the rise and fall of a midwest princess",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/fb/65/cb/fb65cb0f-4260-d740-d6f5-bb80c9c27c1b/23UMGIM84225.rgb.jpg/600x600bb.jpg",
+    "year": 2023,
+    "displayArtists": "Chappell Roan",
+    "artists": [
+      "chappell roan"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/46/e0/2c/46e02c91-a40d-d82f-2b6b-63a1a721639f/mzaf_4543887832571023506.plus.aac.p.m4a",
+    "categories": [
+      "Pop"
+    ]
+  },
+  {
+    "displayName": "The Subway",
+    "answerNames": [
+      "the subway"
+    ],
+    "answerName": "the subway",
+    "album": "The Subway - Single",
+    "albumAnswers": [
+      "the subway",
+      "the subway single",
+      "The Subway - Single"
+    ],
+    "albumAnswer": "the subway single",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/a3/34/ac/a334acc6-5983-27ac-851d-8f03e148a4ce/25UMGIM99609.rgb.jpg/600x600bb.jpg",
+    "year": 2025,
+    "displayArtists": "Chappell Roan",
+    "artists": [
+      "chappell roan"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/35/75/5a/35755af5-8254-c54c-f54c-72929c44c043/mzaf_14156258945431209538.plus.aac.p.m4a",
+    "categories": [
+      "Pop"
+    ]
+  },
+  {
+    "displayName": "we can't be friends (wait for your love)",
+    "answerNames": [
+      "we can't be friends",
+      "we can't be friends wait for your love",
+      "we can't be friends (wait for your love)"
+    ],
+    "answerName": "we can't be friends",
+    "album": "eternal sunshine",
+    "albumAnswers": [
+      "eternal sunshine"
+    ],
+    "albumAnswer": "eternal sunshine",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/2e/88/88/2e8888ad-a0cf-eece-70a7-1ff81377a3ab/24UMGIM00198.rgb.jpg/600x600bb.jpg",
+    "year": 2024,
+    "displayArtists": "Ariana Grande",
+    "artists": [
+      "ariana grande"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/63/f1/45/63f1452d-5087-18b1-4426-52cd1f10bc06/mzaf_5211000209678891014.plus.aac.p.m4a",
+    "categories": [
+      "Pop"
+    ]
+  },
+  {
+    "displayName": "Open Arms (feat. Travis Scott)",
+    "answerNames": [
+      "open arms",
+      "Open Arms (feat. Travis Scott)"
+    ],
+    "answerName": "open arms",
+    "album": "SOS",
+    "albumAnswers": [
+      "sos"
+    ],
+    "albumAnswer": "sos",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/bd/3b/a9/bd3ba9fb-9609-144f-bcfe-ead67b5f6ab3/196589564931.jpg/600x600bb.jpg",
+    "year": 2022,
+    "displayArtists": "SZA",
+    "artists": [
+      "travis scott",
+      "sza"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/be/e1/5c/bee15c13-45e4-a4de-a48d-407cc06a0cb6/mzaf_12967475487789835787.plus.aac.p.m4a",
+    "categories": [
+      "R&B/Soul"
+    ]
+  },
+  {
+    "displayName": "I Know the End",
+    "answerNames": [
+      "i know the end"
+    ],
+    "answerName": "i know the end",
+    "album": "Punisher",
+    "albumAnswers": [
+      "punisher"
+    ],
+    "albumAnswer": "punisher",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/39/91/4f/39914f60-e9aa-4ae9-3962-44b0a5e5d570/656605150062.jpg/600x600bb.jpg",
+    "year": 2020,
+    "displayArtists": "Phoebe Bridgers",
+    "artists": [
+      "phoebe bridgers"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/e1/07/a5/e107a534-9d19-c459-e246-39efe3156918/mzaf_9734585710949644021.plus.aac.p.m4a",
+    "categories": [
+      "Alternative"
+    ]
+  },
+  {
+    "displayName": "APT.",
+    "answerNames": [
+      "apt."
+    ],
+    "answerName": "apt.",
+    "album": "APT. - Single",
+    "albumAnswers": [
+      "apt.",
+      "apt. single",
+      "APT. - Single"
+    ],
+    "albumAnswer": "apt. single",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2d/1a/7d/2d1a7d91-587e-0ceb-d434-327bd66d9e86/075679628312.jpg/600x600bb.jpg",
+    "year": 2024,
+    "displayArtists": "ROSÉ & Bruno Mars",
+    "artists": [
+      "bruno mars",
+      "ros"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/22/8a/a1/228aa1a0-cbfd-ac14-ae99-09ca59bcc80b/mzaf_12121445588963961343.plus.aac.p.m4a",
+    "categories": [
+      "Pop"
+    ]
+  },
+  {
+    "displayName": "greedy",
+    "answerNames": [
+      "greedy"
+    ],
+    "answerName": "greedy",
+    "album": "THINK LATER",
+    "albumAnswers": [
+      "think later"
+    ],
+    "albumAnswer": "think later",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/21/4a/c2/214ac20c-a66c-84a1-e357-f7e60b1932ca/196871542661.jpg/600x600bb.jpg",
+    "year": 2023,
+    "displayArtists": "Tate McRae",
+    "artists": [
+      "tate mcrae"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/ff/fb/f0/fffbf047-d930-4f20-6b5d-17b9895b8052/mzaf_18081110782534090177.plus.aac.p.m4a",
+    "categories": [
+      "Pop"
+    ]
+  },
+  {
+    "displayName": "vampire",
+    "answerNames": [
+      "vampire"
+    ],
+    "answerName": "vampire",
+    "album": "GUTS",
+    "albumAnswers": [
+      "guts"
+    ],
+    "albumAnswer": "guts",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/9e/0d/17/9e0d17e0-c068-fbd9-fd85-610cc87c86aa/23UMGIM71511.rgb.jpg/600x600bb.jpg",
+    "year": 2023,
+    "displayArtists": "Olivia Rodrigo",
+    "artists": [
+      "olivia rodrigo"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/70/2f/a6/702fa6b5-946c-7a8e-2dba-03de25c732d3/mzaf_12764345117177639836.plus.aac.p.m4a",
+    "categories": [
+      "Pop"
+    ]
+  },
+  {
+    "displayName": "Kiss Me More (feat. SZA)",
+    "answerNames": [
+      "kiss me more",
+      "Kiss Me More (feat. SZA)"
+    ],
+    "answerName": "kiss me more",
+    "album": "Planet Her (Deluxe)",
+    "albumAnswers": [
+      "planet her",
+      "planet her deluxe",
+      "Planet Her (Deluxe)"
+    ],
+    "albumAnswer": "planet her",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/14/f3/28/14f32832-b9d9-1ba1-e20a-18c2ff8b6a80/886449410873.jpg/600x600bb.jpg",
+    "year": 2021,
+    "displayArtists": "Doja Cat",
+    "artists": [
+      "sza",
+      "doja cat"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/8f/f9/cd/8ff9cdda-0037-3a34-0f3e-f0b9d2c2f290/mzaf_5290116035450316980.plus.aac.p.m4a",
+    "categories": [
+      "Pop"
+    ]
+  },
+  {
+    "displayName": "Shake It Off",
+    "answerNames": [
+      "shake it off"
+    ],
+    "answerName": "shake it off",
+    "album": "1989 (Deluxe Edition)",
+    "albumAnswers": [
+      "1989",
+      "1989 deluxe edition",
+      "1989 (Deluxe Edition)"
+    ],
+    "albumAnswer": "1989",
+    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a7/98/d8/a798d867-344d-2bf2-fbfe-d2d1412dcef8/14UMDIM03793.rgb.jpg/600x600bb.jpg",
+    "year": 2014,
+    "displayArtists": "Taylor Swift",
+    "artists": [
+      "taylor swift"
+    ],
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/11/d5/6d/11d56d4a-ce23-e793-8681-70dc4d35d931/mzaf_5886436202259848624.plus.aac.p.m4a",
+    "categories": [
+      "Pop"
     ]
   }
 ]

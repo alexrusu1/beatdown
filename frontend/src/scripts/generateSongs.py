@@ -134,7 +134,7 @@ def generate_album_answer_variants(album):
 
 
 def extract_featured_artists_from_title(title):
-    match = re.search(r"(feat\.|ft\.|featuring)(.*)", title, re.IGNORECASE)
+    match = re.search(r"(feat\.|ft\.|featuring\.|with)(.*)", title, re.IGNORECASE)
     if not match:
         return []
 
