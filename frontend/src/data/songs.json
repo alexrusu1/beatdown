@@ -3432,7 +3432,7 @@
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/df/c5/d9/dfc5d936-099d-8c34-3a52-209164115571/mzaf_5301823922994311166.plus.aac.p.m4a",
     "categories": [
-      "Country"
+      "Pop"
     ]
   },
   {
@@ -3869,28 +3869,6 @@
     ]
   },
   {
-    "displayName": "Lie",
-    "answerNames": [
-      "lie"
-    ],
-    "answerName": "lie",
-    "album": "Perception",
-    "albumAnswers": [
-      "perception"
-    ],
-    "albumAnswer": "perception",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/6e/96/04/6e9604a8-3270-f86e-0c47-0127141545c3/17UM1IM17084.rgb.jpg/600x600bb.jpg",
-    "year": 2017,
-    "displayArtists": "NF",
-    "artists": [
-      "nf"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f2/4c/67/f24c6755-782d-9229-c5e5-616eaeadd73f/mzaf_16043140753199578523.plus.aac.p.m4a",
-    "categories": [
-      "Hip-Hop/Rap"
-    ]
-  },
-  {
     "displayName": "Me and Your Mama",
     "answerNames": [
       "me and your mama"
@@ -3909,36 +3887,6 @@
       "childish gambino"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/02/a5/05/02a5050a-d4d2-9123-f171-93ed3d180a3a/mzaf_139919145843734647.plus.aac.p.m4a",
-    "categories": [
-      "Hip-Hop/Rap"
-    ]
-  },
-  {
-    "displayName": "Easy (Remix) [feat. Chris Brown]",
-    "answerNames": [
-      "easy",
-      "easy remix",
-      "Easy (Remix) [feat. Chris Brown]"
-    ],
-    "answerName": "easy",
-    "album": "Easy (Remix) [feat. Chris Brown] - Single",
-    "albumAnswers": [
-      "easy",
-      "easy remix",
-      "easy single",
-      "easy feat chris brown",
-      "easy remix feat chris brown single",
-      "Easy (Remix) [feat. Chris Brown] - Single"
-    ],
-    "albumAnswer": "easy single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/88/7e/8d/887e8d16-a3d3-ac05-39bb-7d1d600000e0/19UMGIM53142.rgb.jpg/600x600bb.jpg",
-    "year": 2019,
-    "displayArtists": "DaniLeigh",
-    "artists": [
-      "chris brown",
-      "danileigh"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f2/55/53/f255538a-23c1-cde0-4274-203f4dac5639/mzaf_2513186839204535191.plus.aac.p.m4a",
     "categories": [
       "Hip-Hop/Rap"
     ]
@@ -4605,53 +4553,6 @@
     ]
   },
   {
-    "displayName": "Cupid",
-    "answerNames": [
-      "cupid"
-    ],
-    "answerName": "cupid",
-    "album": "112",
-    "albumAnswers": [
-      "112"
-    ],
-    "albumAnswer": "112",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/2b/3b/8d/2b3b8d43-1ea1-d85b-0bbd-fb6499b37b08/mzi.puxmnlmp.jpg/600x600bb.jpg",
-    "year": 1998,
-    "displayArtists": "112",
-    "artists": [
-      "112"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/61/3a/61/613a61f8-61dd-0e65-90d6-e9bd962a5e10/mzaf_16223317656394124956.plus.aac.p.m4a",
-    "categories": [
-      "R&B/Soul"
-    ]
-  },
-  {
-    "displayName": "Love Don't Change",
-    "answerNames": [
-      "love dont change",
-      "Love Don't Change"
-    ],
-    "answerName": "love dont change",
-    "album": "All About You (Deluxe Edition)",
-    "albumAnswers": [
-      "all about you",
-      "all about you deluxe edition",
-      "All About You (Deluxe Edition)"
-    ],
-    "albumAnswer": "all about you",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/4e/da/e3/4edae341-488b-a5c0-bcd3-0b047508124e/10UMGIM24508.rgb.jpg/600x600bb.jpg",
-    "year": 2010,
-    "displayArtists": "Jeremih",
-    "artists": [
-      "jeremih"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b8/19/2e/b8192ed3-5070-eb67-c087-10b9c9e4d357/mzaf_956096865366017025.plus.aac.p.m4a",
-    "categories": [
-      "R&B/Soul"
-    ]
-  },
-  {
     "displayName": "Magic in the Hamptons (feat. Lil Yachty)",
     "answerNames": [
       "magic in the hamptons",
@@ -4675,30 +4576,6 @@
       "lil yachty"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/c5/32/13/c5321344-7a9a-ce1b-dd49-8554cf3e9a1f/mzaf_10893580160999159681.plus.aac.p.m4a",
-    "categories": [
-      "Hip-Hop/Rap"
-    ]
-  },
-  {
-    "displayName": "772 Love",
-    "answerNames": [
-      "772 love"
-    ],
-    "answerName": "772 love",
-    "album": "772 Love - Single",
-    "albumAnswers": [
-      "772 love",
-      "772 love single",
-      "772 Love - Single"
-    ],
-    "albumAnswer": "772 love single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/14/4a/6d/144a6d17-29d1-482d-847e-e49c1c572f8f/YNWM002.jpg/600x600bb.jpg",
-    "year": 2017,
-    "displayArtists": "YNW Melly",
-    "artists": [
-      "ynw melly"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/80/52/83/8052836a-65ae-9d78-66f4-9023c193e2a3/mzaf_16944157147902597212.plus.aac.p.m4a",
     "categories": [
       "Hip-Hop/Rap"
     ]
@@ -4754,74 +4631,6 @@
     ]
   },
   {
-    "displayName": "Like a Boy",
-    "answerNames": [
-      "like a boy"
-    ],
-    "answerName": "like a boy",
-    "album": "The Evolution (Bonus Track Edition)",
-    "albumAnswers": [
-      "the evolution",
-      "the evolution bonus track edition",
-      "The Evolution (Bonus Track Edition)"
-    ],
-    "albumAnswer": "the evolution",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music/a1/d3/05/mzi.nzfmzboj.jpg/600x600bb.jpg",
-    "year": 2006,
-    "displayArtists": "Ciara",
-    "artists": [
-      "ciara"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/50/3b/ec/503bec61-c852-bff1-e5c4-e946adf293dd/mzaf_16839891991787568558.plus.aac.p.m4a",
-    "categories": [
-      "R&B/Soul"
-    ]
-  },
-  {
-    "displayName": "Same Drugs",
-    "answerNames": [
-      "same drugs"
-    ],
-    "answerName": "same drugs",
-    "album": "Coloring Book",
-    "albumAnswers": [
-      "coloring book"
-    ],
-    "albumAnswer": "coloring book",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/0d/3f/b5/0d3fb523-1b70-b4b1-6bf7-ee94a89ab805/859717324721_cover.jpg/600x600bb.jpg",
-    "year": 2016,
-    "displayArtists": "Chance the Rapper",
-    "artists": [
-      "chance the rapper"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/6f/50/95/6f5095db-8d35-37df-1139-6be3c509fd73/mzaf_12544685800792122721.plus.aac.p.m4a",
-    "categories": [
-      "Hip-Hop/Rap"
-    ]
-  },
-  {
-    "displayName": "Finesse",
-    "answerNames": [
-      "finesse"
-    ],
-    "answerName": "finesse",
-    "album": "Scorpion",
-    "albumAnswers": [
-      "scorpion"
-    ],
-    "albumAnswer": "scorpion",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/1f/37/43/1f374304-2e04-2be3-53ea-41dd6f0b6fb8/00602567892410.rgb.jpg/600x600bb.jpg",
-    "year": 2018,
-    "displayArtists": "Drake",
-    "artists": [
-      "drake"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/fd/99/19/fd99196e-f1e8-6422-310f-3700e3ee51a4/mzaf_11044985536935960266.plus.aac.p.m4a",
-    "categories": [
-      "Hip-Hop/Rap"
-    ]
-  },
-  {
     "displayName": "Ride Slow",
     "answerNames": [
       "ride slow"
@@ -4842,28 +4651,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/49/0c/0c/490c0c5a-ed17-88a8-7834-99120d71b8b7/mzaf_9944900147831982143.plus.aac.p.m4a",
     "categories": [
       "Hip-Hop/Rap"
-    ]
-  },
-  {
-    "displayName": "Creep",
-    "answerNames": [
-      "creep"
-    ],
-    "answerName": "creep",
-    "album": "CrazySexyCool",
-    "albumAnswers": [
-      "crazysexycool"
-    ],
-    "albumAnswer": "crazysexycool",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/14/a8/69/14a86912-841d-3cb8-cf55-0439b15c6cab/dj.mjduepez.jpg/600x600bb.jpg",
-    "year": 1994,
-    "displayArtists": "TLC",
-    "artists": [
-      "tlc"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/85/4d/1a/854d1ab6-85be-65d4-0c9a-6439800676be/mzaf_784336923403827515.plus.aac.p.m4a",
-    "categories": [
-      "R&B/Soul"
     ]
   },
   {
@@ -4891,29 +4678,6 @@
     ]
   },
   {
-    "displayName": "Cherry Hill",
-    "answerNames": [
-      "cherry hill"
-    ],
-    "answerName": "cherry hill",
-    "album": "There's Really A Wolf",
-    "albumAnswers": [
-      "theres really a wolf",
-      "There's Really A Wolf"
-    ],
-    "albumAnswer": "theres really a wolf",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/85/46/30/85463080-a614-b8b7-4567-637733dad15f/886446447629.jpg/600x600bb.jpg",
-    "year": 2017,
-    "displayArtists": "Russ",
-    "artists": [
-      "russ"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/5c/84/0b/5c840be0-786c-47ef-0a66-cec01bbdf37a/mzaf_11262063834735625879.plus.aac.p.m4a",
-    "categories": [
-      "Hip-Hop/Rap"
-    ]
-  },
-  {
     "displayName": "Gangsta's Paradise (feat. L.V.)",
     "answerNames": [
       "gangstas paradise",
@@ -4936,30 +4700,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e9/2c/7b/e92c7bc7-1eb7-670d-2e81-52cd8e972bc9/mzaf_14053213445913686907.plus.aac.p.m4a",
     "categories": [
       "Hip-Hop/Rap"
-    ]
-  },
-  {
-    "displayName": "Like You (feat. Ciara)",
-    "answerNames": [
-      "like you",
-      "Like You (feat. Ciara)"
-    ],
-    "answerName": "like you",
-    "album": "Wanted",
-    "albumAnswers": [
-      "wanted"
-    ],
-    "albumAnswer": "wanted",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music/ae/ad/f4/mzi.vpzwhzsw.jpg/600x600bb.jpg",
-    "year": 2005,
-    "displayArtists": "Bow Wow",
-    "artists": [
-      "ciara",
-      "bow wow"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/ed/3f/c8/ed3fc836-755d-3dac-de86-4b0ccc4355b0/mzaf_14689933007223604168.plus.aac.p.m4a",
-    "categories": [
-      "Dirty South"
     ]
   },
   {
@@ -5027,6 +4767,7 @@
     "displayArtists": "B.o.B",
     "artists": [
       "bob",
+      "b.o.b.",
       "bruno mars"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/b9/f5/90/b9f5905a-bb90-321e-0c8b-f794de312a42/mzaf_863925247996723132.plus.aac.p.m4a",
@@ -5083,51 +4824,6 @@
     ]
   },
   {
-    "displayName": "Car Radio",
-    "answerNames": [
-      "car radio"
-    ],
-    "answerName": "car radio",
-    "album": "Vessel",
-    "albumAnswers": [
-      "vessel"
-    ],
-    "albumAnswer": "vessel",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/73/a7/23/73a7230c-19df-02a4-ff4e-53944024f63d/075679957924.jpg/600x600bb.jpg",
-    "year": 2011,
-    "displayArtists": "twenty one pilots",
-    "artists": [
-      "twenty one pilots"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/15/3a/38/153a384e-f784-82c3-59ce-028f2f65ecaa/mzaf_2613530958360325626.plus.aac.p.m4a",
-    "categories": [
-      "Alternative"
-    ]
-  },
-  {
-    "displayName": "All My Life",
-    "answerNames": [
-      "all my life"
-    ],
-    "answerName": "all my life",
-    "album": "Love Always",
-    "albumAnswers": [
-      "love always"
-    ],
-    "albumAnswer": "love always",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5b/23/5b/5b235b02-d260-e8ac-dbac-b0ea6924aa98/06UMGIM21106.rgb.jpg/600x600bb.jpg",
-    "year": 1997,
-    "displayArtists": "K-Ci & JoJo",
-    "artists": [
-      "kci",
-      "jojo"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/04/18/38/04183814-3465-a82b-c283-7cc0a3011aab/mzaf_14604770823956701628.plus.aac.p.m4a",
-    "categories": [
-      "R&B/Soul"
-    ]
-  },
-  {
     "displayName": "Find Your Love",
     "answerNames": [
       "find your love"
@@ -5145,54 +4841,6 @@
       "drake"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/86/73/cc/8673cc33-0e13-5950-86d3-74800dfbe136/mzaf_5876953672416177332.plus.aac.p.m4a",
-    "categories": [
-      "Hip-Hop/Rap"
-    ]
-  },
-  {
-    "displayName": "Rookie of the Year",
-    "answerNames": [
-      "rookie of the year"
-    ],
-    "answerName": "rookie of the year",
-    "album": "Rookie of the Year - Single",
-    "albumAnswers": [
-      "rookie of the year",
-      "rookie of the year single",
-      "Rookie of the Year - Single"
-    ],
-    "albumAnswer": "rookie of the year single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/a9/36/40/a9364051-d6a1-7d13-ccd9-15070ce18c48/21UMGIM46180.rgb.jpg/600x600bb.jpg",
-    "year": 2021,
-    "displayArtists": "Moneybagg Yo",
-    "artists": [
-      "moneybagg yo"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/20/7c/5c/207c5c85-2b9e-b084-802c-56d3b00d7377/mzaf_10699656745064597871.plus.aac.p.m4a",
-    "categories": [
-      "Hip-Hop/Rap"
-    ]
-  },
-  {
-    "displayName": "Signs",
-    "answerNames": [
-      "signs"
-    ],
-    "answerName": "signs",
-    "album": "Signs - Single",
-    "albumAnswers": [
-      "signs",
-      "signs single",
-      "Signs - Single"
-    ],
-    "albumAnswer": "signs single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/be/b5/16/beb51692-6125-f465-e1a9-d414be6c7c33/00602557821048.rgb.jpg/600x600bb.jpg",
-    "year": 2017,
-    "displayArtists": "Drake",
-    "artists": [
-      "drake"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/32/96/e5/3296e522-e0c0-e54f-6354-423623959ac5/mzaf_11544558088389127199.plus.aac.p.m4a",
     "categories": [
       "Hip-Hop/Rap"
     ]
@@ -5225,29 +4873,6 @@
     ]
   },
   {
-    "displayName": "So Anxious",
-    "answerNames": [
-      "so anxious"
-    ],
-    "answerName": "so anxious",
-    "album": "100% Ginuwine",
-    "albumAnswers": [
-      "100 ginuwine",
-      "100% Ginuwine"
-    ],
-    "albumAnswer": "100 ginuwine",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music/44/31/43/mzi.vitmrbeq.jpg/600x600bb.jpg",
-    "year": 1999,
-    "displayArtists": "Ginuwine",
-    "artists": [
-      "ginuwine"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/fe/de/7a/fede7ae3-51f7-b352-670c-f0f1e148a6a0/mzaf_685485112641159664.plus.aac.p.m4a",
-    "categories": [
-      "R&B/Soul"
-    ]
-  },
-  {
     "displayName": "Turn Down for What",
     "answerNames": [
       "turn down for what"
@@ -5273,52 +4898,6 @@
     ]
   },
   {
-    "displayName": "Promise",
-    "answerNames": [
-      "promise"
-    ],
-    "answerName": "promise",
-    "album": "The Evolution (Bonus Track Edition)",
-    "albumAnswers": [
-      "the evolution",
-      "the evolution bonus track edition",
-      "The Evolution (Bonus Track Edition)"
-    ],
-    "albumAnswer": "the evolution",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music/a1/d3/05/mzi.nzfmzboj.jpg/600x600bb.jpg",
-    "year": 2006,
-    "displayArtists": "Ciara",
-    "artists": [
-      "ciara"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c7/49/35/c7493588-2dd0-e16c-aa7c-470e8301fba4/mzaf_4896321248842262088.plus.aac.p.m4a",
-    "categories": [
-      "R&B/Soul"
-    ]
-  },
-  {
-    "displayName": "Hurricane",
-    "answerNames": [
-      "hurricane"
-    ],
-    "answerName": "hurricane",
-    "album": "Donda",
-    "albumAnswers": [
-      "donda"
-    ],
-    "albumAnswer": "donda",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/62/13/7b/62137b3f-7722-59f5-2ee1-b5aff9426869/21UMGIM64738.rgb.jpg/600x600bb.jpg",
-    "year": 2021,
-    "displayArtists": "Kanye West",
-    "artists": [
-      "kanye west"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/f2/6e/1a/f26e1a9d-05c2-3e08-7e8a-120d2548a9a2/mzaf_7958854607137187447.plus.aac.p.m4a",
-    "categories": [
-      "Hip-Hop/Rap"
-    ]
-  },
-  {
     "displayName": "Good News",
     "answerNames": [
       "good news"
@@ -5336,32 +4915,6 @@
       "mac miller"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/13/e2/be/13e2beaa-321b-1a0a-2c4e-b865fe9d9f60/mzaf_13231410766586809540.plus.aac.p.m4a",
-    "categories": [
-      "Hip-Hop/Rap"
-    ]
-  },
-  {
-    "displayName": "I'll Be Missing You (feat. Faith Evans, 112)",
-    "answerNames": [
-      "ill be missing you",
-      "I'll Be Missing You (feat. Faith Evans, 112)"
-    ],
-    "answerName": "ill be missing you",
-    "album": "Bad Boy's 10th Anniversary- The Hits",
-    "albumAnswers": [
-      "bad boys 10th anniversary the hits",
-      "Bad Boy's 10th Anniversary- The Hits"
-    ],
-    "albumAnswer": "bad boys 10th anniversary the hits",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/db/2c/2d/db2c2dc7-18cd-f64e-3580-52eae12bccc0/dj.izjbcsws.jpg/600x600bb.jpg",
-    "year": 1997,
-    "displayArtists": "Puff Daddy & Faith Evans",
-    "artists": [
-      "112",
-      "puff daddy",
-      "faith evans"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/41/a0/1d/41a01dad-1b51-8151-866a-50e239b01d49/mzaf_16034913608556950043.plus.aac.p.m4a",
     "categories": [
       "Hip-Hop/Rap"
     ]
@@ -5420,30 +4973,6 @@
     ]
   },
   {
-    "displayName": "No Fear",
-    "answerNames": [
-      "no fear"
-    ],
-    "answerName": "no fear",
-    "album": "No Fear - Single",
-    "albumAnswers": [
-      "no fear",
-      "no fear single",
-      "No Fear - Single"
-    ],
-    "albumAnswer": "no fear single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/68/1c/73/681c73a2-47ce-0bbb-0f45-4d0876967f25/886446413099.jpg/600x600bb.jpg",
-    "year": 2017,
-    "displayArtists": "DeJ Loaf",
-    "artists": [
-      "dej loaf"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/65/c3/85/65c38519-f11f-0574-2f24-28574c1d00b9/mzaf_9254817108131327491.plus.aac.p.m4a",
-    "categories": [
-      "Hip-Hop/Rap"
-    ]
-  },
-  {
     "displayName": "Shower",
     "answerNames": [
       "shower"
@@ -5463,79 +4992,6 @@
       "becky g"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/28/60/8b/28608be1-ac33-ca4b-05ed-f6133556ee5f/mzaf_6511680028124136489.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "Can You Stand the Rain",
-    "answerNames": [
-      "can you stand the rain"
-    ],
-    "answerName": "can you stand the rain",
-    "album": "Heart Break",
-    "albumAnswers": [
-      "heart break"
-    ],
-    "albumAnswer": "heart break",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/0c/c1/be/0cc1beb9-be76-8de3-9f77-2b47da565e70/06UMGIM02085.rgb.jpg/600x600bb.jpg",
-    "year": 1988,
-    "displayArtists": "New Edition",
-    "artists": [
-      "new edition"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b2/fd/d9/b2fdd9a6-ea94-30f5-8ad8-0ee70ef0311f/mzaf_15037054110076888661.plus.aac.p.m4a",
-    "categories": [
-      "R&B/Soul"
-    ]
-  },
-  {
-    "displayName": "Gangsta's Paradise (feat. L.V.) [2023 Remaster]",
-    "answerNames": [
-      "gangstas paradise",
-      "gangstas paradise 2023 remaster",
-      "Gangsta's Paradise (feat. L.V.) [2023 Remaster]"
-    ],
-    "answerName": "gangstas paradise",
-    "album": "Gangsta's Paradise (Deluxe Edition)",
-    "albumAnswers": [
-      "gangstas paradise",
-      "gangstas paradise deluxe edition",
-      "Gangsta's Paradise (Deluxe Edition)"
-    ],
-    "albumAnswer": "gangstas paradise",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/c2/23/0b/c2230b5f-e753-e9b0-c032-b9ea0713450f/016998513262.png/600x600bb.jpg",
-    "year": 1995,
-    "displayArtists": "Coolio",
-    "artists": [
-      "lv 2023 remaster",
-      "coolio"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/56/58/f7/5658f7ec-2bb5-0ef0-0f9f-5adcd1a96363/mzaf_7433975646947882823.plus.aac.p.m4a",
-    "categories": [
-      "Hip-Hop/Rap"
-    ]
-  },
-  {
-    "displayName": "Rocketeer (feat. Ryan Tedder)",
-    "answerNames": [
-      "rocketeer",
-      "Rocketeer (feat. Ryan Tedder)"
-    ],
-    "answerName": "rocketeer",
-    "album": "Free Wired",
-    "albumAnswers": [
-      "free wired"
-    ],
-    "albumAnswer": "free wired",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/5f/69/26/5f6926ea-5a7f-17d9-25ce-dbcddfbc14d8/10UMGIM25431.rgb.jpg/600x600bb.jpg",
-    "year": 2010,
-    "displayArtists": "Far East Movement & Ryan Tedder",
-    "artists": [
-      "far east movement",
-      "ryan tedder"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/2b/1f/36/2b1f3606-fb68-5241-1a0e-87fd345ac027/mzaf_8719340920409218644.plus.aac.p.m4a",
     "categories": [
       "Pop"
     ]
@@ -5582,32 +5038,6 @@
       "bad bunny"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/fd/7f/5d/fd7f5df2-255d-d51d-23b1-d1cd33b37688/mzaf_13244856273657682935.plus.aac.p.m4a",
-    "categories": [
-      "Hip-Hop/Rap"
-    ]
-  },
-  {
-    "displayName": "Be Without You (Kendu Mix)",
-    "answerNames": [
-      "be without you",
-      "be without you kendu mix",
-      "Be Without You (Kendu Mix)"
-    ],
-    "answerName": "be without you",
-    "album": "The Breakthrough (Deluxe)",
-    "albumAnswers": [
-      "the breakthrough",
-      "the breakthrough deluxe",
-      "The Breakthrough (Deluxe)"
-    ],
-    "albumAnswer": "the breakthrough",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/8e/d0/84/8ed08455-44e9-718c-d2a3-2997ea329b12/15UMGIM00591.rgb.jpg/600x600bb.jpg",
-    "year": 2005,
-    "displayArtists": "Mary J. Blige",
-    "artists": [
-      "mary j blige"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1b/a1/26/1ba126de-8fa1-1ed0-da98-b1d4e9b8045a/mzaf_15843954949240731828.plus.aac.p.m4a",
     "categories": [
       "Hip-Hop/Rap"
     ]
@@ -6906,28 +6336,6 @@
     ]
   },
   {
-    "displayName": "Rumor",
-    "answerNames": [
-      "rumor"
-    ],
-    "answerName": "rumor",
-    "album": "Lee Brice",
-    "albumAnswers": [
-      "lee brice"
-    ],
-    "albumAnswer": "lee brice",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/51/83/8f/51838f82-c7a2-8f70-ca73-9f7a9c534ffc/79452_-_Lee_Brice.png/600x600bb.jpg",
-    "year": 2017,
-    "displayArtists": "Lee Brice",
-    "artists": [
-      "lee brice"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/75/45/1b/75451b9b-e17e-3149-f431-3edce43fbfb5/mzaf_14006487899428030985.plus.aac.p.m4a",
-    "categories": [
-      "Country"
-    ]
-  },
-  {
     "displayName": "Roses (feat. ROZES)",
     "answerNames": [
       "roses",
@@ -7044,7 +6452,7 @@
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/9c/16/61/9c1661fd-ec64-f5e5-39b4-782398d56508/mzaf_18438317548939967601.plus.aac.p.m4a",
     "categories": [
-      "Country"
+      "Pop"
     ]
   },
   {
@@ -7067,53 +6475,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/10/98/c0/1098c0cf-2c7a-43cc-e00a-fc08c62534f9/mzaf_7838405506889474959.plus.aac.p.m4a",
     "categories": [
       "Pop"
-    ]
-  },
-  {
-    "displayName": "Take Your Time",
-    "answerNames": [
-      "take your time"
-    ],
-    "answerName": "take your time",
-    "album": "Montevallo",
-    "albumAnswers": [
-      "montevallo"
-    ],
-    "albumAnswer": "montevallo",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/17/00/a2/1700a23b-2441-5133-7cb8-344168f45cd4/14UMGIM42058.rgb.jpg/600x600bb.jpg",
-    "year": 2014,
-    "displayArtists": "Sam Hunt",
-    "artists": [
-      "sam hunt"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/79/a4/6f/79a46f91-b182-a184-124c-274254513d8d/mzaf_6484400883356507512.plus.aac.p.m4a",
-    "categories": [
-      "Country"
-    ]
-  },
-  {
-    "displayName": "Boo'd Up",
-    "answerNames": [
-      "bood up",
-      "Boo'd Up"
-    ],
-    "answerName": "bood up",
-    "album": "Ready - EP",
-    "albumAnswers": [
-      "ready",
-      "ready ep",
-      "Ready - EP"
-    ],
-    "albumAnswer": "ready ep",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/cc/82/2a/cc822a8e-eff8-4a82-c5ee-a0e2090f908f/00602557411805.rgb.jpg/600x600bb.jpg",
-    "year": 2017,
-    "displayArtists": "Ella Mai",
-    "artists": [
-      "ella mai"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/f8/4e/50/f84e5044-fe25-a547-8709-21b4105683c1/mzaf_12145955719999715719.plus.aac.p.m4a",
-    "categories": [
-      "R&B/Soul"
     ]
   },
   {
@@ -7161,55 +6522,6 @@
     ]
   },
   {
-    "displayName": "With You I Am",
-    "answerNames": [
-      "with you i am"
-    ],
-    "answerName": "with you i am",
-    "album": "Gotta Be Me (Bonus Track Version)",
-    "albumAnswers": [
-      "gotta be me",
-      "gotta be me bonus track version",
-      "Gotta Be Me (Bonus Track Version)"
-    ],
-    "albumAnswer": "gotta be me",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/04/de/38/04de38d7-c9bb-e39e-0fb3-9f50e14fc097/859716744698_cover.jpg/600x600bb.jpg",
-    "year": 2016,
-    "displayArtists": "Cody Johnson",
-    "artists": [
-      "cody johnson"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/d8/0f/b3/d80fb3c6-b712-ed5d-1cc2-c93bd4936f04/mzaf_6649149963945867108.plus.aac.p.m4a",
-    "categories": [
-      "Country"
-    ]
-  },
-  {
-    "displayName": "In Case You Didn't Know",
-    "answerNames": [
-      "in case you didnt know",
-      "In Case You Didn't Know"
-    ],
-    "answerName": "in case you didnt know",
-    "album": "Brett Young (Deluxe Video Edition)",
-    "albumAnswers": [
-      "brett young",
-      "brett young deluxe video edition",
-      "Brett Young (Deluxe Video Edition)"
-    ],
-    "albumAnswer": "brett young",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e1/68/3a/e1683a62-929c-c4dd-6139-93869866d95e/17UMGIM01226.rgb.jpg/600x600bb.jpg",
-    "year": 2017,
-    "displayArtists": "Brett Young",
-    "artists": [
-      "brett young"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/21/c0/50/21c0508a-21ba-500d-684b-2d011cb54b5c/mzaf_16208561735295426803.plus.aac.p.m4a",
-    "categories": [
-      "Country"
-    ]
-  },
-  {
     "displayName": "Here With Me (feat. CHVRCHES)",
     "answerNames": [
       "here with me",
@@ -7235,30 +6547,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b3/af/19/b3af191d-e300-00ac-5283-4c6db2b3c977/mzaf_2957856479963987572.plus.aac.p.m4a",
     "categories": [
       "Dance"
-    ]
-  },
-  {
-    "displayName": "I'm Comin' Over",
-    "answerNames": [
-      "im comin over",
-      "I'm Comin' Over"
-    ],
-    "answerName": "im comin over",
-    "album": "I'm Comin' Over",
-    "albumAnswers": [
-      "im comin over",
-      "I'm Comin' Over"
-    ],
-    "albumAnswer": "im comin over",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/83/7f/4a/837f4a21-2ff9-8016-be59-b2cfe90b5da0/mzm.nwcddsiz.jpg/600x600bb.jpg",
-    "year": 2015,
-    "displayArtists": "Chris Young",
-    "artists": [
-      "chris young"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/2e/b7/07/2eb707d7-d998-5f1d-070f-7c656e909692/mzaf_7732499854334906995.plus.aac.p.m4a",
-    "categories": [
-      "Country"
     ]
   },
   {
@@ -7428,7 +6716,7 @@
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/2c/6e/b8/2c6eb87b-a89c-98b0-f4c3-94846613b36b/mzaf_10934143866669182930.plus.aac.p.m4a",
     "categories": [
-      "Country"
+      "Pop"
     ]
   },
   {
@@ -7525,28 +6813,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/22/a7/61/22a76174-5078-0045-a36f-ffb979c576ca/mzaf_14033357771390999743.plus.aac.p.m4a",
     "categories": [
       "R&B/Soul"
-    ]
-  },
-  {
-    "displayName": "Heartache on the Dance Floor",
-    "answerNames": [
-      "heartache on the dance floor"
-    ],
-    "answerName": "heartache on the dance floor",
-    "album": "California Sunrise",
-    "albumAnswers": [
-      "california sunrise"
-    ],
-    "albumAnswer": "california sunrise",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/c1/6f/2f/c16f2fbe-b608-e931-1d2f-1171bdf2f7cc/16UMGIM11343.rgb.jpg/600x600bb.jpg",
-    "year": 2016,
-    "displayArtists": "Jon Pardi",
-    "artists": [
-      "jon pardi"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/56/a3/8f/56a38f28-cdea-0b63-bbe8-964ffde0f4da/mzaf_5567639509013378579.plus.aac.p.m4a",
-    "categories": [
-      "Country"
     ]
   },
   {
@@ -7878,31 +7144,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/b9/dd/6e/b9dd6e1f-5138-6a69-8cdc-6aa7cfd3f69b/mzaf_16522754389120070644.plus.aac.p.m4a",
     "categories": [
       "Alternative"
-    ]
-  },
-  {
-    "displayName": "I Don't Dance",
-    "answerNames": [
-      "i dont dance",
-      "I Don't Dance"
-    ],
-    "answerName": "i dont dance",
-    "album": "I Don't Dance (Deluxe Edition)",
-    "albumAnswers": [
-      "i dont dance",
-      "i dont dance deluxe edition",
-      "I Don't Dance (Deluxe Edition)"
-    ],
-    "albumAnswer": "i dont dance",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/d8/d0/6c/d8d06c30-dcca-ba73-d8db-c3400a717404/79400_Lee_Brice_deluxe.jpg/600x600bb.jpg",
-    "year": 2014,
-    "displayArtists": "Lee Brice",
-    "artists": [
-      "lee brice"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/8e/f7/ea/8ef7eadf-85a6-8897-81ed-53e07b0f39f5/mzaf_11867969500558631323.plus.aac.p.m4a",
-    "categories": [
-      "Country"
     ]
   },
   {
@@ -8486,30 +7727,6 @@
     ]
   },
   {
-    "displayName": "Thinking ‘Bout You (feat. Lauren Alaina)",
-    "answerNames": [
-      "thinking bout you",
-      "Thinking ‘Bout You (feat. Lauren Alaina)"
-    ],
-    "answerName": "thinking bout you",
-    "album": "Tullahoma",
-    "albumAnswers": [
-      "tullahoma"
-    ],
-    "albumAnswer": "tullahoma",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/71/5c/0f/715c0ff6-1aa1-36c4-2008-937bfe2bb62f/4050538562576.jpg/600x600bb.jpg",
-    "year": 2020,
-    "displayArtists": "Dustin Lynch",
-    "artists": [
-      "dustin lynch",
-      "lauren alaina"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/8c/08/8e/8c088ec8-1a18-efb7-163f-6d44e9c07193/mzaf_10409126176423283360.plus.aac.p.m4a",
-    "categories": [
-      "Country"
-    ]
-  },
-  {
     "displayName": "Could You Be Loved",
     "answerNames": [
       "could you be loved"
@@ -8632,28 +7849,6 @@
     ]
   },
   {
-    "displayName": "A Woman Like You",
-    "answerNames": [
-      "a woman like you"
-    ],
-    "answerName": "a woman like you",
-    "album": "Hard 2 Love",
-    "albumAnswers": [
-      "hard 2 love"
-    ],
-    "albumAnswer": "hard 2 love",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/89/a3/3e/89a33e77-4e57-742b-e1ae-b1abf1d4d338/79316_-_Lee_Brice.jpg/600x600bb.jpg",
-    "year": 2011,
-    "displayArtists": "Lee Brice",
-    "artists": [
-      "lee brice"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/9f/ec/d9/9fecd942-b7d2-ccec-3eac-0c2426624bc5/mzaf_8033570906363298463.plus.aac.p.m4a",
-    "categories": [
-      "Country"
-    ]
-  },
-  {
     "displayName": "Earned It",
     "answerNames": [
       "earned it"
@@ -8720,59 +7915,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/fa/a0/e6/faa0e604-ed77-47b9-753c-bb8fb0714b67/mzaf_16753844694727195971.plus.aac.p.m4a",
     "categories": [
       "Alternative"
-    ]
-  },
-  {
-    "displayName": "Chasing After You",
-    "answerNames": [
-      "chasing after you"
-    ],
-    "answerName": "chasing after you",
-    "album": "Chasing After You - Single",
-    "albumAnswers": [
-      "chasing after you",
-      "chasing after you single",
-      "Chasing After You - Single"
-    ],
-    "albumAnswer": "chasing after you single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/45/ee/69/45ee69be-61c6-bedd-cf68-53dca9c447b7/886449075263.jpg/600x600bb.jpg",
-    "year": 2021,
-    "displayArtists": "Ryan Hurd & Maren Morris",
-    "artists": [
-      "maren morris",
-      "ryan hurd"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/7b/12/36/7b12369d-be9c-1b08-ebaf-5820b6ff7e68/mzaf_5020852964893825640.plus.aac.p.m4a",
-    "categories": [
-      "Country"
-    ]
-  },
-  {
-    "displayName": "I Wanna Know (feat. Bea Miller)",
-    "answerNames": [
-      "i wanna know",
-      "I Wanna Know (feat. Bea Miller)"
-    ],
-    "answerName": "i wanna know",
-    "album": "I Wanna Know (feat. Bea Miller) - Single",
-    "albumAnswers": [
-      "i wanna know",
-      "i wanna know single",
-      "i wanna know feat bea miller",
-      "i wanna know feat bea miller single",
-      "I Wanna Know (feat. Bea Miller) - Single"
-    ],
-    "albumAnswer": "i wanna know single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/27/d2/ba/27d2ba0f-fc5c-ae94-ee80-5209f3eab444/00602567497431.rgb.jpg/600x600bb.jpg",
-    "year": 2018,
-    "displayArtists": "NOTD",
-    "artists": [
-      "bea miller",
-      "notd"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/60/30/df/6030dfac-317d-58ce-dd6d-b9dc76b230f8/mzaf_3150709424556022817.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
     ]
   },
   {
@@ -8864,52 +8006,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/ab/cb/ff/abcbff56-dffb-e390-9699-6dd494a0c280/mzaf_3526458013556102441.plus.aac.p.m4a",
     "categories": [
       "Pop"
-    ]
-  },
-  {
-    "displayName": "Die a Happy Man",
-    "answerNames": [
-      "die a happy man"
-    ],
-    "answerName": "die a happy man",
-    "album": "Tangled Up",
-    "albumAnswers": [
-      "tangled up"
-    ],
-    "albumAnswer": "tangled up",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/b7/f9/e4/b7f9e48c-8e9d-8385-6680-26b9f2319204/15UMDIM00481.rgb.jpg/600x600bb.jpg",
-    "year": 2015,
-    "displayArtists": "Thomas Rhett",
-    "artists": [
-      "thomas rhett"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/6f/80/ba/6f80ba33-2371-b138-f8be-947dcd81c3fc/mzaf_11382613734685635407.plus.aac.p.m4a",
-    "categories": [
-      "Country"
-    ]
-  },
-  {
-    "displayName": "Didn't Cha Know",
-    "answerNames": [
-      "didnt cha know",
-      "Didn't Cha Know"
-    ],
-    "answerName": "didnt cha know",
-    "album": "Mama's Gun",
-    "albumAnswers": [
-      "mamas gun",
-      "Mama's Gun"
-    ],
-    "albumAnswer": "mamas gun",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/63/9c/05/639c0568-e961-2146-f4cb-819a1f9226d3/06UMGIM01547.rgb.jpg/600x600bb.jpg",
-    "year": 2000,
-    "displayArtists": "Erykah Badu",
-    "artists": [
-      "erykah badu"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/52/93/ec/5293ec12-4b8e-2d68-6ef3-8ee6bb45415a/mzaf_8804608844272955749.plus.aac.p.m4a",
-    "categories": [
-      "R&B/Soul"
     ]
   },
   {
@@ -9413,7 +8509,7 @@
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/44/8a/a4/448aa432-42ae-8075-fe00-5f2deffe9896/mzaf_13232029737890307916.plus.aac.p.m4a",
     "categories": [
-      "Country"
+      "Pop"
     ]
   },
   {
@@ -10553,29 +9649,6 @@
     ]
   },
   {
-    "displayName": "El Comandante",
-    "answerNames": [
-      "el comandante"
-    ],
-    "answerName": "el comandante",
-    "album": "Corridos Bélicos, Vol. 2",
-    "albumAnswers": [
-      "corridos blicos vol 2",
-      "Corridos Bélicos, Vol. 2"
-    ],
-    "albumAnswer": "corridos blicos vol 2",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/95/39/dc/9539dc20-499f-dff6-aa76-04bfbb2b3392/720665677224_cover.jpg/600x600bb.jpg",
-    "year": 2021,
-    "displayArtists": "Luis R Conriquez",
-    "artists": [
-      "luis r conriquez"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/62/08/04/6208043e-08e4-3da8-61f0-ebf8b3f5242d/mzaf_3197978801688271162.plus.aac.p.m4a",
-    "categories": [
-      "Música Mexicana"
-    ]
-  },
-  {
     "displayName": "Electric Touch",
     "answerNames": [
       "electric touch"
@@ -10784,54 +9857,6 @@
     ]
   },
   {
-    "displayName": "Duro Le C*******s",
-    "answerNames": [
-      "duro le cs",
-      "Duro Le C*******s"
-    ],
-    "answerName": "duro le cs",
-    "album": "Duro Le Chingamos - Single",
-    "albumAnswers": [
-      "duro le chingamos",
-      "duro le chingamos single",
-      "Duro Le Chingamos - Single"
-    ],
-    "albumAnswer": "duro le chingamos single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/8c/07/8d/8c078d59-d16a-2320-8db5-21e72e81164c/1963621181260_cover.jpg/600x600bb.jpg",
-    "year": 2023,
-    "displayArtists": "Luis R Conriquez",
-    "artists": [
-      "luis r conriquez"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/e5/49/85/e549851c-9e2b-c1f9-8f8e-ca55b83f5ffe/mzaf_5010156772719892621.plus.aac.p.m4a",
-    "categories": [
-      "Música Mexicana"
-    ]
-  },
-  {
-    "displayName": "El Junior",
-    "answerNames": [
-      "el junior"
-    ],
-    "answerName": "el junior",
-    "album": "Corridos Bélicos",
-    "albumAnswers": [
-      "corridos blicos",
-      "Corridos Bélicos"
-    ],
-    "albumAnswer": "corridos blicos",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/a6/76/19/a676195b-03c4-a257-1879-3452ff29bd8c/709401226773_cover.jpg/600x600bb.jpg",
-    "year": 2020,
-    "displayArtists": "Luis R Conriquez",
-    "artists": [
-      "luis r conriquez"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/bb/48/57/bb485785-6dc7-ef9b-7cf7-ba96ad9b8e2e/mzaf_2158480016143596401.plus.aac.p.m4a",
-    "categories": [
-      "Música Mexicana"
-    ]
-  },
-  {
     "displayName": "My R",
     "answerNames": [
       "my r"
@@ -10924,52 +9949,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b9/fc/8e/b9fc8e96-0570-a5d9-5841-900d21225067/mzaf_199742269636733111.plus.aac.p.m4a",
     "categories": [
       "Pop"
-    ]
-  },
-  {
-    "displayName": "Por Clave Doble R",
-    "answerNames": [
-      "por clave doble r"
-    ],
-    "answerName": "por clave doble r",
-    "album": "Por Clave Doble R - Single",
-    "albumAnswers": [
-      "por clave doble r",
-      "por clave doble r single",
-      "Por Clave Doble R - Single"
-    ],
-    "albumAnswer": "por clave doble r single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/89/2e/02/892e0274-9776-01a6-0a17-7fe94c86b96e/018736420184_cover.jpg/600x600bb.jpg",
-    "year": 2020,
-    "displayArtists": "Luis R Conriquez",
-    "artists": [
-      "luis r conriquez"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/e4/90/be/e490be30-0d75-0f73-cdb3-2a1db7eb4613/mzaf_10563587056659319961.plus.aac.p.m4a",
-    "categories": [
-      "Música Mexicana"
-    ]
-  },
-  {
-    "displayName": "Love And Memories",
-    "answerNames": [
-      "love and memories"
-    ],
-    "answerName": "love and memories",
-    "album": "Stories Of A Stranger",
-    "albumAnswers": [
-      "stories of a stranger"
-    ],
-    "albumAnswer": "stories of a stranger",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/26/24/3b/26243b2d-16f6-897b-4671-33af1c1c346f/18CRGIM06102.rgb.jpg/600x600bb.jpg",
-    "year": 2005,
-    "displayArtists": "O.A.R.",
-    "artists": [
-      "o.a.r."
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/37/37/e1/3737e1e3-04a1-33e9-f2f6-8adef6589601/mzaf_8939482209684970182.plus.aac.p.m4a",
-    "categories": [
-      "Rock"
     ]
   },
   {
@@ -11570,7 +10549,7 @@
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d6/c8/64/d6c864a4-4bae-ee81-be9e-ef0beb97ccb1/mzaf_8891089632729595012.plus.aac.p.m4a",
     "categories": [
-      "Country"
+      "Pop"
     ]
   },
   {
@@ -13311,29 +12290,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/04/bc/13/04bc1303-8bb8-8f20-d92a-d359ef554068/mzaf_14402578973860795369.plus.aac.p.m4a",
     "categories": [
       "Pop"
-    ]
-  },
-  {
-    "displayName": "Rumor Has It",
-    "answerNames": [
-      "rumor has it"
-    ],
-    "answerName": "rumor has it",
-    "album": "Clay Walker: Greatest Hits",
-    "albumAnswers": [
-      "clay walker greatest hits",
-      "Clay Walker: Greatest Hits"
-    ],
-    "albumAnswer": "clay walker greatest hits",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/58/7f/95/587f9567-bfc6-ec27-a547-da23d2a159ac/mzi.mtjjggqu.jpg/600x600bb.jpg",
-    "year": 1993,
-    "displayArtists": "Clay Walker",
-    "artists": [
-      "clay walker"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/d6/52/d8/d652d85a-eb92-5df7-1ca6-f76e2ad3633c/mzaf_12044663909030646000.plus.aac.p.m4a",
-    "categories": [
-      "Country"
     ]
   },
   {
@@ -15216,7 +14172,7 @@
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/95/e7/bb/95e7bb40-f0e3-11c1-08d4-73626d8d8e94/mzaf_6190233390504127357.plus.aac.p.m4a",
     "categories": [
-      "Country"
+      "Pop"
     ]
   },
   {
@@ -15925,55 +14881,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ca/5b/00/ca5b0049-9204-38a8-7e2e-bc7e79841b57/mzaf_3241303717288164662.plus.aac.p.m4a",
     "categories": [
       "Pop"
-    ]
-  },
-  {
-    "displayName": "Thinking Out Loud",
-    "answerNames": [
-      "thinking out loud"
-    ],
-    "answerName": "thinking out loud",
-    "album": "Thinking Out Loud - Single",
-    "albumAnswers": [
-      "thinking out loud",
-      "thinking out loud single",
-      "thinking out loud - single",
-      "Thinking Out Loud - Single"
-    ],
-    "albumAnswer": "thinking out loud - single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/95/dd/86/95dd8687-5cac-4575-1005-09d087ecc816/715187394766.png/600x600bb.jpg",
-    "year": 2015,
-    "displayArtists": "Dylan Scott",
-    "artists": [
-      "dylan scott"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/d9/d9/d2/d9d9d2c4-9018-dba4-e791-de1f7d2a2f72/mzaf_4742840597919809315.plus.aac.p.m4a",
-    "categories": [
-      "Country"
-    ]
-  },
-  {
-    "displayName": "Photograph (feat. Bea Miller)",
-    "answerNames": [
-      "photograph",
-      "Photograph (feat. Bea Miller)"
-    ],
-    "answerName": "photograph",
-    "album": "Cover Sessions, Vol. 4",
-    "albumAnswers": [
-      "cover sessions, vol. 4"
-    ],
-    "albumAnswer": "cover sessions, vol. 4",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/40/ba/0c/40ba0c19-e901-81f3-c7bc-4a4b202d5ba5/2429825.jpg/600x600bb.jpg",
-    "year": 2014,
-    "displayArtists": "Boyce Avenue",
-    "artists": [
-      "boyce avenue",
-      "bea miller"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/31/9f/2e/319f2e82-85ef-342e-79b5-559eddfde60b/mzaf_15134256222325615379.plus.aac.p.m4a",
-    "categories": [
-      "Singer/Songwriter"
     ]
   },
   {
@@ -17256,54 +16163,28 @@
       "Dance"
     ]
   },
+
   {
-    "displayName": "I Can Do Anything",
-    "answerNames": [
-      "i can do anything"
-    ],
-    "answerName": "i can do anything",
-    "album": "All I've Ever Known",
-    "albumAnswers": [
-      "all i've ever known"
-    ],
-    "albumAnswer": "all i've ever known",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/22/c9/ef/22c9efae-f1b6-272f-7ba8-8d9890992c47/859776714167_cover.jpg/600x600bb.jpg",
-    "year": 2023,
-    "displayArtists": "Alexandra Kay",
-    "artists": [
-      "alexandra kay"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/07/c7/2c/07c72ce9-b081-1d3d-4b75-830a0354d87d/mzaf_8487824499141908146.plus.aac.p.m4a",
-    "categories": [
-      "Country"
-    ]
-  },
-  {
-    "displayName": "Middle (feat. Bipolar Sunshine) [4B Remix]",
+    "displayName": "Middle (feat. Bipolar Sunshine)",
     "answerNames": [
       "middle",
       "middle 4b remix",
       "Middle (feat. Bipolar Sunshine) [4B Remix]"
     ],
     "answerName": "middle",
-    "album": "Middle (feat. Bipolar Sunshine) [4B Remix] - Single",
+    "album": "Encore",
     "albumAnswers": [
-      "middle",
-      "middle single",
-      "middle 4b remix",
-      "middle feat. bipolar sunshine",
-      "middle feat. bipolar sunshine 4b remix - single",
-      "Middle (feat. Bipolar Sunshine) [4B Remix] - Single"
+      "Encore"
     ],
-    "albumAnswer": "middle - single",
+    "albumAnswer": "Encore",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/0a/b8/6d/0ab86d04-0202-3380-98ee-d2178b5ca432/00602547904270.rgb.jpg/600x600bb.jpg",
-    "year": 2015,
+    "year": 2016,
     "displayArtists": "DJ Snake",
     "artists": [
       "dj snake",
-      "bipolar sunshine 4b remix"
+      "bipolar sunshine"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/e9/f5/17/e9f517b4-de7f-8d4c-e5e2-267af5397b67/mzaf_11806714723550305968.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/50/e1/e7/50e1e761-c790-706d-d337-f06dcfa41363/mzaf_5364191575394001947.plus.aac.ep.m4a",
     "categories": [
       "Dance"
     ]
@@ -27846,7 +26727,8 @@
     "year": 2017,
     "displayArtists": "JAY-Z",
     "artists": [
-      "jayz"
+      "jayz",
+      "jay-z"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/3e/c1/22/3ec122bc-88e4-6665-c8de-64dd58405055/mzaf_13776268416746720389.plus.aac.p.m4a",
     "categories": [
@@ -38890,7 +37772,7 @@
       "Diamonds from Sierra Leone (feat. JAŸ-Z)"
     ],
     "answerName": "diamonds from sierra leone",
-    "album": "Diamonds from Sierra Leone (Remix) - Single",
+    "album": "Diamonds from Sierra Leone - Single",
     "albumAnswers": [
       "diamonds from sierra leone",
       "diamonds from sierra leone remix",
@@ -38905,7 +37787,7 @@
     "artists": [
       "jayz",
       "jay-z",
-      "kanye west featuring jayz"
+      "kanye west"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/06/fb/d1/06fbd1e5-a081-5e07-2eb3-cf95dc9788b4/mzaf_13473978303514434821.plus.aac.p.m4a",
     "categories": [
@@ -39775,29 +38657,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/6b/7f/1c/6b7f1c9b-91a1-25fd-159b-72d03589476b/mzaf_14219815302233988307.plus.aac.p.m4a",
     "categories": [
       "Hip-Hop/Rap"
-    ]
-  },
-  {
-    "displayName": "Not Like Us",
-    "answerNames": [
-      "not like us"
-    ],
-    "answerName": "not like us",
-    "album": "Fire & Brimstone",
-    "albumAnswers": [
-      "fire brimstone",
-      "Fire & Brimstone"
-    ],
-    "albumAnswer": "fire brimstone",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/83/c7/06/83c706b5-5418-bbe1-68d8-c8dcc81be4dd/19OPBMR00635.rgb.jpg/600x600bb.jpg",
-    "year": 2019,
-    "displayArtists": "Brantley Gilbert",
-    "artists": [
-      "brantley gilbert"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f3/b1/fa/f3b1fac3-1596-03a5-b305-f7c878191677/mzaf_3298664852922802843.plus.aac.p.m4a",
-    "categories": [
-      "Country"
     ]
   },
   {
@@ -40839,31 +39698,6 @@
     ]
   },
   {
-    "displayName": "Luckenbach, Texas (Back to the Basics of Love) [feat. Willie Nelson]",
-    "answerNames": [
-      "luckenbach, texas",
-      "luckenbach, texas back to the basics of love",
-      "Luckenbach, Texas (Back to the Basics of Love) [feat. Willie Nelson]"
-    ],
-    "answerName": "luckenbach, texas",
-    "album": "Ultimate Waylon Jennings",
-    "albumAnswers": [
-      "ultimate waylon jennings"
-    ],
-    "albumAnswer": "ultimate waylon jennings",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/b6/f7/49/b6f749c6-5d5c-cc69-73ec-4c7f26358a2c/828765726726.jpg/600x600bb.jpg",
-    "year": 1977,
-    "displayArtists": "Waylon Jennings",
-    "artists": [
-      "waylon jennings",
-      "willie nelson"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/bb/4b/37/bb4b3744-1ce9-c54f-66a3-8488ae2508ca/mzaf_3331847242523811391.plus.aac.p.m4a",
-    "categories": [
-      "Country"
-    ]
-  },
-  {
     "displayName": "Too Much Sauce (feat. Future & Lil Uzi Vert)",
     "answerNames": [
       "too much sauce",
@@ -41741,28 +40575,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/21/0a/c2/210ac2d3-a50c-6b0f-fcc6-843a50252d37/mzaf_14252555834771701359.plus.aac.p.m4a",
     "categories": [
       "Hip-Hop/Rap"
-    ]
-  },
-  {
-    "displayName": "End Up Gone",
-    "answerNames": [
-      "end up gone"
-    ],
-    "answerName": "end up gone",
-    "album": "Stories",
-    "albumAnswers": [
-      "stories"
-    ],
-    "albumAnswer": "stories",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/87/af/70/87af70cc-5056-39e2-0dc9-b969fed02330/artwork.jpg/600x600bb.jpg",
-    "year": 2022,
-    "displayArtists": "Folks Like Them",
-    "artists": [
-      "folks like them"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/a4/e1/08/a4e1088f-232e-de22-b2c7-b908c3eae360/mzaf_16803116921955495513.plus.aac.p.m4a",
-    "categories": [
-      "Country"
     ]
   },
   {
@@ -45862,30 +44674,6 @@
     ]
   },
   {
-    "displayName": "Nobody But You (feat. Gwen Stefani)",
-    "answerNames": [
-      "nobody but you",
-      "Nobody But You (feat. Gwen Stefani)"
-    ],
-    "answerName": "nobody but you",
-    "album": "Fully Loaded: God's Country",
-    "albumAnswers": [
-      "fully loaded: god's country"
-    ],
-    "albumAnswer": "fully loaded: god's country",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/c2/50/ce/c250ce37-4daf-3ce7-e6a4-050e0a16d09d/093624896586.jpg/600x600bb.jpg",
-    "year": 2019,
-    "displayArtists": "Blake Shelton",
-    "artists": [
-      "gwen stefani",
-      "blake shelton"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/da/ec/44/daec44cb-b6a5-169c-adcd-941c9d54e454/mzaf_15662379384938043779.plus.aac.p.m4a",
-    "categories": [
-      "Country"
-    ]
-  },
-  {
     "displayName": "Moon River",
     "answerNames": [
       "moon river"
@@ -45907,28 +44695,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/96/11/21/961121d3-a5ed-b097-a261-1b475769f0d2/mzaf_264350905652784834.plus.aac.p.m4a",
     "categories": [
       "Pop"
-    ]
-  },
-  {
-    "displayName": "Too Fast",
-    "answerNames": [
-      "too fast"
-    ],
-    "answerName": "too fast",
-    "album": "Old Boots, New Dirt",
-    "albumAnswers": [
-      "old boots, new dirt"
-    ],
-    "albumAnswer": "old boots, new dirt",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/66/93/76/6693767f-a4b0-efc3-e9db-8e00182eaf79/0859381127734.jpg/600x600bb.jpg",
-    "year": 2014,
-    "displayArtists": "Jason Aldean",
-    "artists": [
-      "jason aldean"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/a2/ed/5a/a2ed5a03-45e4-3515-5ff4-a78c062a02a7/mzaf_1178065939881764987.plus.aac.p.m4a",
-    "categories": [
-      "Country"
     ]
   },
   {
