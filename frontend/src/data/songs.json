@@ -522,9 +522,8 @@
     "answerName": "timber",
     "album": "Global Warming: Meltdown (Deluxe Version)",
     "albumAnswers": [
-      "global warming meltdown",
+      "global warming: meltdown",
       "global warming meltdown deluxe version",
-      "global warming meltdown deluxe version deluxe version",
       "Global Warming: Meltdown (Deluxe Version)"
     ],
     "albumAnswer": "global warming meltdown",
@@ -735,7 +734,7 @@
       "starving feat zedd single",
       "Starving (feat. Zedd) - Single"
     ],
-    "albumAnswer": "starving   single",
+    "albumAnswer": "starving - single",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/15/16/a7/1516a71c-4d85-57c8-41ea-e937867bbc15/16UMGIM56252.rgb.jpg/600x600bb.jpg",
     "year": 2015,
     "displayArtists": "Hailee Steinfeld & Grey",
@@ -2361,32 +2360,6 @@
     ]
   },
   {
-    "displayName": "Say Something (feat. Chris Stapleton)",
-    "answerNames": [
-      "say something",
-      "say something feat chris stapleton",
-      "Say Something (feat. Chris Stapleton)"
-    ],
-    "answerName": "say something",
-    "album": "Man of the Woods",
-    "albumAnswers": [
-      "man of the woods",
-      "Man of the Woods"
-    ],
-    "albumAnswer": "man of the woods",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/9b/3d/a7/9b3da71d-0a60-69f0-41db-a33a60651a69/886446900759.jpg/600x600bb.jpg",
-    "year": 2018,
-    "displayArtists": "Justin Timberlake",
-    "artists": [
-      "justin timberlake",
-      "chris stapleton"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/73/4c/6d/734c6d4e-3906-f48b-6e69-56cfb4615d68/mzaf_12604481431824317433.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
     "displayName": "Locked Away (feat. Adam Levine)",
     "answerNames": [
       "locked away",
@@ -2461,84 +2434,6 @@
       "sierra"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/8b/3a/ed/8b3aed0f-aae4-74bb-418d-189b58105a5d/mzaf_8979702649126856835.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "Dark Horse (feat. Juicy J)",
-    "answerNames": [
-      "dark horse",
-      "dark horse feat juicy j",
-      "Dark Horse (feat. Juicy J)"
-    ],
-    "answerName": "dark horse",
-    "album": "PRISM (Deluxe Version)",
-    "albumAnswers": [
-      "prism",
-      "prism deluxe version",
-      "prism deluxe version deluxe version",
-      "PRISM (Deluxe Version)"
-    ],
-    "albumAnswer": "prism",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/36/21/81/36218129-51b4-df22-cafb-8e9503b53147/13UAAIM70445.rgb.jpg/600x600bb.jpg",
-    "year": 2013,
-    "displayArtists": "Katy Perry",
-    "artists": [
-      "juicy j",
-      "katy perry"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c7/80/b7/c780b757-f2e8-9e40-c5b9-dd28b5fe1296/mzaf_9911645771464051186.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "Rain On Me",
-    "answerNames": [
-      "rain on me",
-      "Rain On Me"
-    ],
-    "answerName": "rain on me",
-    "album": "Chromatica",
-    "albumAnswers": [
-      "chromatica",
-      "Chromatica"
-    ],
-    "albumAnswer": "chromatica",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/5d/4d/f9/5d4df96a-e95e-2fe9-404a-5d570513762d/20UMGIM15390.rgb.jpg/600x600bb.jpg",
-    "year": 2020,
-    "displayArtists": "Lady Gaga & Ariana Grande",
-    "artists": [
-      "ariana grande",
-      "lady gaga"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/77/41/4c/77414c83-2297-fb9f-7d38-47a03ab56d8f/mzaf_17756500385136857934.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "Never Forget You",
-    "answerNames": [
-      "never forget you",
-      "Never Forget You"
-    ],
-    "answerName": "never forget you",
-    "album": "So Good",
-    "albumAnswers": [
-      "so good",
-      "So Good"
-    ],
-    "albumAnswer": "so good",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/b2/82/69/b2826914-f524-4fed-dfeb-b6df63ea6cff/886446183473.jpg/600x600bb.jpg",
-    "year": 2017,
-    "displayArtists": "Zara Larsson & MNEK",
-    "artists": [
-      "zara larsson",
-      "mnek"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/03/b4/33/03b433ec-78ea-65f5-a1df-9259eaf1611d/mzaf_621997061325530498.plus.aac.p.m4a",
     "categories": [
       "Pop"
     ]
@@ -5416,31 +5311,6 @@
     ]
   },
   {
-    "displayName": "Dancè",
-    "answerNames": [
-      "danc",
-      "Dancè"
-    ],
-    "answerName": "danc",
-    "album": "G.O.A.T.",
-    "albumAnswers": [
-      "goat",
-      "G.O.A.T."
-    ],
-    "albumAnswer": "goat",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/94/0b/4f/940b4f21-8acf-a2b9-97e5-b0de9dabe236/888915829318_cover.jpg/600x600bb.jpg",
-    "year": 2018,
-    "displayArtists": "Machel Montano & Jacob Desvarieux",
-    "artists": [
-      "jacob desvarieux",
-      "machel montano"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/de/a0/44/dea044ec-5418-12aa-acc7-60f81d1c1c80/mzaf_3109828991499546556.plus.aac.p.m4a",
-    "categories": [
-      "Reggae"
-    ]
-  },
-  {
     "displayName": "Dance",
     "answerNames": [
       "dance"
@@ -7056,22 +6926,22 @@
       "could you be loved"
     ],
     "answerName": "could you be loved",
-    "album": "Legend – The Best Of Bob Marley & The Wailers",
+    "album": "Uprising",
     "albumAnswers": [
-      "legend the best of bob marley the wailers",
-      "Legend – The Best Of Bob Marley & The Wailers"
+      "Uprising"
     ],
-    "albumAnswer": "legend the best of bob marley the wailers",
+    "albumAnswer": "Uprising",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/3c/c2/0d/3cc20dcc-8f4e-f060-36dd-7de52a7ec8fe/12UMGIM14712.rgb.jpg/600x600bb.jpg",
-    "year": 1984,
+    "year": 1980,
     "displayArtists": "Bob Marley & The Wailers",
     "artists": [
       "bob marley",
-      "the wailers"
+      "the wailers",
+      "Bob Marley & The Wailers"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/51/f8/c8/51f8c8ae-d664-40b4-5c94-e851a2707129/mzaf_1023835277857455852.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/82/fc/99/82fc998e-d1ed-c2a6-4642-1d907e6a12d8/mzaf_13391925435636923719.plus.aac.ep.m4a",
     "categories": [
-      "Reggae"
+      "Pop"
     ]
   },
   {
@@ -8508,8 +8378,8 @@
     "answerName": "sexyback",
     "album": "FutureSex/LoveSounds (Deluxe Edition)",
     "albumAnswers": [
-      "futuresexlovesounds",
-      "futuresexlovesounds deluxe edition",
+      "futuresex/lovesounds",
+      "futuresex/lovesounds deluxe edition",
       "FutureSex/LoveSounds (Deluxe Edition)"
     ],
     "albumAnswer": "futuresexlovesounds",
@@ -9448,13 +9318,14 @@
   {
     "displayName": "Where Are Ü Now (feat. Justin Bieber)",
     "answerNames": [
-      "where are now",
+      "where are you now",
+      "where are u now",
       "Where Are Ü Now (feat. Justin Bieber)"
     ],
     "answerName": "where are now",
     "album": "Skrillex and Diplo present Jack Ü",
     "albumAnswers": [
-      "skrillex and diplo present jack",
+      "skrillex and diplo present jack u",
       "Skrillex and Diplo present Jack Ü"
     ],
     "albumAnswer": "skrillex and diplo present jack",
@@ -9463,7 +9334,7 @@
     "displayArtists": "Jack Ü, Skrillex & Diplo",
     "artists": [
       "diplo",
-      "jack",
+      "jack u",
       "justin bieber",
       "skrillex"
     ],
@@ -9546,31 +9417,26 @@
     ]
   },
   {
-    "displayName": "Sexy Bitch (feat. Akon) [Abel Ramos Atlanta With Love Mix Remix]",
+    "displayName": "Sexy Bitch (feat. Akon)",
     "answerNames": [
       "sexy bitch",
-      "sexy bitch abel ramos atlanta with love mix remix",
-      "Sexy Bitch (feat. Akon) [Abel Ramos Atlanta With Love Mix Remix]"
+      "Sexy Bitch (feat. Akon)"
     ],
     "answerName": "sexy bitch",
-    "album": "Sexy Bitch (feat. Akon) [Remixes 2] - Single",
+    "album": "One Love (Deluxe)",
     "albumAnswers": [
-      "sexy bitch",
-      "sexy bitch single",
-      "sexy bitch remixes 2",
-      "sexy bitch feat. akon",
-      "sexy bitch feat. akon remixes 2 - single",
-      "Sexy Bitch (feat. Akon) [Remixes 2] - Single"
+      "One Love (Deluxe)",
+      "One Love"
     ],
-    "albumAnswer": "sexy bitch - single",
+    "albumAnswer": "One Love",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music6/v4/a7/59/38/a7593878-3997-95dc-b4bf-3cb230be60f1/5099930989559_3543x3543_300dpi.jpg/600x600bb.jpg",
     "year": 2009,
     "displayArtists": "David Guetta",
     "artists": [
       "david guetta",
-      "akon abel ramos atlanta with love mix remix"
+      "akon"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/de/55/8d/de558dd5-e6e5-c548-9041-a4cf1a02d014/mzaf_16644944603704168250.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/ba/28/1b/ba281be4-2ffb-e08d-62fa-4edb7dda91b4/mzaf_18005648927492178719.plus.aac.ep.m4a",
     "categories": [
       "Dance"
     ]
@@ -9696,30 +9562,6 @@
       "pitbull"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/ba/45/50/ba45503b-5ee4-b257-b24a-dc7eb7fbbffc/mzaf_3673441859948261125.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "Timber",
-    "answerNames": [
-      "timber"
-    ],
-    "answerName": "timber",
-    "album": "Global Warming: Meltdown (Deluxe Version)",
-    "albumAnswers": [
-      "Global Warming: Meltdown (Deluxe Version)",
-      "Global Warming: Meltdown"
-    ],
-    "albumAnswer": "Global Warming: Meltdown",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music/v4/52/5b/68/525b689b-ce4b-98ee-5d8e-439255131c63/cover.jpg/600x600bb.jpg",
-    "year": 2012,
-    "displayArtists": "Pitbull, Kesha",
-    "artists": [
-      "Pitbull",
-      "Kesha"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/2f/20/df/2f20df7e-a8db-31bf-4ee0-1c2a4da41468/mzaf_727458021883463780.plus.aac.ep.m4a",
     "categories": [
       "Pop"
     ]
@@ -9949,48 +9791,17 @@
     ]
   },
   {
-    "displayName": "Just the Way You Are (Remix) [feat. Lupe Fiasco] {Bonus Track}",
-    "answerNames": [
-      "just the way you are bonus track",
-      "just the way you are bonus track remix",
-      "Just the Way You Are (Remix) [feat. Lupe Fiasco] {Bonus Track}"
-    ],
-    "answerName": "just the way you are bonus track",
-    "album": "Just the Way You Are - Deluxe Single",
-    "albumAnswers": [
-      "just the way you are",
-      "just the way you are deluxe single",
-      "just the way you are - deluxe single",
-      "Just the Way You Are - Deluxe Single"
-    ],
-    "albumAnswer": "just the way you are - deluxe single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music/5a/48/e3/mzi.gjjmrpau.jpg/600x600bb.jpg",
-    "year": 2010,
-    "displayArtists": "Bruno Mars",
-    "artists": [
-      "bruno mars",
-      "lupe fiasco bonus track"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/90/aa/47/90aa47ef-774b-a107-038e-dfc5e64d0bc7/mzaf_10116758121111688246.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "Airplanes (DJ Frank E! Remix) [feat. Hayley Williams of Paramore]",
+    "displayName": "Airplanes (feat. Hayley Williams)",
     "answerNames": [
       "airplanes",
-      "airplanes dj frank e! remix",
-      "Airplanes (DJ Frank E! Remix) [feat. Hayley Williams of Paramore]"
+      "Airplanes (feat. Hayley Williams)"
     ],
     "answerName": "airplanes",
-    "album": "Airplanes (feat. Hayley Williams of Paramore) - Deluxe Single",
+    "album": "B.o.B Presents: The Adventures of Bobby Ray (Deluxe)",
     "albumAnswers": [
-      "airplanes",
-      "airplanes deluxe single",
-      "airplanes feat. hayley williams of paramore",
-      "airplanes feat. hayley williams of paramore - deluxe single",
-      "Airplanes (feat. Hayley Williams of Paramore) - Deluxe Single"
+      "B.o.B Presents: The Adventures of Bobby Ray (Deluxe)",
+      "B.o.B Presents: The Adventures of Bobby Ray",
+      "The Adventures of Bobby Ray"
     ],
     "albumAnswer": "airplanes - deluxe single",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/68/62/e2/6862e2ae-7356-75e0-2a9c-1de6fbd45646/mzi.xesswxim.jpg/600x600bb.jpg",
@@ -9998,11 +9809,11 @@
     "displayArtists": "B.o.B",
     "artists": [
       "b.o.b",
-      "hayley williams of paramore"
+      "hayley williams"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/c3/a1/f0/c3a1f089-4090-219e-3186-7297afe252c8/mzaf_4872948234750571453.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/fe/01/d3/fe01d3f7-e556-6824-428b-17fd9a12600f/mzaf_2991428474828742945.plus.aac.ep.m4a",
     "categories": [
-      "Hip-Hop/Rap"
+      "Pop"
     ]
   },
   {
@@ -10124,37 +9935,6 @@
     ]
   },
   {
-    "displayName": "Where Are Ü Now (with Justin Bieber) [Marshmello Remix]",
-    "answerNames": [
-      "where are now",
-      "where are now marshmello remix",
-      "where are now with justin bieber",
-      "Where Are Ü Now (with Justin Bieber) [Marshmello Remix]"
-    ],
-    "answerName": "where are now",
-    "album": "Where Are Ü Now (with Justin Bieber) [Remixes] - EP",
-    "albumAnswers": [
-      "where are u now",
-      "where are now ep",
-      "where are now remixes",
-      "where are now with justin bieber",
-      "where are now with justin bieber remixes - ep",
-      "Where Are Ü Now (with Justin Bieber) [Remixes] - EP"
-    ],
-    "albumAnswer": "where are now - ep",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/c9/05/01/c9050185-5cc6-c0a0-f78f-e91322a72949/075679922472.jpg/600x600bb.jpg",
-    "year": 2015,
-    "displayArtists": "Skrillex & Diplo",
-    "artists": [
-      "skrillex",
-      "diplo"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/87/0f/8e/870f8ed8-2393-75fd-9f48-f39b18a14378/mzaf_9423086775893888267.plus.aac.p.m4a",
-    "categories": [
-      "Dance"
-    ]
-  },
-  {
     "displayName": "Payphone (feat. Wiz Khalifa)",
     "answerNames": [
       "payphone",
@@ -10226,28 +10006,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/5e/17/1e/5e171e94-ca08-9404-de1a-f24089955a14/mzaf_15460706958713399296.plus.aac.p.m4a",
     "categories": [
       "Alternative"
-    ]
-  },
-  {
-    "displayName": "Ridin' Solo",
-    "answerNames": [
-      "ridin' solo"
-    ],
-    "answerName": "ridin' solo",
-    "album": "Jason Derulo",
-    "albumAnswers": [
-      "jason derulo"
-    ],
-    "albumAnswer": "jason derulo",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/2a/e1/fc/2ae1fc34-a98d-20bf-33ed-71e321773b0a/dj.lykipmdm.jpg/600x600bb.jpg",
-    "year": 2010,
-    "displayArtists": "Jason Derulo",
-    "artists": [
-      "jason derulo"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d2/17/a9/d217a994-438f-ebfe-6c64-91e5595d4ade/mzaf_13186695727619290076.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
     ]
   },
   {
@@ -10589,33 +10347,6 @@
     ]
   },
   {
-    "displayName": "Ridin Solo (Njomza Remix)",
-    "answerNames": [
-      "ridin solo",
-      "ridin solo njomza remix",
-      "Ridin Solo (Njomza Remix)"
-    ],
-    "answerName": "ridin solo",
-    "album": "Sunny - EP",
-    "albumAnswers": [
-      "sunny",
-      "sunny ep",
-      "sunny - ep",
-      "Sunny - EP"
-    ],
-    "albumAnswer": "sunny - ep",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/ea/df/6e/eadf6ee8-a3fa-ff6d-5ba3-82228b96ae03/856074004761.jpg/600x600bb.jpg",
-    "year": 2014,
-    "displayArtists": "Hippie Sabotage",
-    "artists": [
-      "hippie sabotage"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/d6/da/a3/d6daa3e6-2067-bca8-31c3-36f05e30e2de/mzaf_8592655321790368726.plus.aac.p.m4a",
-    "categories": [
-      "Dance"
-    ]
-  },
-  {
     "displayName": "Unwritten",
     "answerNames": [
       "unwritten"
@@ -10704,7 +10435,7 @@
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/18/75/3f/18753f2d-57fc-46a4-d46e-28d5c333c2c5/mzaf_7595555177497347321.plus.aac.p.m4a",
     "categories": [
-      "Reggae"
+      "Pop"
     ]
   },
   {
@@ -11111,30 +10842,25 @@
     ]
   },
   {
-    "displayName": "Somebody That I Used To Know (feat. Kimbra) [Adrock Remix]",
+    "displayName": "Somebody That I Used To Know (feat. Kimbra)",
     "answerNames": [
       "somebody that i used to know",
-      "somebody that i used to know adrock remix",
-      "Somebody That I Used To Know (feat. Kimbra) [Adrock Remix]"
+      "Somebody That I Used To Know (feat. Kimbra)"
     ],
     "answerName": "somebody that i used to know",
-    "album": "Somebody That I Used To Know (Remixes) [feat. Kimbra]",
+    "album": "Making Mirrors",
     "albumAnswers": [
-      "somebody that i used to know",
-      "somebody that i used to know remixes",
-      "somebody that i used to know feat. kimbra",
-      "somebody that i used to know remixes feat. kimbra",
-      "Somebody That I Used To Know (Remixes) [feat. Kimbra]"
+      "Making Mirrors"
     ],
-    "albumAnswer": "somebody that i used to know",
+    "albumAnswer": "Making Mirrors",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/5d/4b/b0/5d4bb010-fbb5-3d6d-b355-d8074392e958/12UMGIM32418.rgb.jpg/600x600bb.jpg",
-    "year": 2012,
+    "year": 2011,
     "displayArtists": "Gotye",
     "artists": [
       "gotye",
-      "kimbra adrock remix"
+      "kimbra"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview114/v4/86/24/31/86243155-975b-1499-7a71-834cb6e04ccb/mzaf_18029982671412213469.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/f9/9c/55/f99c553e-7be1-91dc-b55e-3da1aad29bba/mzaf_8881595477209725037.plus.aac.ep.m4a",
     "categories": [
       "Alternative"
     ]
@@ -11777,30 +11503,25 @@
     ]
   },
   {
-    "displayName": "Clarity (feat. Foxes) [Zedd Union Mix]",
+    "displayName": "Clarity (feat. Foxes)",
     "answerNames": [
       "clarity",
-      "clarity zedd union mix",
-      "Clarity (feat. Foxes) [Zedd Union Mix]"
+      "Clarity (feat. Foxes)"
     ],
     "answerName": "clarity",
-    "album": "Clarity (Remixes) - EP",
+    "album": "Clarity",
     "albumAnswers": [
-      "clarity",
-      "clarity ep",
-      "clarity remixes",
-      "clarity remixes - ep",
-      "Clarity (Remixes) - EP"
+      "clarity"
     ],
-    "albumAnswer": "clarity - ep",
+    "albumAnswer": "clarity",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/ea/f9/5b/eaf95be3-d649-0a29-f3a8-1e81592d9c8c/00602537269150.rgb.jpg/600x600bb.jpg",
     "year": 2012,
     "displayArtists": "Zedd",
     "artists": [
-      "foxes zedd union mix",
+      "foxes zedd",
       "zedd"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/41/91/56/41915622-8e7f-3832-5c5d-91a0a92b2ad5/mzaf_15163001362709771069.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3d/19/9d/3d199db0-f98a-65c9-f5b6-b04e845d50b6/mzaf_9750528156217116227.plus.aac.ep.m4a",
     "categories": [
       "Dance"
     ]
@@ -12667,36 +12388,6 @@
     ]
   },
   {
-    "displayName": "Rather Be (feat. Jess Glynne) [The Magician Remix]",
-    "answerNames": [
-      "rather be",
-      "rather be the magician remix",
-      "Rather Be (feat. Jess Glynne) [The Magician Remix]"
-    ],
-    "answerName": "rather be",
-    "album": "Rather Be (feat. Jess Glynne) [Remixes] - EP",
-    "albumAnswers": [
-      "rather be",
-      "rather be ep",
-      "rather be remixes",
-      "rather be feat. jess glynne",
-      "rather be feat. jess glynne remixes - ep",
-      "Rather Be (feat. Jess Glynne) [Remixes] - EP"
-    ],
-    "albumAnswer": "rather be - ep",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/ed/fc/08/edfc081e-98ad-2a27-ca1d-5de13765b53d/825646331901.jpg/600x600bb.jpg",
-    "year": 2014,
-    "displayArtists": "Clean Bandit",
-    "artists": [
-      "jess glynne the magician remix",
-      "clean bandit"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/f9/20/5d/f9205d34-fea3-a947-329b-f619e2a45336/mzaf_8836269960738744240.plus.aac.p.m4a",
-    "categories": [
-      "Dance"
-    ]
-  },
-  {
     "displayName": "The Lazy Song",
     "answerNames": [
       "the lazy song"
@@ -13295,29 +12986,26 @@
     ]
   },
   {
-    "displayName": "Lady Hear Me Tonight (Remix)",
+    "displayName": "Lady (Hear Me Tonight)",
     "answerNames": [
       "lady hear me tonight",
-      "lady hear me tonight remix",
-      "Lady Hear Me Tonight (Remix)"
+      "lady",
+      "lady (hear me tonight)"
     ],
-    "answerName": "lady hear me tonight",
-    "album": "Lady Hear Me Tonight (Remix) - Single",
+    "answerName": "lady",
+    "album": "Modjo (Remastered)",
     "albumAnswers": [
-      "lady hear me tonight",
-      "lady hear me tonight remix",
-      "lady hear me tonight single",
-      "lady hear me tonight remix - single",
-      "Lady Hear Me Tonight (Remix) - Single"
+      "Modjo (Remastered)",
+      "Modjo"
     ],
-    "albumAnswer": "lady hear me tonight - single",
+    "albumAnswer": "Modjo",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/6a/19/05/6a1905f5-bc94-bf88-5e89-966ddb5695cb/7316473769973.png/600x600bb.jpg",
-    "year": 2000,
+    "year": 2001,
     "displayArtists": "Modjo",
     "artists": [
       "modjo"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/fc/86/0c/fc860c03-efba-9371-8b30-f10efc4783d1/mzaf_4469300355362782548.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/39/a0/2a/39a02a04-7e77-c309-9128-02e61098a7b7/mzaf_12099388594447473689.plus.aac.ep.m4a",
     "categories": [
       "House"
     ]
@@ -14106,31 +13794,25 @@
     ]
   },
   {
-    "displayName": "Get Lucky (feat. Pharrell Williams & Nile Rodgers) [Daft Punk Remix]",
+    "displayName": "Get Lucky",
     "answerNames": [
-      "get lucky",
-      "get lucky daft punk remix",
-      "Get Lucky (feat. Pharrell Williams & Nile Rodgers) [Daft Punk Remix]"
+      "get lucky"
     ],
     "answerName": "get lucky",
-    "album": "Get Lucky (feat. Pharrell Williams & Nile Rodgers) [Daft Punk Remix]",
+    "album": "Random Access Memories",
     "albumAnswers": [
-      "get lucky",
-      "get lucky daft punk remix",
-      "get lucky feat. pharrell williams nile rodgers",
-      "get lucky feat. pharrell williams nile rodgers daft punk remix",
-      "Get Lucky (feat. Pharrell Williams & Nile Rodgers) [Daft Punk Remix]"
+      "Random Access Memories"
     ],
-    "albumAnswer": "get lucky",
+    "albumAnswer": "Random Access Memories",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music/v4/ba/58/0c/ba580cb1-a7e2-4771-e1a9-244f32ba15a4/886444079006.jpg/600x600bb.jpg",
     "year": 2013,
-    "displayArtists": "Daft Punk",
+    "displayArtists": "Daft Punk, Pharrell Williams & Nile Rodgers",
     "artists": [
       "daft punk",
       "pharrell williams",
-      "nile rodgers daft punk remix"
+      "nile rodgers"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/68/2e/16/682e16c2-6c6d-6bf4-9cd9-42c742fa6bbc/mzaf_11789558788925782439.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/d4/d3/1e/d4d31eb4-7405-b806-8346-3c52ad5b4cf4/mzaf_5357165260912314960.plus.aac.ep.m4a",
     "categories": [
       "Pop"
     ]
@@ -14158,29 +13840,23 @@
     ]
   },
   {
-    "displayName": "Are You With Me (Dash Berlin Radio Edit)",
+    "displayName": "Are You With Me",
     "answerNames": [
-      "are you with me",
-      "are you with me dash berlin radio edit",
-      "Are You With Me (Dash Berlin Radio Edit)"
+      "are you with me"
     ],
     "answerName": "are you with me",
-    "album": "Are You With Me (Dash Berlin Remix) - Single",
+    "album": "Less Is More",
     "albumAnswers": [
-      "are you with me",
-      "are you with me single",
-      "are you with me dash berlin remix",
-      "are you with me dash berlin remix - single",
-      "Are You With Me (Dash Berlin Remix) - Single"
+      "Less Is More"
     ],
-    "albumAnswer": "are you with me - single",
+    "albumAnswer": "Less Is More",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/c7/e1/20/c7e120bf-1d4b-46fa-fe24-0be56d64db0f/8718522061431.png/600x600bb.jpg",
-    "year": 2015,
+    "year": 2016,
     "displayArtists": "Lost Frequencies",
     "artists": [
       "lost frequencies"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/c9/15/32/c9153261-5e12-0f25-7ae7-dd34c9cbc4da/mzaf_3705881815139112740.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/44/3f/6b/443f6b9b-6675-6480-f6fe-970e27689241/mzaf_13856761715069773355.plus.aac.p.m4a",
     "categories": [
       "Dance"
     ]
@@ -14398,27 +14074,23 @@
     ]
   },
   {
-    "displayName": "Pump It (Travis Barker Remix Version)",
+    "displayName": "Pump It",
     "answerNames": [
-      "pump it",
-      "pump it travis barker remix version",
-      "Pump It (Travis Barker Remix Version)"
+      "pump it"
     ],
     "answerName": "pump it",
-    "album": "Monkey Business (20th Anniversary Edition)",
+    "album": "Monkey Business",
     "albumAnswers": [
-      "monkey business",
-      "monkey business 20th anniversary edition",
-      "Monkey Business (20th Anniversary Edition)"
+      "monkey business"
     ],
     "albumAnswer": "monkey business",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/b6/67/39/b6673987-b974-c579-325d-6df068e3eadc/25UMGIM77774.rgb.jpg/600x600bb.jpg",
-    "year": 2006,
+    "year": 2005,
     "displayArtists": "Black Eyed Peas",
     "artists": [
       "black eyed peas"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/83/fb/69/83fb6917-19a5-78a1-1120-15d910a54891/mzaf_1569911826648558644.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/d4/4d/7b/d44d7b54-0af3-1529-0742-6e57931697a7/mzaf_993866147622455087.plus.aac.ep.m4a",
     "categories": [
       "Hip-Hop/Rap"
     ]
@@ -14539,33 +14211,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d7/6e/55/d76e5531-e6ee-9c96-d462-a5fda6a78e39/mzaf_16702194806517817836.plus.aac.p.m4a",
     "categories": [
       "Hip-Hop/Rap"
-    ]
-  },
-  {
-    "displayName": "Say It Right (feat. Courtney John) [Reggae Main Mix]",
-    "answerNames": [
-      "say it right",
-      "say it right reggae main mix",
-      "Say It Right (feat. Courtney John) [Reggae Main Mix]"
-    ],
-    "answerName": "say it right",
-    "album": "Loose (Expanded Edition)",
-    "albumAnswers": [
-      "loose",
-      "loose expanded edition",
-      "Loose (Expanded Edition)"
-    ],
-    "albumAnswer": "loose",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/0c/5a/d3/0c5ad339-9532-eca9-9231-30b6ea9949e4/21UMGIM32622.rgb.jpg/600x600bb.jpg",
-    "year": 2007,
-    "displayArtists": "Nelly Furtado",
-    "artists": [
-      "courtney john reggae main mix",
-      "nelly furtado"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b9/c3/8c/b9c38c29-9f62-f1c7-da5e-6c242444df60/mzaf_2857115686914022528.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
     ]
   },
   {
@@ -14844,34 +14489,6 @@
     ]
   },
   {
-    "displayName": "SexyBack (feat. Timbaland) [Armand's Mix]",
-    "answerNames": [
-      "sexyback",
-      "sexyback armand's mix",
-      "SexyBack (feat. Timbaland) [Armand's Mix]"
-    ],
-    "answerName": "sexyback",
-    "album": "SexyTracks: The SexyBack Remixes - EP",
-    "albumAnswers": [
-      "sexytracks the sexyback remixes",
-      "sexytracks the sexyback remixes ep",
-      "sexytracks the sexyback remixes - ep",
-      "SexyTracks: The SexyBack Remixes - EP"
-    ],
-    "albumAnswer": "sexytracks the sexyback remixes - ep",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/d9/28/03/d928035c-c5f4-bcf0-c07b-414401b79292/888880042538.jpg/600x600bb.jpg",
-    "year": 2006,
-    "displayArtists": "Justin Timberlake",
-    "artists": [
-      "timbaland armand's mix",
-      "justin timberlake"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/07/a5/a0/07a5a030-5733-e600-a49e-5e5367f417c5/mzaf_12779647066436902896.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
     "displayName": "Brand New (with Justin Timberlake)",
     "answerNames": [
       "brand new",
@@ -15040,30 +14657,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d2/9b/17/d29b173f-546a-606b-378f-8f3c333e81f1/mzaf_3952108508633208951.plus.aac.p.m4a",
     "categories": [
       "Alternative"
-    ]
-  },
-  {
-    "displayName": "Wake Me Up (Acoustic)",
-    "answerNames": [
-      "wake me up",
-      "wake me up acoustic",
-      "Wake Me Up (Acoustic)"
-    ],
-    "answerName": "wake me up",
-    "album": "Lift Your Spirit",
-    "albumAnswers": [
-      "lift your spirit"
-    ],
-    "albumAnswer": "lift your spirit",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/0d/b7/1c/0db71c6c-19d2-b51b-541a-4c18b4eb4dbe/00602537753628.rgb.jpg/600x600bb.jpg",
-    "year": 2013,
-    "displayArtists": "Aloe Blacc",
-    "artists": [
-      "aloe blacc"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b3/ac/86/b3ac86e6-08e3-c365-4e0c-f83429c5021e/mzaf_14410170935287718046.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
     ]
   },
   {
@@ -15284,31 +14877,25 @@
     ]
   },
   {
-    "displayName": "Jon Bellion - All Time Low (DEIA Remix)",
+    "displayName": "All Time Low",
     "answerNames": [
-      "jon bellion - all time low",
-      "jon bellion - all time low deia remix",
-      "Jon Bellion - All Time Low (DEIA Remix)"
+      "All Time Low"
     ],
-    "answerName": "jon bellion - all time low",
-    "album": "Jon Bellion - All Time Low (DEIA Remix) - Single",
+    "answerName": "All Time Low",
+    "album": "The Human Condition",
     "albumAnswers": [
-      "jon bellion - all time low",
-      "jon bellion - all time low single",
-      "jon bellion - all time low deia remix",
-      "jon bellion - all time low deia remix - single",
-      "Jon Bellion - All Time Low (DEIA Remix) - Single"
+      "The Human Condition"
     ],
-    "albumAnswer": "jon bellion - all time low - single",
+    "albumAnswer": "The Human Condition",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/9c/18/58/9c1858ab-e1f8-9aa0-d05e-7865461e69b9/3c866f7c-9119-4940-9432-cf55988a4649.jpg/600x600bb.jpg",
-    "year": 2021,
-    "displayArtists": "Deia",
+    "year": 2016,
+    "displayArtists": "Jon Bellion",
     "artists": [
-      "deia"
+      "Jon Bellion"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/06/3c/b4/063cb49f-177d-da54-e033-11f5e4bbec08/mzaf_3159443053930956153.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/05/d3/31/05d3313b-efd0-341f-dd58-d5df646bf58e/mzaf_8640435264424948714.plus.aac.ep.m4a",
     "categories": [
-      "Dance"
+      "Pop"
     ]
   },
   {
@@ -15338,8 +14925,7 @@
     "displayName": "Middle (feat. Bipolar Sunshine)",
     "answerNames": [
       "middle",
-      "middle 4b remix",
-      "Middle (feat. Bipolar Sunshine) [4B Remix]"
+      "Middle (feat. Bipolar Sunshine)"
     ],
     "answerName": "middle",
     "album": "Encore",
@@ -15407,35 +14993,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/c1/e1/cb/c1e1cb71-b781-09a2-4d77-48016cdb200a/mzaf_14532239971242282964.plus.aac.p.m4a",
     "categories": [
       "Hip-Hop/Rap"
-    ]
-  },
-  {
-    "displayName": "Maneater (Nala Remix)",
-    "answerNames": [
-      "maneater",
-      "maneater nala remix",
-      "Maneater (Nala Remix)"
-    ],
-    "answerName": "maneater",
-    "album": "Maneater (Nala Remix) - Single",
-    "albumAnswers": [
-      "maneater",
-      "maneater single",
-      "maneater nala remix",
-      "maneater nala remix - single",
-      "Maneater (Nala Remix) - Single"
-    ],
-    "albumAnswer": "maneater - single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/58/44/f5/5844f5c7-83b0-e0d8-e65d-a1619f22d32a/25UMGIM36606.rgb.jpg/600x600bb.jpg",
-    "year": 2025,
-    "displayArtists": "Nelly Furtado & Nala",
-    "artists": [
-      "nala",
-      "nelly furtado"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/33/3c/48/333c48cb-7543-598f-c42b-abb4af7c9789/mzaf_3179438821590805971.plus.aac.p.m4a",
-    "categories": [
-      "Dance"
     ]
   },
   {
@@ -15750,20 +15307,16 @@
     ]
   },
   {
-    "displayName": "IDWK (Loud Luxury Remix)",
+    "displayName": "IDWK",
     "answerNames": [
-      "idwk",
-      "idwk loud luxury remix",
-      "IDWK (Loud Luxury Remix)"
+      "idwk"
     ],
     "answerName": "idwk",
-    "album": "IDWK (Loud Luxury Remix) - Single",
+    "album": "IDWK - Single",
     "albumAnswers": [
       "idwk",
       "idwk single",
-      "idwk loud luxury remix",
-      "idwk loud luxury remix - single",
-      "IDWK (Loud Luxury Remix) - Single"
+      "idwk - Single"
     ],
     "albumAnswer": "idwk - single",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/3f/d0/f9/3fd0f9eb-dec9-a2ae-68b3-1a2c739891e3/0617465976056.jpg/600x600bb.jpg",
@@ -15773,7 +15326,7 @@
       "dvbbs",
       "blackbear"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/75/cf/24/75cf24a5-39d0-7946-e7d7-01ec2435fd17/mzaf_2335628015454574281.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/a4/71/67/a4716796-615c-c845-531d-79d2e2ee3989/mzaf_1519349968287956425.plus.aac.ep.m4a",
     "categories": [
       "Dance"
     ]
@@ -15880,46 +15433,19 @@
     ]
   },
   {
-    "displayName": "Dark Horse",
-    "answerNames": [
-      "dark horse"
-    ],
-    "answerName": "dark horse",
-    "album": "Dark Horse - Single",
-    "albumAnswers": [
-      "dark horse",
-      "dark horse single",
-      "dark horse - single",
-      "Dark Horse - Single"
-    ],
-    "albumAnswer": "dark horse - single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/aa/5c/69/aa5c69fa-f5a2-095e-474e-4b153ec8e1f6/192914354321.jpg/600x600bb.jpg",
-    "year": 2018,
-    "displayArtists": "Phil Larson",
-    "artists": [
-      "phil larson"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/15/a2/61/15a2616e-f5e5-54e9-235c-1b37ce91e599/mzaf_2470834177464405422.plus.aac.p.m4a",
-    "categories": [
-      "Classical Crossover"
-    ]
-  },
-  {
-    "displayName": "Goodbye (Glenn's Stadium Radio Edit) [feat. Islove]",
+    "displayName": "Goodbye [feat. Islove]",
     "answerNames": [
       "goodbye",
-      "goodbye glenn's stadium radio edit",
-      "Goodbye (Glenn's Stadium Radio Edit) [feat. Islove]"
+      "goodbye (radio edit)",
+      "Goodbye (feat. Islove)",
+      "Goodbye (radio edit) [feat. Islove]"
     ],
     "answerName": "goodbye",
-    "album": "Goodbye (Glenn's Stadium Mixes) [feat. Islove] - Single",
+    "album": "Goodbye - Single",
     "albumAnswers": [
       "goodbye",
-      "goodbye single",
-      "goodbye feat. islove",
-      "goodbye glenn's stadium mixes",
-      "goodbye glenn's stadium mixes feat. islove - single",
-      "Goodbye (Glenn's Stadium Mixes) [feat. Islove] - Single"
+      "goodbye - single",
+      "Goodbye (feat. Islove) [Remixes]"
     ],
     "albumAnswer": "goodbye - single",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music6/v4/ef/cc/84/efcc8434-2f51-c105-e9b1-2f9afd874a24/768697227826.jpg/600x600bb.jpg",
@@ -15929,35 +15455,34 @@
       "islove",
       "glenn morrison"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/04/d2/f0/04d2f03c-e320-1a45-f155-8082819d685a/mzaf_1828738818737989858.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/d6/aa/36/d6aa3660-edac-3588-2de2-ffcd8ad7d711/mzaf_16702036650867560184.plus.aac.ep.m4a",
     "categories": [
-      "Dance"
+      "Pop"
     ]
   },
   {
-    "displayName": "I'm Still in Love with You (feat. Sasha) [Jeremy Harding & Murray Elias Remix]",
+    "displayName": "I'm Still in Love with You (feat. Sasha)",
     "answerNames": [
       "i'm still in love with you",
-      "i'm still in love with you jeremy harding murray elias remix",
-      "I'm Still in Love with You (feat. Sasha) [Jeremy Harding & Murray Elias Remix]"
+      "I'm Still in Love with You (feat. Sasha)"
     ],
     "answerName": "i'm still in love with you",
-    "album": "Zodiac Series Earth Signs",
+    "album": "Dutty Rock (20th Anniversary)",
     "albumAnswers": [
-      "zodiac series earth signs"
+      "Dutty Rock (20th Anniversary)",
+      "Dutty Rock"
     ],
-    "albumAnswer": "zodiac series earth signs",
+    "albumAnswer": "Dutty Rock",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/b2/e0/8e/b2e08ecc-32b1-ef18-754f-0a34d8d3a863/5059460173354.jpg/600x600bb.jpg",
     "year": 2002,
     "displayArtists": "Sean Paul",
     "artists": [
-      "murray elias remix",
       "sean paul",
-      "sasha jeremy harding"
+      "sasha"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview113/v4/61/4b/12/614b12fb-3143-426d-b62d-dc8f8a07a5cf/mzaf_17865825358162468896.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e6/b0/d0/e6b0d074-bba9-9fd5-8a85-3b63797f574b/mzaf_5646326387539078347.plus.aac.ep.m4a",
     "categories": [
-      "Reggae"
+      "Pop"
     ]
   },
   {
@@ -16086,6 +15611,7 @@
     "albumAnswers": [
       "i follow rivers",
       "i follow rivers single",
+      "i follow rivers - single",
       "i follow rivers the magician remix",
       "i follow rivers the magician remix - single",
       "I Follow Rivers (The Magician Remix) - Single"
@@ -16130,31 +15656,26 @@
     ]
   },
   {
-    "displayName": "Solo (feat. Demi Lovato) [Leandro Da Silva Remix]",
+    "displayName": "Solo (feat. Demi Lovato)",
     "answerNames": [
       "solo",
-      "solo leandro da silva remix",
-      "Solo (feat. Demi Lovato) [Leandro Da Silva Remix]"
+      "Solo (feat. Demi Lovato)"
     ],
     "answerName": "solo",
-    "album": "Solo (feat. Demi Lovato) [Leandro Da Silva Remix] - Single",
+    "album": "What Is Love? (Deluxe)",
     "albumAnswers": [
-      "solo",
-      "solo single",
-      "solo feat. demi lovato",
-      "solo leandro da silva remix",
-      "solo feat. demi lovato leandro da silva remix - single",
-      "Solo (feat. Demi Lovato) [Leandro Da Silva Remix] - Single"
+      "What Is Love?",
+      "What Is Love? (Deluxe)"
     ],
-    "albumAnswer": "solo - single",
+    "albumAnswer": "What Is Love?",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/4b/d2/84/4bd2846c-bd0e-f55f-89d6-c82cb3c1790c/A10302B0004500925H.jpg/600x600bb.jpg",
     "year": 2018,
     "displayArtists": "Clean Bandit",
     "artists": [
-      "demi lovato leandro da silva remix",
+      "demi lovato",
       "clean bandit"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/ff/eb/91/ffeb91f5-78d8-6578-701e-29eb0af979d7/mzaf_8673833937704851443.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/95/b4/da/95b4da95-7da2-ffbe-5dd4-8d3243f87ee7/mzaf_2161555376855125232.plus.aac.ep.m4a",
     "categories": [
       "Dance"
     ]
@@ -16702,31 +16223,26 @@
     ]
   },
   {
-    "displayName": "Don't Wanna Know (feat. Kendrick Lamar) [BRAVVO Remix]",
+    "displayName": "Don't Wanna Know (feat. Kendrick Lamar)",
     "answerNames": [
       "don't wanna know",
-      "don't wanna know bravvo remix",
-      "Don't Wanna Know (feat. Kendrick Lamar) [BRAVVO Remix]"
+      "Don't Wanna Know (feat. Kendrick Lamar)"
     ],
     "answerName": "don't wanna know",
-    "album": "Don't Wanna Know (feat. Kendrick Lamar) [BRAVVO Remix] - Single",
+    "album": "Red Pill Blues (Deluxe)",
     "albumAnswers": [
-      "don't wanna know",
-      "don't wanna know single",
-      "don't wanna know bravvo remix",
-      "don't wanna know feat. kendrick lamar",
-      "don't wanna know feat. kendrick lamar bravvo remix - single",
-      "Don't Wanna Know (feat. Kendrick Lamar) [BRAVVO Remix] - Single"
+      "Red Pill Blues",
+      "Red Pill Blues (Deluxe)"
     ],
-    "albumAnswer": "don't wanna know - single",
+    "albumAnswer": "Red Pill Blues",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/85/d6/cc/85d6cc27-85f2-6bfe-dca7-a966e2bc0cee/00602557378047.rgb.jpg/600x600bb.jpg",
     "year": 2017,
     "displayArtists": "Maroon 5",
     "artists": [
       "maroon 5",
-      "kendrick lamar bravvo remix"
+      "kendrick lamar"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/9f/9c/f6/9f9cf6a4-1bb7-de30-12bc-858922964054/mzaf_3348963334980250558.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/11/5e/6e/115e6e42-7537-4c6b-d29d-3a2a2ccfef56/mzaf_7489972438138947951.plus.aac.ep.m4a",
     "categories": [
       "Pop"
     ]
@@ -16858,35 +16374,6 @@
     ]
   },
   {
-    "displayName": "The Weekend (Funk Wav Remix)",
-    "answerNames": [
-      "the weekend",
-      "the weekend funk wav remix",
-      "The Weekend (Funk Wav Remix)"
-    ],
-    "answerName": "the weekend",
-    "album": "The Weekend (Funk Wav Remix) - Single",
-    "albumAnswers": [
-      "the weekend",
-      "the weekend single",
-      "the weekend funk wav remix",
-      "the weekend funk wav remix - single",
-      "The Weekend (Funk Wav Remix) - Single"
-    ],
-    "albumAnswer": "the weekend - single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/75/73/39/75733929-5ce0-234e-6861-0e3932fa342a/886446852157.jpg/600x600bb.jpg",
-    "year": 2017,
-    "displayArtists": "SZA & Calvin Harris",
-    "artists": [
-      "calvin harris",
-      "sza"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/8d/b6/8c/8db68c90-b6f6-5832-55d9-b2a04fbc1eae/mzaf_15596069897713393388.plus.aac.p.m4a",
-    "categories": [
-      "R&B/Soul"
-    ]
-  },
-  {
     "displayName": "Who Do You Love",
     "answerNames": [
       "who do you love"
@@ -16935,36 +16422,6 @@
       "disciples"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/c4/74/05/c4740520-049c-221f-f474-f1863ccf1ed6/mzaf_4758229676729707526.plus.aac.p.m4a",
-    "categories": [
-      "Dance"
-    ]
-  },
-  {
-    "displayName": "I Need Your Love (feat. Ellie Goulding) [Jacob Plant Remix]",
-    "answerNames": [
-      "i need your love",
-      "i need your love jacob plant remix",
-      "I Need Your Love (feat. Ellie Goulding) [Jacob Plant Remix]"
-    ],
-    "answerName": "i need your love",
-    "album": "I Need Your Love (feat. Ellie Goulding) [Remixes] - Single",
-    "albumAnswers": [
-      "i need your love",
-      "i need your love single",
-      "i need your love remixes",
-      "i need your love feat. ellie goulding",
-      "i need your love feat. ellie goulding remixes - single",
-      "I Need Your Love (feat. Ellie Goulding) [Remixes] - Single"
-    ],
-    "albumAnswer": "i need your love - single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Features124/v4/eb/6e/bb/eb6ebba2-2ae1-4684-ff2f-ffe425e96a26/dj.dgiuyuff.jpg/600x600bb.jpg",
-    "year": 2013,
-    "displayArtists": "Calvin Harris",
-    "artists": [
-      "ellie goulding jacob plant remix",
-      "calvin harris"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/69/3e/aa/693eaa8a-56dc-e484-f05b-347d6ec03b07/mzaf_1959117178062464097.plus.aac.p.m4a",
     "categories": [
       "Dance"
     ]
@@ -17094,64 +16551,25 @@
     ]
   },
   {
-    "displayName": "Let Me Love You (feat. Justin Bieber) [Marshmello Remix]",
+    "displayName": "Let Me Love You (feat. Justin Bieber)",
     "answerNames": [
       "let me love you",
-      "let me love you marshmello remix",
-      "Let Me Love You (feat. Justin Bieber) [Marshmello Remix]"
+      "Let Me Love You (feat. Justin Bieber)"
     ],
     "answerName": "let me love you",
-    "album": "Let Me Love You (feat. Justin Bieber) [Marshmello Remix] - Single",
+    "album": "Encore",
     "albumAnswers": [
-      "let me love you",
-      "let me love you single",
-      "let me love you marshmello remix",
-      "let me love you feat. justin bieber",
-      "let me love you feat. justin bieber marshmello remix - single",
-      "Let Me Love You (feat. Justin Bieber) [Marshmello Remix] - Single"
+      "Encore"
     ],
-    "albumAnswer": "let me love you - single",
+    "albumAnswer": "Encore",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/85/a4/a3/85a4a36a-7f1a-f167-3a7d-8cec6543741b/00602557325423.rgb.jpg/600x600bb.jpg",
     "year": 2016,
-    "displayArtists": "DJ Snake & Marshmello",
+    "displayArtists": "DJ Snake",
     "artists": [
-      "justin bieber marshmello remix",
-      "dj snake",
-      "marshmello"
+      "justin bieber",
+      "dj snake"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/e1/d4/9c/e1d49cc1-b35b-2b38-4a62-248fd2637e69/mzaf_6744633114095194404.plus.aac.p.m4a",
-    "categories": [
-      "Dance"
-    ]
-  },
-  {
-    "displayName": "Lean On (feat. MØ & DJ Snake) [J Balvin & Farruko Remix]",
-    "answerNames": [
-      "lean on",
-      "lean on j balvin farruko remix",
-      "Lean On (feat. MØ & DJ Snake) [J Balvin & Farruko Remix]"
-    ],
-    "answerName": "lean on",
-    "album": "Lean On (feat. MØ & DJ Snake) [Remixes, Vol. 2] - Single",
-    "albumAnswers": [
-      "lean on",
-      "lean on single",
-      "lean on remixes, vol. 2",
-      "lean on feat. m dj snake",
-      "lean on feat. m dj snake remixes, vol. 2 - single",
-      "Lean On (feat. MØ & DJ Snake) [Remixes, Vol. 2] - Single"
-    ],
-    "albumAnswer": "lean on - single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/29/a7/3f/29a73f03-a1b5-c8f0-0df7-8dfe107bf929/653738300326_Cover.jpg/600x600bb.jpg",
-    "year": 2015,
-    "displayArtists": "Major Lazer",
-    "artists": [
-      "dj snake j balvin",
-      "m",
-      "major lazer",
-      "farruko remix"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/cf/4f/9f/cf4f9f22-a272-72ae-6873-52a23afc0b98/mzaf_10354636981390731246.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/c3/d4/97/c3d497dd-d07c-ce2e-8fd8-53a4bc455d69/mzaf_10905084055808435379.plus.aac.ep.m4a",
     "categories": [
       "Dance"
     ]
@@ -17245,67 +16663,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/81/19/83/811983ba-173c-84f4-4058-fae8340abcdf/mzaf_13432775834568786807.plus.aac.p.m4a",
     "categories": [
       "Pop"
-    ]
-  },
-  {
-    "displayName": "Silence (feat. Khalid) [Illenium Remix]",
-    "answerNames": [
-      "silence",
-      "silence illenium remix",
-      "Silence (feat. Khalid) [Illenium Remix]"
-    ],
-    "answerName": "silence",
-    "album": "Silence (feat. Khalid) [Illenium Remix] - Single",
-    "albumAnswers": [
-      "silence",
-      "silence single",
-      "silence feat. khalid",
-      "silence illenium remix",
-      "silence feat. khalid illenium remix - single",
-      "Silence (feat. Khalid) [Illenium Remix] - Single"
-    ],
-    "albumAnswer": "silence - single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/b1/a4/fd/b1a4fdde-726b-9b7a-6067-6e9e5ba8367d/886446798530.jpg/600x600bb.jpg",
-    "year": 2017,
-    "displayArtists": "Marshmello",
-    "artists": [
-      "marshmello",
-      "khalid illenium remix"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/75/64/4d/75644da6-760d-a420-458d-1fea61a663c9/mzaf_16664321118866323924.plus.aac.p.m4a",
-    "categories": [
-      "Dance"
-    ]
-  },
-  {
-    "displayName": "Takeaway (feat. Lennon Stella) [Pilton Remix]",
-    "answerNames": [
-      "takeaway",
-      "takeaway pilton remix",
-      "Takeaway (feat. Lennon Stella) [Pilton Remix]"
-    ],
-    "answerName": "takeaway",
-    "album": "Takeaway (feat. Lennon Stella) [Remixes] - Single",
-    "albumAnswers": [
-      "takeaway",
-      "takeaway single",
-      "takeaway remixes",
-      "takeaway feat. lennon stella",
-      "takeaway feat. lennon stella remixes - single",
-      "Takeaway (feat. Lennon Stella) [Remixes] - Single"
-    ],
-    "albumAnswer": "takeaway - single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/19/d0/18/19d018f4-4e5e-44a8-7acc-8c0f70b5df41/886447943342.jpg/600x600bb.jpg",
-    "year": 2019,
-    "displayArtists": "The Chainsmokers & ILLENIUM",
-    "artists": [
-      "lennon stella pilton remix",
-      "the chainsmokers",
-      "illenium"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/26/d9/bd/26d9bd63-3d4b-98af-d9d4-e422aa6370b7/mzaf_8941358429001403657.plus.aac.p.m4a",
-    "categories": [
-      "Dance"
     ]
   },
   {
@@ -17425,7 +16782,7 @@
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/bc/df/80/bcdf8037-748c-af25-1b11-71779d4e470f/mzaf_13527957838889156615.plus.aac.p.m4a",
     "categories": [
-      "Reggae"
+      "Pop"
     ]
   },
   {
@@ -17667,8 +17024,8 @@
   {
     "displayName": "You & Me (feat. Eliza Doolittle) [Flume Remix]",
     "answerNames": [
-      "you me",
-      "you me flume remix",
+      "you & me",
+      "you & me flume remix",
       "You & Me (feat. Eliza Doolittle) [Flume Remix]"
     ],
     "answerName": "you me",
@@ -17914,35 +17271,6 @@
     ]
   },
   {
-    "displayName": "Body (feat. brando) [Orjan Nilsen Remix]",
-    "answerNames": [
-      "body",
-      "body orjan nilsen remix",
-      "Body (feat. brando) [Orjan Nilsen Remix]"
-    ],
-    "answerName": "body",
-    "album": "Body (feat. Brando) - Single",
-    "albumAnswers": [
-      "body",
-      "body single",
-      "body feat. brando",
-      "body feat. brando - single",
-      "Body (feat. Brando) - Single"
-    ],
-    "albumAnswer": "body - single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/7c/29/ec/7c29ec60-5f10-03c8-27b7-c24788f6acc5/8718522214714.png/600x600bb.jpg",
-    "year": 2018,
-    "displayArtists": "Loud Luxury",
-    "artists": [
-      "brando orjan nilsen remix",
-      "loud luxury"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/9c/f1/12/9cf112e5-9954-0bca-9389-ca43d0188b13/mzaf_8499140193463566513.plus.aac.p.m4a",
-    "categories": [
-      "Dance"
-    ]
-  },
-  {
     "displayName": "Imagination (feat. Katy Menditta)",
     "answerNames": [
       "imagination",
@@ -18041,32 +17369,25 @@
     ]
   },
   {
-    "displayName": "I Wanna Dance with Somebody (Who Loves Me) [David Solomon Remix]",
+    "displayName": "I Wanna Dance with Somebody (Who Loves Me)",
     "answerNames": [
       "i wanna dance with somebody",
       "i wanna dance with somebody who loves me",
-      "i wanna dance with somebody david solomon remix",
-      "I Wanna Dance with Somebody (Who Loves Me) [David Solomon Remix]"
+      "I Wanna Dance with Somebody (Who Loves Me)"
     ],
     "answerName": "i wanna dance with somebody",
-    "album": "I Wanna Dance with Somebody (Who Loves Me) [David Solomon Remix] - Single",
+    "album": "Whitney",
     "albumAnswers": [
-      "i wanna dance with somebody",
-      "i wanna dance with somebody single",
-      "i wanna dance with somebody who loves me",
-      "i wanna dance with somebody david solomon remix",
-      "i wanna dance with somebody who loves me david solomon remix - single",
-      "I Wanna Dance with Somebody (Who Loves Me) [David Solomon Remix] - Single"
+      "Whitney"
     ],
-    "albumAnswer": "i wanna dance with somebody - single",
+    "albumAnswer": "Whitney",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/e5/84/f7/e584f7fd-910e-a458-acc6-1873a5b81014/196589261489.jpg/600x600bb.jpg",
-    "year": 2022,
-    "displayArtists": "Whitney Houston & David Solomon",
+    "year": 1987,
+    "displayArtists": "Whitney Houston",
     "artists": [
-      "whitney houston",
-      "david solomon"
+      "whitney houston"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/04/53/9b/04539b38-bfd6-051c-bf9e-decf66af450b/mzaf_13305928128170435466.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/7b/67/fd/7b67fd07-6a7a-0362-135c-878ac5799f2c/mzaf_9729580352994578586.plus.aac.ep.m4a",
     "categories": [
       "Dance"
     ]
@@ -18358,31 +17679,24 @@
     ]
   },
   {
-    "displayName": "S&M (Remix) [feat. Britney Spears]",
+    "displayName": "S&M",
     "answerNames": [
-      "sm",
-      "sm remix",
-      "S&M (Remix) [feat. Britney Spears]"
+      "S&M"
     ],
-    "answerName": "sm",
-    "album": "S&M (Remix) [feat. Britney Spears] - Single",
+    "answerName": "S&M",
+    "album": "Loud (Deluxe)",
     "albumAnswers": [
-      "sm",
-      "sm remix",
-      "sm single",
-      "sm feat. britney spears",
-      "sm remix feat. britney spears - single",
-      "S&M (Remix) [feat. Britney Spears] - Single"
+      "Loud (Deluxe)",
+      "Loud"
     ],
-    "albumAnswer": "sm - single",
+    "albumAnswer": "Loud",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/1c/8c/06/1c8c06c4-56e0-c89a-6936-3b4871e05917/11UMGIM10184.rgb.jpg/600x600bb.jpg",
-    "year": 2011,
+    "year": 2010,
     "displayArtists": "Rihanna",
     "artists": [
-      "britney spears",
       "rihanna"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/02/a8/4d/02a84d1b-e538-ade2-bcae-cb9548c9c13f/mzaf_665222301792604031.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/59/b8/bf/59b8bf51-2801-7f4c-be3f-3bdba83539c5/mzaf_3595730607010825534.plus.aac.ep.m4a",
     "categories": [
       "Pop"
     ]
@@ -18671,18 +17985,15 @@
     ]
   },
   {
-    "displayName": "Walking On A Dream (Kaskade Remix)",
+    "displayName": "Walking On A Dream",
     "answerNames": [
-      "walking on a dream",
-      "walking on a dream kaskade remix",
-      "Walking On A Dream (Kaskade Remix)"
+      "walking on a dream"
     ],
     "answerName": "walking on a dream",
-    "album": "Walking On A Dream (Reimagined)",
+    "album": "Walking On a Dream (Special Edition)",
     "albumAnswers": [
       "walking on a dream",
-      "walking on a dream reimagined",
-      "Walking On A Dream (Reimagined)"
+      "Walking On a Dream (Special Edition)"
     ],
     "albumAnswer": "walking on a dream",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/07/b6/6e/07b66efb-efd2-5f1f-f946-280ba8077688/25UM1IM47952.rgb.jpg/600x600bb.jpg",
@@ -18691,7 +18002,7 @@
     "artists": [
       "empire of the sun"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f8/8b/09/f88b0923-4755-0d0c-dc30-3a61400d69ff/mzaf_6476444855114270333.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ff/32/28/ff322824-bf6c-f621-5c2e-32dcb237edca/mzaf_8067355650650760368.plus.aac.ep.m4a",
     "categories": [
       "Dance"
     ]
@@ -18722,21 +18033,18 @@
     ]
   },
   {
-    "displayName": "Cold Water (feat. Justin Bieber & MØ) [Don Omar Remix]",
+    "displayName": "Cold Water (feat. Justin Bieber & MØ)",
     "answerNames": [
       "cold water",
-      "cold water don omar remix",
-      "Cold Water (feat. Justin Bieber & MØ) [Don Omar Remix]"
+      "Cold Water (feat. Justin Bieber & MØ)"
     ],
     "answerName": "cold water",
-    "album": "Cold Water (feat. Justin Bieber & MØ) [Don Omar Remix] - Single",
+    "album": "Cold Water (feat. Justin Bieber & MØ) - Single",
     "albumAnswers": [
       "cold water",
       "cold water single",
-      "cold water don omar remix",
-      "cold water feat. justin bieber m",
-      "cold water feat. justin bieber m don omar remix - single",
-      "Cold Water (feat. Justin Bieber & MØ) [Don Omar Remix] - Single"
+      "cold water - single",
+      "Cold Water (feat. Justin Bieber & MØ) - Single"
     ],
     "albumAnswer": "cold water - single",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/54/b8/d4/54b8d4d1-4280-58b9-6629-fdd57232a4b3/00602557247060.rgb.jpg/600x600bb.jpg",
@@ -18744,10 +18052,10 @@
     "displayArtists": "Major Lazer",
     "artists": [
       "major lazer",
-      "m don omar remix",
+      "mo",
       "justin bieber"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/fc/77/f2/fc77f286-307a-3d87-b6e5-e6f361b70e1c/mzaf_16263889321473599832.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/49/e2/f8/49e2f81f-91b3-1da7-ba98-37f6055c8250/mzaf_9489566121222970035.plus.aac.ep.m4a",
     "categories": [
       "Pop"
     ]
@@ -18804,23 +18112,18 @@
     ]
   },
   {
-    "displayName": "Run Up (Sub Focus Remix) [feat. PARTYNEXTDOOR & Nicki Minaj]",
+    "displayName": "Run Up",
     "answerNames": [
-      "run up",
-      "run up sub focus remix",
-      "Run Up (Sub Focus Remix) [feat. PARTYNEXTDOOR & Nicki Minaj]"
+      "run up"
     ],
     "answerName": "run up",
-    "album": "Run Up (Remixes) [feat. PARTYNEXTDOOR & Nicki Minaj] - Single",
+    "album": "Run Up (Remixes) - EP",
     "albumAnswers": [
       "run up",
-      "run up single",
-      "run up remixes",
-      "run up feat. partynextdoor nicki minaj",
-      "run up remixes feat. partynextdoor nicki minaj - single",
-      "Run Up (Remixes) [feat. PARTYNEXTDOOR & Nicki Minaj] - Single"
+      "run up - EP",
+      "Run Up (Remixes) - EP"
     ],
-    "albumAnswer": "run up - single",
+    "albumAnswer": "run up - EP",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/80/bd/81/80bd81c3-6d0b-ffc5-e075-32a28b7ffd42/653738377328_Cover.jpg/600x600bb.jpg",
     "year": 2017,
     "displayArtists": "Major Lazer",
@@ -19117,31 +18420,25 @@
     ]
   },
   {
-    "displayName": "Sweet Nothing (feat. Florence Welch) [Diplo + Grandtheft Remix]",
+    "displayName": "Sweet Nothing (feat. Florence Welch)",
     "answerNames": [
       "sweet nothing",
-      "sweet nothing diplo grandtheft remix",
-      "Sweet Nothing (feat. Florence Welch) [Diplo + Grandtheft Remix]"
+      "Sweet Nothing (feat. Florence Welch)"
     ],
     "answerName": "sweet nothing",
-    "album": "Sweet Nothing (feat. Florence Welch) [Remixes] - EP",
+    "album": "18 Months",
     "albumAnswers": [
-      "sweet nothing",
-      "sweet nothing ep",
-      "sweet nothing remixes",
-      "sweet nothing feat. florence welch",
-      "sweet nothing feat. florence welch remixes - ep",
-      "Sweet Nothing (feat. Florence Welch) [Remixes] - EP"
+      "18 Months"
     ],
-    "albumAnswer": "sweet nothing - ep",
+    "albumAnswer": "18 Months",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music/v4/1d/3b/e8/1d3be80f-66a8-118a-e151-1b590c381070/886443766129.jpg/600x600bb.jpg",
     "year": 2012,
     "displayArtists": "Calvin Harris",
     "artists": [
-      "florence welch diplo grandtheft remix",
+      "florence welch",
       "calvin harris"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/6e/2a/86/6e2a8673-28fe-5f02-591e-1b3d5af09f4a/mzaf_3603338559672472431.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/87/6b/29/876b29ee-586e-c375-8afa-4fec8f395c96/mzaf_12663973773048592887.plus.aac.ep.m4a",
     "categories": [
       "Dance"
     ]
@@ -19478,17 +18775,17 @@
     ]
   },
   {
-    "displayName": "Habits (Stay High) [Hippie Sabotage Remix]",
+    "displayName": "Habits (Stay High)",
     "answerNames": [
       "habits",
       "habits stay high",
-      "habits hippie sabotage remix",
-      "Habits (Stay High) [Hippie Sabotage Remix]"
+      "Habits (Stay High)"
     ],
     "answerName": "habits",
-    "album": "Queen of the Clouds",
+    "album": "Queen of the Clouds (Blueprint Edition)",
     "albumAnswers": [
-      "queen of the clouds"
+      "Queen of the Clouds (Blueprint Edition)",
+      "Queen of the Clouds"
     ],
     "albumAnswer": "queen of the clouds",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/ad/17/77/ad177799-79d3-6065-e587-87a889ccf72a/14UMGIM36051.rgb.jpg/600x600bb.jpg",
@@ -19497,7 +18794,7 @@
     "artists": [
       "tove lo"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/b3/d7/c3/b3d7c33e-b310-c643-f28c-d245a2f53ca6/mzaf_5784762553220651853.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/16/93/c9/1693c9c1-9181-005a-ce77-6d45a07cb3d0/mzaf_1549714739041547894.plus.aac.ep.m4a",
     "categories": [
       "Alternative"
     ]
@@ -19598,22 +18895,19 @@
       "all that she wants"
     ],
     "answerName": "all that she wants",
-    "album": "All That She Wants (The Remixes) - EP",
+    "album": "The Sign (2015 Remastered Version)",
     "albumAnswers": [
-      "all that she wants",
-      "all that she wants ep",
-      "all that she wants the remixes",
-      "all that she wants the remixes - ep",
-      "All That She Wants (The Remixes) - EP"
+      "The Sign (2015 Remastered Version)",
+      "The Sign"
     ],
     "albumAnswer": "all that she wants - ep",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/be/93/73/be9373d1-31eb-edd0-5818-beb2a7d51868/cover.jpg/600x600bb.jpg",
-    "year": 1992,
+    "year": 1993,
     "displayArtists": "Ace of Base",
     "artists": [
       "ace of base"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/fe/4b/58/fe4b58b4-a857-6e91-03b4-306d36b4705e/mzaf_5205475917489618359.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/57/3c/c3/573cc3c6-8d58-4803-2233-f985b7f0848f/mzaf_9279943448674584903.plus.aac.ep.m4a",
     "categories": [
       "Pop"
     ]
@@ -19626,16 +18920,11 @@
       "Bad (Remix) [feat. Rihanna]"
     ],
     "answerName": "bad",
-    "album": "Bad (Remix) [feat. Rihanna] - Single",
+    "album": "The Gifted",
     "albumAnswers": [
-      "bad",
-      "bad remix",
-      "bad single",
-      "bad feat. rihanna",
-      "bad remix feat. rihanna - single",
-      "Bad (Remix) [feat. Rihanna] - Single"
+      "The Gifted"
     ],
-    "albumAnswer": "bad - single",
+    "albumAnswer": "The Gifted",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music2/v4/01/0d/c7/010dc7be-e2f5-eed2-20ef-aa1d37784dae/075679951595.jpg/600x600bb.jpg",
     "year": 2013,
     "displayArtists": "Wale",
@@ -19643,7 +18932,7 @@
       "wale",
       "rihanna"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/6b/eb/e7/6bebe7fb-5c18-4b61-d0b0-e9617c159416/mzaf_14771348446676632517.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/bb/59/78/bb597875-ac4b-78f6-a7f9-80e530224227/mzaf_1870813466709031669.plus.aac.ep.m4a",
     "categories": [
       "Hip-Hop/Rap"
     ]
@@ -19678,22 +18967,19 @@
       "the sign"
     ],
     "answerName": "the sign",
-    "album": "The Sign (The Remixes) - EP",
+    "album": "The Sign (2015 Remastered Version)",
     "albumAnswers": [
-      "the sign",
-      "the sign ep",
-      "the sign the remixes",
-      "the sign the remixes - ep",
-      "The Sign (The Remixes) - EP"
+      "The Sign (2015 Remastered Version)",
+      "The Sign"
     ],
-    "albumAnswer": "the sign - ep",
+    "albumAnswer": "The Sign",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/14/ea/87/14ea87fa-fc85-4b1f-472f-43c3e694ec8c/cover.jpg/600x600bb.jpg",
     "year": 1993,
     "displayArtists": "Ace of Base",
     "artists": [
       "ace of base"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/50/d1/8f/50d18f80-466d-3044-3045-769cd045b582/mzaf_145168018015310017.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/1f/cc/91/1fcc916e-a50f-0df8-8e3b-9ac479b71aff/mzaf_11273190577481884119.plus.aac.ep.m4a",
     "categories": [
       "Pop"
     ]
@@ -19912,55 +19198,28 @@
     ]
   },
   {
-    "displayName": "The One That Got Away (Acoustic)",
+    "displayName": "The One That Got Away",
     "answerNames": [
-      "the one that got away",
-      "the one that got away acoustic",
-      "The One That Got Away (Acoustic)"
+      "the one that got away"
     ],
     "answerName": "the one that got away",
-    "album": "Teenage Dream: The Complete Confection",
+    "album": "Teenage Dream",
     "albumAnswers": [
-      "teenage dream the complete confection",
-      "Teenage Dream: The Complete Confection"
+      "Teenage Dream"
     ],
-    "albumAnswer": "teenage dream the complete confection",
+    "albumAnswer": "Teenage Dream",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/31/57/b3/3157b3d9-6551-e44e-46c0-488686998a05/13UABIM58339.rgb.jpg/600x600bb.jpg",
-    "year": 2012,
+    "year": 2010,
     "displayArtists": "Katy Perry",
     "artists": [
       "katy perry"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/db/d7/e2/dbd7e25a-5de8-390c-a917-20ae2e8f1423/mzaf_16328200571828577920.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/9c/d0/bf/9cd0bf4f-46b0-e887-f5ae-a1f9e19ff703/mzaf_7998002155929163606.plus.aac.ep.m4a",
     "categories": [
       "Pop"
     ]
   },
-  {
-    "displayName": "Pon De Replay (Remix) [feat. Elephant Man]",
-    "answerNames": [
-      "pon de replay",
-      "pon de replay remix",
-      "Pon De Replay (Remix) [feat. Elephant Man]"
-    ],
-    "answerName": "pon de replay",
-    "album": "Music of the Sun",
-    "albumAnswers": [
-      "music of the sun"
-    ],
-    "albumAnswer": "music of the sun",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/2f/89/a4/2f89a4e5-83c4-7cc8-93d6-99b0d8283a1f/16UMGIM58839.rgb.jpg/600x600bb.jpg",
-    "year": 2005,
-    "displayArtists": "Rihanna",
-    "artists": [
-      "elephant man",
-      "rihanna"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/08/55/e8/0855e89f-e36c-cb5e-dc82-a328b0b0f9bc/mzaf_2271700403776399180.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
+
   {
     "displayName": "I'm Not the Only One",
     "answerNames": [
@@ -20983,35 +20242,6 @@
     ]
   },
   {
-    "displayName": "In the Name of Love (DallasK Remix)",
-    "answerNames": [
-      "in the name of love",
-      "in the name of love dallask remix",
-      "In the Name of Love (DallasK Remix)"
-    ],
-    "answerName": "in the name of love",
-    "album": "In the Name of Love (Remixes) - Single",
-    "albumAnswers": [
-      "in the name of love",
-      "in the name of love single",
-      "in the name of love remixes",
-      "in the name of love remixes - single",
-      "In the Name of Love (Remixes) - Single"
-    ],
-    "albumAnswer": "in the name of love - single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/a9/24/6c/a9246c8d-9976-921d-5a49-016ba1bb8bb6/886446221625.jpg/600x600bb.jpg",
-    "year": 2016,
-    "displayArtists": "Martin Garrix & Bebe Rexha",
-    "artists": [
-      "martin garrix",
-      "bebe rexha"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/94/94/f7/9494f722-57ce-8d82-dca7-6420f4defc77/mzaf_840379150873979271.plus.aac.p.m4a",
-    "categories": [
-      "Dance"
-    ]
-  },
-  {
     "displayName": "Hello",
     "answerNames": [
       "hello"
@@ -21155,61 +20385,6 @@
     ]
   },
   {
-    "displayName": "Uptown Funk (feat. Bruno Mars) [Dave Audé Remix]",
-    "answerNames": [
-      "uptown funk",
-      "uptown funk dave aud remix",
-      "Uptown Funk (feat. Bruno Mars) [Dave Audé Remix]"
-    ],
-    "answerName": "uptown funk",
-    "album": "Uptown Funk (feat. Bruno Mars) [Remixes] - EP",
-    "albumAnswers": [
-      "uptown funk",
-      "uptown funk ep",
-      "uptown funk remixes",
-      "uptown funk feat. bruno mars",
-      "uptown funk feat. bruno mars remixes - ep",
-      "Uptown Funk (feat. Bruno Mars) [Remixes] - EP"
-    ],
-    "albumAnswer": "uptown funk - ep",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music5/v4/5c/eb/9d/5ceb9d47-c80d-a70a-1842-a8ca347bcc8e/886445222081.jpg/600x600bb.jpg",
-    "year": 2015,
-    "displayArtists": "Mark Ronson",
-    "artists": [
-      "mark ronson",
-      "bruno mars dave aud remix"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/fb/65/ec/fb65ec1c-2a7a-8458-7dac-c20463d1c348/mzaf_14125167907932995758.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "Party In the U.S.A.",
-    "answerNames": [
-      "party in the u.s.a."
-    ],
-    "answerName": "party in the u.s.a.",
-    "album": "Party In the U.S.A. - Single",
-    "albumAnswers": [
-      "party in the u.s.a.",
-      "party in the u.s.a. single",
-      "party in the u.s.a. - single",
-      "Party In the U.S.A. - Single"
-    ],
-    "albumAnswer": "party in the u.s.a. - single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/1f/29/3e/1f293e38-987a-9a77-d004-c866acebdac1/09BVMIM00838.rgb.jpg/600x600bb.jpg",
-    "year": 2009,
-    "displayArtists": "Miley Cyrus",
-    "artists": [
-      "miley cyrus"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/76/9e/79/769e79f5-3fbe-a416-4109-e57acaf7ebb7/mzaf_1472369971298162165.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
     "displayName": "Sweet Dreams (Are Made of This) [2005 Remaster]",
     "answerNames": [
       "sweet dreams",
@@ -21239,29 +20414,23 @@
     ]
   },
   {
-    "displayName": "Back To Black (Original Demo)",
+    "displayName": "Back To Black",
     "answerNames": [
-      "back to black",
-      "back to black original demo",
-      "Back To Black (Original Demo)"
+      "back to black"
     ],
     "answerName": "back to black",
-    "album": "Back To Black (Remixes & B Sides) - EP",
+    "album": "Back To Black",
     "albumAnswers": [
-      "back to black",
-      "back to black ep",
-      "back to black remixes b sides",
-      "back to black remixes b sides - ep",
-      "Back To Black (Remixes & B Sides) - EP"
+      "back to black"
     ],
-    "albumAnswer": "back to black - ep",
+    "albumAnswer": "back to black",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/cd/6c/11/cd6c11b3-6300-0a29-d211-855847ed2c8c/00602547505040.rgb.jpg/600x600bb.jpg",
-    "year": 2007,
+    "year": 2006,
     "displayArtists": "Amy Winehouse",
     "artists": [
       "amy winehouse"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/40/07/2c/40072c1f-c551-e490-4ee4-d864eeb28c51/mzaf_11174458628498475021.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/73/9f/24/739f24b0-91ae-c5b6-ba60-d0aa99b945b6/mzaf_15411460896947859494.plus.aac.ep.m4a",
     "categories": [
       "R&B/Soul"
     ]
@@ -21585,30 +20754,6 @@
     ]
   },
   {
-    "displayName": "Attention (Arr. For Piano)",
-    "answerNames": [
-      "attention",
-      "attention arr. for piano",
-      "Attention (Arr. For Piano)"
-    ],
-    "answerName": "attention",
-    "album": "Pop Goes Classical",
-    "albumAnswers": [
-      "pop goes classical"
-    ],
-    "albumAnswer": "pop goes classical",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/51/f0/25/51f0250d-b818-68f6-dc4e-58d82ac17c33/9008798313488_cover.jpg/600x600bb.jpg",
-    "year": 2019,
-    "displayArtists": "Max Arnald",
-    "artists": [
-      "max arnald"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview123/v4/c8/a8/7a/c8a87aa6-91a3-f583-7b69-0bbb870c30a4/mzaf_6395299056119730199.plus.aac.p.m4a",
-    "categories": [
-      "Classical Crossover"
-    ]
-  },
-  {
     "displayName": "Marvin Gaye (feat. Meghan Trainor)",
     "answerNames": [
       "marvin gaye",
@@ -21851,37 +20996,6 @@
     ]
   },
   {
-    "displayName": "I Don't Like It, I Love It (feat. Robin Thicke & Verdine White) [DiscoTech Remix]",
-    "answerNames": [
-      "i don't like it, i love it",
-      "i don't like it, i love it discotech remix",
-      "I Don't Like It, I Love It (feat. Robin Thicke & Verdine White) [DiscoTech Remix]"
-    ],
-    "answerName": "i don't like it, i love it",
-    "album": "I Don't Like It, I Love It (feat. Robin Thicke & Verdine White) [DiscoTech Remix] - Single",
-    "albumAnswers": [
-      "i don't like it, i love it",
-      "i don't like it, i love it single",
-      "i don't like it, i love it discotech remix",
-      "i don't like it, i love it feat. robin thicke verdine white",
-      "i don't like it, i love it feat. robin thicke verdine white discotech remix - single",
-      "I Don't Like It, I Love It (feat. Robin Thicke & Verdine White) [DiscoTech Remix] - Single"
-    ],
-    "albumAnswer": "i don't like it, i love it - single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music7/v4/d5/94/1f/d5941f7e-0eb8-941f-0642-fa39425e4464/075679922113.jpg/600x600bb.jpg",
-    "year": 2015,
-    "displayArtists": "Flo Rida",
-    "artists": [
-      "verdine white discotech remix",
-      "flo rida",
-      "robin thicke"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/07/d8/e3/07d8e359-32c2-933a-7e9a-37e1dcaa20a3/mzaf_11931512695177191321.plus.aac.p.m4a",
-    "categories": [
-      "Dance"
-    ]
-  },
-  {
     "displayName": "Pocketful of Sunshine",
     "answerNames": [
       "pocketful of sunshine"
@@ -22116,7 +21230,7 @@
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d6/da/e5/d6dae573-5ea0-1b60-cae5-b1113b60bda3/mzaf_14284169442486227360.plus.aac.p.m4a",
     "categories": [
-      "Reggae"
+      "Pop"
     ]
   },
   {
@@ -23151,35 +22265,6 @@
       "sam smith"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/74/5c/be/745cbe87-a3a7-7f4f-a064-4dd508112350/mzaf_9344440335282076439.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
-    "displayName": "Too Good at Goodbyes (Galantis Remix)",
-    "answerNames": [
-      "too good at goodbyes",
-      "too good at goodbyes galantis remix",
-      "Too Good at Goodbyes (Galantis Remix)"
-    ],
-    "answerName": "too good at goodbyes",
-    "album": "Too Good at Goodbyes (Galantis Remix) - Single",
-    "albumAnswers": [
-      "too good at goodbyes",
-      "too good at goodbyes single",
-      "too good at goodbyes galantis remix",
-      "too good at goodbyes galantis remix - single",
-      "Too Good at Goodbyes (Galantis Remix) - Single"
-    ],
-    "albumAnswer": "too good at goodbyes - single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/4c/6c/11/4c6c11cc-4e29-ee4c-c3eb-c7e8a3757b32/00602567059066.rgb.jpg/600x600bb.jpg",
-    "year": 2017,
-    "displayArtists": "Sam Smith & Galantis",
-    "artists": [
-      "galantis",
-      "sam smith"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/cf/10/5f/cf105fdb-6734-a1f9-c86a-851f9cc031f0/mzaf_17623720570401641277.plus.aac.p.m4a",
     "categories": [
       "Pop"
     ]
@@ -24399,30 +23484,6 @@
       "$NOT"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/7b/ae/61/7bae614c-3d7c-b30d-36a8-5b20e4455821/mzaf_9118957718663985369.plus.aac.ep.m4a",
-    "categories": [
-      "Hip-Hop/Rap"
-    ]
-  },
-  {
-    "displayName": "Gold Digger (feat. Jamie Foxx)",
-    "answerNames": [
-      "gold digger",
-      "Gold Digger (feat. Jamie Foxx)"
-    ],
-    "answerName": "gold digger",
-    "album": "Late Registration",
-    "albumAnswers": [
-      "late registration"
-    ],
-    "albumAnswer": "late registration",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/0e/90/3c/0e903c43-9d81-f91b-90f1-727a58f7fb2c/00602498824030.rgb.jpg/600x600bb.jpg",
-    "year": 2005,
-    "displayArtists": "Kanye West",
-    "artists": [
-      "kanye west",
-      "jamie foxx"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/3e/3d/10/3e3d10bb-41c8-cf98-e7de-126cf72b186a/mzaf_14398557118566661017.plus.aac.p.m4a",
     "categories": [
       "Hip-Hop/Rap"
     ]
@@ -32839,7 +31900,7 @@
     "displayArtists": "Jhené Aiko",
     "artists": [
       "kendrick lamar",
-      "jhen aiko"
+      "jhene aiko"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b4/e4/54/b4e454ab-096f-07ab-b720-fad68995581a/mzaf_7205036915612882452.plus.aac.p.m4a",
     "categories": [
@@ -34231,28 +33292,6 @@
     ]
   },
   {
-    "displayName": "Maneater",
-    "answerNames": [
-      "maneater"
-    ],
-    "answerName": "maneater",
-    "album": "Loose",
-    "albumAnswers": [
-      "Loose"
-    ],
-    "albumAnswer": "Loose",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/8f/28/68/8f28688e-d1a1-eebe-7c14-0bd26a40c339/cover.jpg/600x600bb.jpg",
-    "year": 2006,
-    "displayArtists": "Nelly Furtado",
-    "artists": [
-      "Nelly Furtado"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/28/a1/12/28a11253-216f-bd03-4a9a-b64d92ec5fb7/mzaf_9825119262327062442.plus.aac.ep.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
     "displayName": "cocoa (feat. Don Toliver)",
     "answerNames": [
       "cocoa",
@@ -34509,31 +33548,26 @@
     ]
   },
   {
-    "displayName": "She Make It Clap (feat. French Montana) [Remix]",
+    "displayName": "She Make It Clap",
     "answerNames": [
-      "she make it clap",
-      "she make it clap remix",
-      "She Make It Clap (feat. French Montana) [Remix]"
+      "she make it clap"
     ],
     "answerName": "she make it clap",
-    "album": "She Make It Clap (Remix) [feat. French Montana] - Single",
+    "album": "She Make It Clap - Single",
     "albumAnswers": [
       "she make it clap",
-      "she make it clap remix",
-      "she make it clap single",
-      "she make it clap feat. french montana",
-      "she make it clap remix feat. french montana single",
-      "She Make It Clap (Remix) [feat. French Montana] - Single"
+      "she make it clap - single",
+      "she make it clap single"
     ],
-    "albumAnswer": "she make it clap single",
+    "albumAnswer": "she make it clap - single",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/c8/c2/c5/c8c2c594-7228-4dbc-24f8-a03989f76ef2/21UMGIM62950.rgb.jpg/600x600bb.jpg",
     "year": 2021,
     "displayArtists": "Soulja Boy Tell 'Em",
     "artists": [
       "soulja boy tell 'em",
-      "french montana remix"
+      "soulja boy"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/07/7b/b9/077bb954-fb46-b12f-c973-503f21ce3816/mzaf_18195586163097798962.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview124/v4/57/6b/9b/576b9bb1-6a91-b897-839e-989864584bbe/mzaf_1358096972044247378.plus.aac.p.m4a",
     "categories": [
       "Hip-Hop/Rap"
     ]
@@ -35184,36 +34218,6 @@
     ]
   },
   {
-    "displayName": "Suburban, Pt. 2 (Remix) [feat. Frosty]",
-    "answerNames": [
-      "suburban, pt. 2",
-      "suburban, pt. 2 remix",
-      "Suburban, Pt. 2 (Remix) [feat. Frosty]"
-    ],
-    "answerName": "suburban, pt. 2",
-    "album": "Suburban, Pt. 2 (Remix) [feat. Frosty] - Single",
-    "albumAnswers": [
-      "suburban, pt. 2",
-      "suburban, pt. 2 remix",
-      "suburban, pt. 2 single",
-      "suburban, pt. 2 feat. frosty",
-      "suburban, pt. 2 remix feat. frosty single",
-      "Suburban, Pt. 2 (Remix) [feat. Frosty] - Single"
-    ],
-    "albumAnswer": "suburban, pt. 2 single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/d1/7b/87/d17b8786-64fd-d696-695e-31c30c2e0e23/075679814166.jpg/600x600bb.jpg",
-    "year": 2020,
-    "displayArtists": "22Gz",
-    "artists": [
-      "22gz",
-      "frosty"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/1a/6f/92/1a6f92d0-cea6-9060-38d4-073bd34b8200/mzaf_2708672190896822794.plus.aac.p.m4a",
-    "categories": [
-      "Hip-Hop/Rap"
-    ]
-  },
-  {
     "displayName": "New Opp (Drill Beat)",
     "answerNames": [
       "new opp",
@@ -35594,7 +34598,7 @@
     "displayArtists": "Yo Gotti",
     "artists": [
       "yo gotti",
-      "nicki minaj remix"
+      "nicki minaj"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/c9/79/db/c979dbcd-74d7-c62e-b0a4-8236b396bda0/mzaf_4363264051050179516.plus.aac.p.m4a",
     "categories": [
@@ -36398,7 +35402,7 @@
     "displayArtists": "Jennifer Lopez",
     "artists": [
       "jadakiss",
-      "styles p track masters remix",
+      "styles p",
       "jennifer lopez"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d1/26/7f/d1267f37-ae4b-8176-7066-67787afd4195/mzaf_16242458862458331824.plus.aac.p.m4a",
@@ -36409,31 +35413,28 @@
   {
     "displayName": "Who's That Girl? (Mixed)",
     "answerNames": [
-      "who's that girl?",
-      "who's that girl? mixed",
-      "Who's That Girl? (Mixed)"
+      "who's that girl?"
     ],
     "answerName": "who's that girl?",
-    "album": "Pure Throwback Radio: Women in Hip Hop (DJ Mix)",
+    "album": "Scorpion (Deluxe)",
     "albumAnswers": [
-      "pure throwback radio: women in hip hop",
-      "pure throwback radio: women in hip hop dj mix",
-      "Pure Throwback Radio: Women in Hip Hop (DJ Mix)"
+      "Scorpion (Deluxe)",
+      "Scorpion"
     ],
-    "albumAnswer": "pure throwback radio: women in hip hop",
+    "albumAnswer": "Scorpion",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/31/05/af/3105af79-6ac2-6f16-ef65-c1d406b08180/26476c81-09ba-4565-ae69-fa46f8e4a56f.png/600x600bb.jpg",
-    "year": 2025,
+    "year": 2001,
     "displayArtists": "Eve",
     "artists": [
       "eve"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/37/be/d6/37bed6b7-cb93-65ae-cee9-66ed3c22a702/mzaf_8940366415454479239.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/1c/6e/83/1c6e83d1-9958-ce90-e038-adfd9c043d96/mzaf_15453285798289823325.plus.aac.ep.m4a",
     "categories": [
       "Hip-Hop/Rap"
     ]
   },
   {
-    "displayName": "Baby Boy (feat. Beyoncé )",
+    "displayName": "Baby Boy (feat. Beyoncé)",
     "answerNames": [
       "baby boy",
       "Baby Boy (feat. Beyoncé )"
@@ -37553,36 +36554,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e5/17/2c/e5172c7d-8e13-2cf7-252f-00c2a91f24ee/mzaf_14697937897539675507.plus.aac.p.m4a",
     "categories": [
       "Pop"
-    ]
-  },
-  {
-    "displayName": "Fisherrr (Remix)",
-    "answerNames": [
-      "fisherrr",
-      "fisherrr remix",
-      "Fisherrr (Remix)"
-    ],
-    "answerName": "fisherrr",
-    "album": "Fisherrr (Remix) - Single",
-    "albumAnswers": [
-      "fisherrr",
-      "fisherrr remix",
-      "fisherrr single",
-      "fisherrr remix single",
-      "Fisherrr (Remix) - Single"
-    ],
-    "albumAnswer": "fisherrr single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/33/48/5f/33485f0c-91af-6cd5-c80f-4266c4f4bb23/24UMGIM48942.rgb.jpg/600x600bb.jpg",
-    "year": 2024,
-    "displayArtists": "Cash Cobain, Ice Spice & Bay Swag",
-    "artists": [
-      "bay swag",
-      "ice spice",
-      "cash cobain"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/08/ba/0e/08ba0e4a-3e94-576a-33f3-6043589c9762/mzaf_13173753081012494397.plus.aac.p.m4a",
-    "categories": [
-      "Hip-Hop/Rap"
     ]
   },
   {
@@ -38964,34 +37935,6 @@
     ]
   },
   {
-    "displayName": "What To Do (&ME Remix)",
-    "answerNames": [
-      "what to do",
-      "what to do me remix",
-      "What To Do (&ME Remix)"
-    ],
-    "answerName": "what to do",
-    "album": "What to Do (Remixes) - Single",
-    "albumAnswers": [
-      "what to do",
-      "what to do single",
-      "what to do remixes",
-      "what to do remixes single",
-      "What to Do (Remixes) - Single"
-    ],
-    "albumAnswer": "what to do single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/72/ff/c6/72ffc69f-bce6-526c-925e-bdd783ce0385/5060589486324.jpg/600x600bb.jpg",
-    "year": 2018,
-    "displayArtists": "Guy Gerber",
-    "artists": [
-      "guy gerber"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/9f/6f/89/9f6f89bb-20a7-dc17-6075-8c0d73ac78ef/mzaf_2344560197414448047.plus.aac.p.m4a",
-    "categories": [
-      "Dance"
-    ]
-  },
-  {
     "displayName": "Fantasy (feat. Don Toliver)",
     "answerNames": [
       "fantasy",
@@ -39141,37 +38084,6 @@
     ]
   },
   {
-    "displayName": "Better Days (feat. Polo G) [Regard Remix]",
-    "answerNames": [
-      "better days",
-      "better days regard remix",
-      "Better Days (feat. Polo G) [Regard Remix]"
-    ],
-    "answerName": "better days",
-    "album": "Better Days (feat. Polo G) (Regard Remix) - Single",
-    "albumAnswers": [
-      "better days",
-      "better days single",
-      "better days regard remix",
-      "better days feat. polo g",
-      "better days feat. polo g regard remix single",
-      "Better Days (feat. Polo G) (Regard Remix) - Single"
-    ],
-    "albumAnswer": "better days single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/44/08/47/4408470e-0921-f4ad-7cac-118e7b1387c6/21UM1IM47316.rgb.jpg/600x600bb.jpg",
-    "year": 2021,
-    "displayArtists": "NEIKED & Mae Muller",
-    "artists": [
-      "mae muller",
-      "polo g regard remix",
-      "neiked"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/5c/7f/28/5c7f2800-b73b-38ad-2313-7589f0bf97a0/mzaf_10236133160175772966.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
     "displayName": "Hide It (feat. Don Toliver)",
     "answerNames": [
       "hide it",
@@ -39317,32 +38229,24 @@
     ]
   },
   {
-    "displayName": "Suicidal (Remix) [feat. Juice WRLD]",
+    "displayName": "Suicidal",
     "answerNames": [
-      "suicidal",
-      "suicidal remix",
-      "Suicidal (Remix) [feat. Juice WRLD]"
+      "suicidal"
     ],
     "answerName": "suicidal",
-    "album": "Suicidal (Remix) [feat. Juice WRLD] - Single",
+    "album": "Melly vs. Melvin",
     "albumAnswers": [
-      "suicidal",
-      "suicidal remix",
-      "suicidal single",
-      "suicidal - single",
-      "suicidal feat. juice wrld",
-      "suicidal remix feat. juice wrld single",
-      "Suicidal (Remix) [feat. Juice WRLD] - Single"
+      "Melly vs. Melvin",
+      "Melly vs Melvin"
     ],
-    "albumAnswer": "suicidal single",
+    "albumAnswer": "Melly vs. Melvin",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/4d/3c/b0/4d3cb064-a40c-7a5c-ba1f-0474a7579a3f/810043680486.jpg/600x600bb.jpg",
     "year": 2020,
     "displayArtists": "YNW Melly",
     "artists": [
-      "juice wrld",
       "ynw melly"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/ed/01/ce/ed01ceb4-1649-6be3-787b-894da7e60b2c/mzaf_5176687540238514020.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/5a/be/c0/5abec08d-b496-24e7-75a5-49a5abcca6cf/mzaf_3590827080604907146.plus.aac.ep.m4a",
     "categories": [
       "Hip-Hop/Rap"
     ]
@@ -39668,29 +38572,6 @@
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/36/7f/09/367f09b9-f68d-f4c6-213e-a8dc76a4830c/mzaf_4067041307925692701.plus.aac.p.m4a",
     "categories": [
       "Hip-Hop"
-    ]
-  },
-  {
-    "displayName": "Older",
-    "answerNames": [
-      "older"
-    ],
-    "answerName": "older",
-    "album": "Goodbye Horses",
-    "albumAnswers": [
-      "goodbye horses"
-    ],
-    "albumAnswer": "goodbye horses",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/8d/03/e9/8d03e935-a136-1904-2e92-09145fca91da/196872530728.jpg/600x600bb.jpg",
-    "year": 2024,
-    "displayArtists": "ian & Reign",
-    "artists": [
-      "reign",
-      "ian"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/21/0a/c2/210ac2d3-a50c-6b0f-fcc6-843a50252d37/mzaf_14252555834771701359.plus.aac.p.m4a",
-    "categories": [
-      "Hip-Hop/Rap"
     ]
   },
   {
@@ -44930,37 +43811,6 @@
     ]
   },
   {
-    "displayName": "All My Friends (feat. Tinashe & Chance The Rapper) [99 Souls Remix]",
-    "answerNames": [
-      "all my friends",
-      "all my friends 99 souls remix",
-      "All My Friends (feat. Tinashe & Chance The Rapper) [99 Souls Remix]"
-    ],
-    "answerName": "all my friends",
-    "album": "All My Friends (feat. Tinashe & Chance The Rapper) [The Remixes] - EP",
-    "albumAnswers": [
-      "all my friends",
-      "all my friends ep",
-      "all my friends the remixes",
-      "all my friends feat. tinashe chance the rapper",
-      "all my friends feat. tinashe chance the rapper the remixes ep",
-      "All My Friends (feat. Tinashe & Chance The Rapper) [The Remixes] - EP"
-    ],
-    "albumAnswer": "all my friends ep",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/3d/01/93/3d019344-16ac-89d0-5632-ced9ad26a26e/886445808841.jpg/600x600bb.jpg",
-    "year": 2015,
-    "displayArtists": "Snakehips",
-    "artists": [
-      "chance the rapper 99 souls remix",
-      "tinashe",
-      "snakehips"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/d7/fb/89/d7fb8982-28fe-b3a9-bbfd-9840b793fb28/mzaf_11811475034592178654.plus.aac.p.m4a",
-    "categories": [
-      "Pop"
-    ]
-  },
-  {
     "displayName": "Summers Over Interlude",
     "answerNames": [
       "summers over interlude"
@@ -45000,39 +43850,6 @@
       "dionne warwick"
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f3/8b/60/f38b606e-5a08-5c2d-5de7-bbba71aeee14/mzaf_2850816078703588102.plus.aac.p.m4a",
-    "categories": [
-      "R&B/Soul"
-    ]
-  },
-  {
-    "displayName": "Un-thinkable (I'm Ready) [Remix] {feat. Drake}",
-    "answerNames": [
-      "unthinkable feat. drake",
-      "unthinkable feat. drake remix",
-      "unthinkable feat. drake i'm ready",
-      "Un-thinkable (I'm Ready) [Remix] {feat. Drake}"
-    ],
-    "answerName": "unthinkable feat. drake",
-    "album": "Un-thinkable (I'm Ready) [Remix] {feat. Drake} - Single",
-    "albumAnswers": [
-      "unthinkable feat. drake",
-      "unthinkable feat. drake remix",
-      "unthinkable feat. drake single",
-      "unthinkable feat. drake i'm ready",
-      "unthinkable i'm ready remix feat. drake single",
-      "Un-thinkable (I'm Ready) [Remix] {feat. Drake} - Single",
-      "un-thinkable",
-      "un-thinkable - single"
-    ],
-    "albumAnswer": "unthinkable feat. drake single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/4d/5d/5d/4d5d5db9-94c5-8d29-22ab-23ab947e18ff/884977645149.jpg/600x600bb.jpg",
-    "year": 2010,
-    "displayArtists": "Alicia Keys",
-    "artists": [
-      "alicia keys",
-      "drake"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/1f/48/08/1f4808a9-eb5d-6797-af77-1c598ae8563a/mzaf_15707844589685266265.plus.aac.p.m4a",
     "categories": [
       "R&B/Soul"
     ]
@@ -47534,30 +46351,25 @@
     ]
   },
   {
-    "displayName": "MUTT (CB REMIX)",
+    "displayName": "MUTT",
     "answerNames": [
-      "mutt",
-      "mutt cb remix",
-      "MUTT (CB REMIX)"
+      "mutt"
     ],
     "answerName": "mutt",
-    "album": "MUTT (CB REMIX) - Single",
+    "album": "MUTT - Single",
     "albumAnswers": [
       "mutt",
-      "mutt single",
-      "mutt cb remix",
-      "mutt cb remix single",
-      "MUTT (CB REMIX) - Single"
+      "MUTT - Single",
+      "mutt single"
     ],
     "albumAnswer": "mutt single",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/72/6c/08/726c080d-d43e-8f7d-82bd-8b7b36d3d449/25UMGIM40985.rgb.jpg/600x600bb.jpg",
-    "year": 2025,
-    "displayArtists": "Leon Thomas & Chris Brown",
+    "year": 2024,
+    "displayArtists": "Leon Thomas",
     "artists": [
-      "leon thomas",
-      "chris brown"
+      "leon thomas"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/56/65/e0/5665e071-d477-ce16-953f-0f99f5cb37ca/mzaf_10677852295925216928.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/0f/cf/c1/0fcfc155-5815-36f3-ac38-f4f78e84a4e5/mzaf_32234819781101093.plus.aac.ep.m4a",
     "categories": [
       "R&B/Soul"
     ]
@@ -47709,27 +46521,23 @@
     ]
   },
   {
-    "displayName": "Creep (Acoustic)",
+    "displayName": "Creep",
     "answerNames": [
-      "creep",
-      "creep acoustic",
-      "Creep (Acoustic)"
+      "creep"
     ],
     "answerName": "creep",
-    "album": "Creep - EP",
+    "album": "Pablo Honey",
     "albumAnswers": [
-      "creep",
-      "creep ep",
-      "Creep - EP"
+      "Pablo Honey"
     ],
-    "albumAnswer": "creep ep",
+    "albumAnswer": "Pablo Honey",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/28/7a/7c/287a7ca9-ed95-1a21-e3bb-4559a1a0ac0e/191404134351.png/600x600bb.jpg",
-    "year": 1992,
+    "year": 1993,
     "displayArtists": "Radiohead",
     "artists": [
       "radiohead"
     ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/8d/e0/bb/8de0bb10-0593-83cc-4d2c-4e9f6ea9b575/mzaf_16440589638018943894.plus.aac.p.m4a",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/17/44/12/174412a1-090a-5565-c8d7-14aaae1e95b2/mzaf_12632684419814940898.plus.aac.ep.m4a",
     "categories": [
       "Alternative"
     ]
