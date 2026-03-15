@@ -18,7 +18,7 @@ RESULTS_PER_REQUEST = 50
 # ----------------------------
 
 def normalize(text):
-    text = re.sub(r"[^a-z0-9\s.,\'\"!?\/-@%&]", "", text.lower()).strip()
+    text = re.sub(r"[^a-z0-9\s.,\'\"!?\/-@%&#$*]", "", text.lower()).strip()
     return re.sub(r"\s+", " ", text).strip()
 
 
