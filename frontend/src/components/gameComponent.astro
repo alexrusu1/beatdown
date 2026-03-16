@@ -28,18 +28,12 @@ const { gameCode = "" } = Astro.props;
   
   <!-- Music Player Controls -->
   <div id="music-controls">
-<<<<<<< HEAD
   <button id="playBtn">▶</button>
   <button id="skip-btn" style="display:none">⏭ Skip</button>
   <audio id="player"></audio>
 
   <div id="song-progress">
     <div id="song-progress-bar"></div>
-=======
-    <button id="playBtn">▶</button>
-    <button id="skip-btn" style="display:none">⏭ Skip</button>
-    <audio id="player" crossorigin="anonymous"></audio>
->>>>>>> ae65ddc1557c4025a90ea3eaf79c82b9989db1e0
   </div>
 </div>
 
@@ -175,27 +169,15 @@ const { gameCode = "" } = Astro.props;
     // helper to figure out whose turn it is to guess
     function getActiveGuesserId(): string | null {
       if (game.phase === "SONG_PLAYING") {
-<<<<<<< HEAD
         return game.players[game.turnIndex]?.uid?.toString() ?? null;
-=======
-        return String(game.players[game.turnIndex]?.uid) ?? null;
->>>>>>> ae65ddc1557c4025a90ea3eaf79c82b9989db1e0
       }
 
       if (game.phase === "ORIGINAL_GUESS_TURN") {
-<<<<<<< HEAD
         return game.players[game.turnIndex]?.uid?.toString() ?? null;
-=======
-        return String(game.players[game.turnIndex]?.uid) ?? null;
->>>>>>> ae65ddc1557c4025a90ea3eaf79c82b9989db1e0
       }
 
       if (game.phase === "CIRCLE_GUESS_TURN" && game.circleGuessIndex !== undefined) {
-<<<<<<< HEAD
         return game.players[game.circleGuessIndex]?.uid?.toString() ?? null;
-=======
-        return String(game.players[game.circleGuessIndex]?.uid) ?? null;
->>>>>>> ae65ddc1557c4025a90ea3eaf79c82b9989db1e0
       }
 
       return null;
@@ -478,14 +460,10 @@ const { gameCode = "" } = Astro.props;
         if (activeId !== myPlayerId) return;
         const currentCirclePlayer = game.players[game.circleGuessIndex];
         dispatch({
-          type: "CIRCLE_GUESS_SUBMIT",
-<<<<<<< HEAD
-          playerId: currentCirclePlayer.uid as number,
-=======
-          playerId: String(currentCirclePlayer.uid),
->>>>>>> ae65ddc1557c4025a90ea3eaf79c82b9989db1e0
-          guesses: { song, artist, year, album }
-        });
+        type: "CIRCLE_GUESS_SUBMIT",
+        playerId: String(currentCirclePlayer.uid),  // ← use String() instead of as number
+        guesses: { song, artist, year, album }
+      });
       }
 
       // Clear all input fields after submitting

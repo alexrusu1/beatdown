@@ -50,13 +50,8 @@ export interface Game {
   originalGuesses: Record<number, Guess>;
   circleGuesses: Record<number, Guess>;
   answerRevealed: boolean;
-<<<<<<< HEAD
   winner?: string | number | null;
-=======
-  winner?: String | null;
-  /** optional list of enabled categories (pop, Hip-Hop/rap, R&B/soul, dance) */
   categories?: string[];
->>>>>>> ae65ddc1557c4025a90ea3eaf79c82b9989db1e0
 }
 
 
@@ -67,11 +62,7 @@ export type GameAction =
   | { type: "END_SONG" }
   | { type: "SET_PLAYING"; playing: boolean }
   | { type: "ORIGINAL_GUESS_SUBMIT"; guesses: Guess }
-<<<<<<< HEAD
-  | { type: "CIRCLE_GUESS_SUBMIT"; playerId: string | number; guesses: Guess }
-=======
   | { type: "CIRCLE_GUESS_SUBMIT"; playerId: String; guesses: Guess }
->>>>>>> ae65ddc1557c4025a90ea3eaf79c82b9989db1e0
   | { type: "REVEAL_ANSWERS" }
   | { type: "RESOLVE_ROUND" }
   | { type: "SET_CATEGORIES"; categories: string[] }
@@ -108,36 +99,23 @@ function levenshteinDistance(a: string, b: string): number {
   return matrix[b.length][a.length];
 }
 
-<<<<<<< HEAD
-function isSimilar(guess: string, correct: string, threshold: number = 0.6): boolean {
-=======
-function isSimilar(guess: string, correct: string[], threshold: number = 0.6): boolean {
-  if (!guess) return false;
-  
-  // Normalize correct to array - handle string, array, or undefined
-    
->>>>>>> ae65ddc1557c4025a90ea3eaf79c82b9989db1e0
+function isSimilar(guess: string, correct: string | string[], threshold: number = 0.6): boolean {
   const g = guess.toLowerCase().trim();
-  const c: string[] = [];
-  for (let i = 0; i < correct.length; i++){
-    c.push(correct[i].toLowerCase().trim());
-  }
-  
+  const candidates = Array.isArray(correct) 
+    ? correct.map(s => s.toLowerCase().trim())
+    : [correct.toLowerCase().trim()];
+
   // Exact match
-  for (let i = 0; i < c.length; i++){
-    if (g === c[i]) return true;
-  }
-  
-  // Calculate similarity ratio
-  const similaritiesList = [];
-  for(let i = 0; i < c.length; i++){
-    const distance = levenshteinDistance(g, c[i]);
-    const maxLength = Math.max(g.length, c[i].length);
-    const similarity = 1 - distance / maxLength;
-    similaritiesList.push(similarity);
-  }
-  
-  return Math.max(...similaritiesList) >= threshold;
+  if (candidates.some(c => g === c)) return true;
+
+  // Best similarity ratio
+  const best = Math.max(...candidates.map(c => {
+    const distance = levenshteinDistance(g, c);
+    const maxLength = Math.max(g.length, c.length);
+    return 1 - distance / maxLength;
+  }));
+
+  return best >= threshold;
 }
 
 function calculateAccuracy(guess: Guess, correct: Song): number {
@@ -145,19 +123,11 @@ function calculateAccuracy(guess: Guess, correct: Song): number {
   
   let score = 0;
   
-<<<<<<< HEAD
   // Song name - allow 60% similarity
-  if (guess.song && isSimilar(guess.song, correct.name, 0.6)) score += 30;
-  
-  // Artist - allow 60% similarity
-  if (guess.artist && isSimilar(guess.artist, correct.artist, 0.6)) score += 30;
-=======
-  // Song name - allow 80% similarity
   if (guess.song && isSimilar(guess.song, correct.answerNames, 0.6)) score += 30;
-  
-  // Artist - allow 80% similarity
+
+  // Artist - allow 60% similarity
   if (guess.artist && isSimilar(guess.artist, correct.artists, 0.6)) score += 30;
->>>>>>> ae65ddc1557c4025a90ea3eaf79c82b9989db1e0
   
   // Year - partial points based on proximity
   if (guess.year !== undefined) {
@@ -174,13 +144,8 @@ function calculateAccuracy(guess: Guess, correct: Song): number {
     // More than 10 years off = 0 points
   }
   
-<<<<<<< HEAD
   // Album - allow 60% similarity
   if (guess.album && isSimilar(guess.album, correct.album, 0.6)) score += 20;
-=======
-  // Album - allow 80% similarity
-  if (guess.album && isSimilar(guess.album, correct.albumAnswers, 0.6)) score += 20;
->>>>>>> ae65ddc1557c4025a90ea3eaf79c82b9989db1e0
   
   return score;
 }
@@ -348,34 +313,6 @@ export function gameReducer(game: Game, action: GameAction): Game {
     case "WAITING_TO_REVEAL":
       if (action.type === "REVEAL_ANSWERS") {
         return { ...game, phase: "REVEAL_RESULTS", answerRevealed: true };
-<<<<<<< HEAD
-=======
-    }
-    return game;
-
-    // ───────── REVEAL
-  case "REVEAL_RESULTS":  
-  if (action.type === "RESOLVE_ROUND") {
-    if (!game.currentSong) return game;
-
-    const song = game.currentSong;
-    const originalUidReveal = game.players[game.turnIndex].uid;
-
-    let players = game.players.map(p => ({ ...p }));
-
-    const origGuess = game.originalGuesses[String(originalUidReveal)] ?? 
-                      game.originalGuesses[Number(originalUidReveal)];
-
-    if (origGuess) {
-      const acc = calculateAccuracy(origGuess, song);
-      if (acc >= 60) {
-        const dmg = 20 + Math.floor((acc - 60) / 2);
-        players = players.map(p =>
-          p.alive && p.uid !== originalUidReveal
-            ? { ...p, health: Math.max(0, p.health - dmg) }
-            : p
-        );
->>>>>>> ae65ddc1557c4025a90ea3eaf79c82b9989db1e0
       }
       return game;
 
@@ -442,53 +379,6 @@ export function gameReducer(game: Game, action: GameAction): Game {
       return game;
     }
 
-<<<<<<< HEAD
-=======
-    Object.entries(game.circleGuesses).forEach(([uid, guess]) => {
-      const acc = calculateAccuracy(guess, song);
-      const heal = Math.floor(acc / 5);
-      players = players.map(p =>
-        String(p.uid) === String(uid) && p.alive
-          ? { ...p, health: Math.min(100, p.health + heal) }
-          : p
-      );
-    });
-
-    // resolve round logic
-    const updated = players.map(p => ({
-      ...p,
-      alive: p.health > 0
-    }));
-
-    const alive = updated.filter(p => p.alive);
-    if (alive.length <= 1) {
-      return {
-        ...game,
-        players: updated,
-        phase: "GAME_OVER",
-        winner: String(alive[0]?.uid) ?? null
-      };
-    }
-
-    let nextTurn = (game.turnIndex + 1) % updated.length;
-    while (!updated[nextTurn].alive) {
-      nextTurn = (nextTurn + 1) % updated.length;
-    }
-
-    return {
-      ...game,
-      players: updated,
-      turnIndex: nextTurn,
-      phase: "SONG_PLAYING",
-      currentSong: null,
-      originalGuesses: {},
-      circleGuesses: {},
-      answerRevealed: false
-    };
-  }
-  return game;
-
->>>>>>> ae65ddc1557c4025a90ea3eaf79c82b9989db1e0
     // ───────── GAME OVER
     case "GAME_OVER":
       if (action.type === "START_GAME") {
