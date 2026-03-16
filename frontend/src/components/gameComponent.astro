@@ -9,6 +9,7 @@ const { gameCode = "" } = Astro.props;
   <h1 id="game-code">{gameCode}</h1>
   <!-- Game Status Display -->
   <div id="game-status"></div>
+  <div id="turn-indicator"></div>
 
   <!-- ADD PLAYER NAME INPUT -->
   <div id="lobby-controls">
@@ -28,10 +29,14 @@ const { gameCode = "" } = Astro.props;
   
   <!-- Music Player Controls -->
   <div id="music-controls">
-    <button id="playBtn">▶</button>
-    <button id="skip-btn" style="display:none">⏭ Skip</button>
-    <audio id="player" crossorigin="anonymous"></audio>
+  <button id="playBtn">▶</button>
+  <button id="skip-btn" style="display:none">⏭ Skip</button>
+  <audio id="player"></audio>
+
+  <div id="song-progress">
+    <div id="song-progress-bar"></div>
   </div>
+</div>
 
   <!-- Guess Form -->
   <div id="guess-form" style="display: none;">
@@ -70,6 +75,7 @@ const { gameCode = "" } = Astro.props;
     const playBtn = document.getElementById("playBtn") as HTMLButtonElement;
     const skipBtn = document.getElementById("skip-btn") as HTMLButtonElement;
     const player = document.getElementById("player") as HTMLAudioElement;
+    const progressBar = document.getElementById("song-progress-bar") as HTMLDivElement;
     const guessForm = document.getElementById("guess-form") as HTMLDivElement;
     const submitGuessBtn = document.getElementById("submit-guess") as HTMLButtonElement;
     const startGameBtn = document.getElementById("start-game") as HTMLButtonElement;
@@ -79,12 +85,12 @@ const { gameCode = "" } = Astro.props;
       return;
     }
 
-    // we'll rely solely on the full game object subscription below;
-    // the separate playersRef listener was overwriting the same DOM
-    // element and causing race/visibility issues when new players joined.
+    player.addEventListener("timeupdate", () => {
+      if (!progressBar || !player.duration) return;
 
-    // (keep the element reference around in renderGame where it's used)
-
+      const percent = (player.currentTime / player.duration) * 100;
+      progressBar.style.width = percent + "%";
+    });
 
     // Song fetching logic (from songs.json)
     let allSongs: any[] = [];
@@ -163,16 +169,18 @@ const { gameCode = "" } = Astro.props;
 
     // helper to figure out whose turn it is to guess
     function getActiveGuesserId(): string | null {
-      // during listening the original guesser is the 'active' player
       if (game.phase === "SONG_PLAYING") {
-        return String(game.players[game.turnIndex]?.uid) ?? null;
+        return game.players[game.turnIndex]?.uid?.toString() ?? null;
       }
+
       if (game.phase === "ORIGINAL_GUESS_TURN") {
-        return String(game.players[game.turnIndex]?.uid) ?? null;
+        return game.players[game.turnIndex]?.uid?.toString() ?? null;
       }
+
       if (game.phase === "CIRCLE_GUESS_TURN" && game.circleGuessIndex !== undefined) {
-        return String(game.players[game.circleGuessIndex]?.uid) ?? null;
+        return game.players[game.circleGuessIndex]?.uid?.toString() ?? null;
       }
+
       return null;
     }
 
@@ -192,9 +200,7 @@ const { gameCode = "" } = Astro.props;
       // Sync to Firebase if multiplayer
       if (gameCode) {
         const gameRef = ref(realtimeDb, `games/${gameCode}`);
-        // Firestore/RealtimeDB rejects undefined values.  Use stringify
-        // to remove them, but also explicitly delete the property just in
-        // case something weird slips through.
+        // Firestore/RealtimeDB rejects undefined values.
         let gameToWrite: any = JSON.parse(JSON.stringify(game));
         if (gameToWrite.circleGuessIndex === undefined) {
           delete gameToWrite.circleGuessIndex;
@@ -323,10 +329,10 @@ const { gameCode = "" } = Astro.props;
 
           // sanitize players list from firebase object
           const playersArray = data.players
-            ? Object.entries(data.players)
+            ? Object.entries(data.players as Record<string, any>)
                 .filter(([, p]) => p != null)
                 .map(([uid, playerObj]) => ({
-                  uid: uid.toString(), // always use string uid
+                  uid: uid.toString(),
                   ...playerObj
                 }))
             : [];
@@ -395,7 +401,7 @@ const { gameCode = "" } = Astro.props;
 
     // UI Event Handlers
 
-// START GAME HANDLER (redundant but left for context)
+// START GAME HANDLER
     startGameBtn.addEventListener("click", () => {
       const host = game.players.find(p => p.isHost);
       if (host?.uid !== myPlayerId) return; // only host may start
@@ -455,10 +461,10 @@ const { gameCode = "" } = Astro.props;
         if (activeId !== myPlayerId) return;
         const currentCirclePlayer = game.players[game.circleGuessIndex];
         dispatch({
-          type: "CIRCLE_GUESS_SUBMIT",
-          playerId: String(currentCirclePlayer.uid),
-          guesses: { song, artist, year, album }
-        });
+        type: "CIRCLE_GUESS_SUBMIT",
+        playerId: String(currentCirclePlayer.uid),  // ← use String() instead of as number
+        guesses: { song, artist, year, album }
+      });
       }
 
       // Clear all input fields after submitting
@@ -487,6 +493,7 @@ const { gameCode = "" } = Astro.props;
       console.log("Rendering game. Current players in renderGame():", game.players);
 
       const statusEl = document.getElementById("game-status");
+      const turnIndicator = document.getElementById("turn-indicator");
       const playerListEl = document.getElementById("player-list");
       const resultsEl = document.getElementById("results");
       const lobbyControls = document.getElementById("lobby-controls");
@@ -545,7 +552,7 @@ const { gameCode = "" } = Astro.props;
       const phaseDisplay = game.phase || "LOBBY";
       statusEl.textContent = `Phase: ${phaseDisplay}`;
 
-    if (game.phase !== "LOBBY" && game.players.length > 0) {
+    if (game.players.length > 0) {
       // make sure indices are valid to avoid undefined access
       if (game.turnIndex >= game.players.length || game.turnIndex < 0) {
         console.warn("renderGame: turnIndex out of bounds", game.turnIndex, game.players.length);
@@ -565,14 +572,48 @@ const { gameCode = "" } = Astro.props;
 
       // Update player list, marking host
       playerListEl.innerHTML = game.players
-        .map(p => {
-          const label = `${p?.name || "(no name)"}${p?.isHost ? " (host)" : ""}`;
-          return `<div>${label}: ${p?.health ?? 0}HP ${p?.alive ? "✓" : "💀"}</div>`;
-        })
-        .join("");
+      .map(p => {
+
+        const activeId = getActiveGuesserId();
+        const isActive = p.uid === activeId;
+
+        return `
+        <div class="player-card ${isActive ? "active-player" : ""}">
+
+          <div class="player-row">
+
+            <div class="avatar">
+              ${p.name ? p.name[0].toUpperCase() : "?"}
+            </div>
+
+            <div class="player-info">
+              <div class="player-name">
+                ${p.name || "Unknown"} ${p.isHost ? "👑" : ""}
+              </div>
+
+              <div class="health-bar">
+                <div class="health-fill" style="width:${p.health}%"></div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+        `;
+      })
+      .join("");
 
       // Show/hide guess form based on phase *and* active guesser
       const activeId = getActiveGuesserId();
+      const activePlayer = game.players.find(p => p.uid === activeId);
+      if (turnIndicator) {
+        if (activePlayer) {
+          turnIndicator.textContent = `🎤 ${activePlayer.name}'s Turn`;
+        } else {
+          turnIndicator.textContent = "";
+        }
+      }
       if (
         (game.phase === "ORIGINAL_GUESS_TURN" || game.phase === "CIRCLE_GUESS_TURN") &&
         activeId === myPlayerId
@@ -646,6 +687,61 @@ const { gameCode = "" } = Astro.props;
 </script>
 
 <style>
+  /* IDs are fine as-is since they're in static HTML */
+  #turn-indicator { ... }
+  #song-progress { ... }
+  #song-progress-bar { ... }
+  #player-list { ... }
+  #playBtn { ... }
+
+  /* These need :global() because they're created via innerHTML */
+  :global(.player-card) {
+    background: #2a2a2a;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: all .2s;
+  }
+  :global(.player-row) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  :global(.avatar) {
+    width: 36px;
+    height: 36px;
+    background: #4c7cff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+  :global(.player-info) { flex: 1; }
+  :global(.player-name) {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  :global(.health-bar) {
+    height: 6px;
+    background: #444;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  :global(.health-fill) {
+    height: 100%;
+    background: #42d67d;
+    transition: width .4s ease;
+  }
+  :global(.active-player) {
+    border: 2px solid #4c7cff;
+    box-shadow: 0 0 12px rgba(76,124,255,.6);
+  }
+  :global(.dead-player) {
+    opacity: 0.5;
+    filter: grayscale(100%);
+  }
+  <style>
   #game-container {
     font-family: "Tilt Neon", sans-serif;
     color: white;
