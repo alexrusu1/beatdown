@@ -29,11 +29,14 @@ export interface Guess {
 
 
 export interface Song {
-  name: string;
-  artist: string;
-  year: number;
+  displayName: string;
+  answerNames: string[];
   album: string;
-  previewURL: string;
+  albumAnswers: string[];
+  displayArtists: string;
+  artists: string[];
+  year: number;
+  previewUrl: string;
   isPlaying?: boolean; // used for multiplayer playback sync
 }
 
@@ -47,7 +50,7 @@ export interface Game {
   originalGuesses: Record<number, Guess>;
   circleGuesses: Record<number, Guess>;
   answerRevealed: boolean;
-  winner?: number | null;
+  winner?: String | null;
   /** optional list of enabled categories (pop, Hip-Hop/rap, R&B/soul, dance) */
   categories?: string[];
 }
@@ -60,7 +63,7 @@ export type GameAction =
   | { type: "END_SONG" }
   | { type: "SET_PLAYING"; playing: boolean }
   | { type: "ORIGINAL_GUESS_SUBMIT"; guesses: Guess }
-  | { type: "CIRCLE_GUESS_SUBMIT"; playerId: number; guesses: Guess }
+  | { type: "CIRCLE_GUESS_SUBMIT"; playerId: String; guesses: Guess }
   | { type: "REVEAL_ANSWERS" }
   | { type: "RESOLVE_ROUND" }
   | { type: "SET_CATEGORIES"; categories: string[] }
@@ -97,32 +100,44 @@ function levenshteinDistance(a: string, b: string): number {
   return matrix[b.length][a.length];
 }
 
-function isSimilar(guess: string, correct: string, threshold: number = 0.8): boolean {
+function isSimilar(guess: string, correct: string[], threshold: number = 0.8): boolean {
+  if (!guess) return false;
+  
+  // Normalize correct to array - handle string, array, or undefined
+    
   const g = guess.toLowerCase().trim();
-  const c = correct.toLowerCase().trim();
+  const c: string[] = [];
+  for (let i = 0; i < correct.length; i++){
+    c.push(correct[i].toLowerCase().trim());
+  }
   
   // Exact match
-  if (g === c) return true;
+  for (let i = 0; i < c.length; i++){
+    if (g === c[i]) return true;
+  }
   
   // Calculate similarity ratio
-  const distance = levenshteinDistance(g, c);
-  const maxLength = Math.max(g.length, c.length);
-  const similarity = 1 - distance / maxLength;
+  const similaritiesList = [];
+  for(let i = 0; i < c.length; i++){
+    const distance = levenshteinDistance(g, c[i]);
+    const maxLength = Math.max(g.length, c[i].length);
+    const similarity = 1 - distance / maxLength;
+    similaritiesList.push(similarity);
+  }
   
-  return similarity >= threshold;
+  return Math.max(...similaritiesList) >= threshold;
 }
 
-function calculateAccuracy(
-  guess: Guess,
-  correct: Song
-): number {
+function calculateAccuracy(guess: Guess, correct: Song): number {
+  if (!correct) return 0;
+  
   let score = 0;
   
   // Song name - allow 80% similarity
-  if (guess.song && isSimilar(guess.song, correct.name, 0.8)) score += 30;
+  if (guess.song && isSimilar(guess.song, correct.answerNames, 0.8)) score += 30;
   
   // Artist - allow 80% similarity
-  if (guess.artist && isSimilar(guess.artist, correct.artist, 0.8)) score += 30;
+  if (guess.artist && isSimilar(guess.artist, correct.artists, 0.8)) score += 30;
   
   // Year - partial points based on proximity
   if (guess.year !== undefined) {
@@ -140,15 +155,15 @@ function calculateAccuracy(
   }
   
   // Album - allow 80% similarity
-  if (guess.album && isSimilar(guess.album, correct.album, 0.8)) score += 20;
+  if (guess.album && isSimilar(guess.album, correct.albumAnswers, 0.8)) score += 20;
   
   return score;
 }
 
 function isWinningGuess(guess: Guess, correct: Song): boolean {
   return (
-    guess.song !== undefined && isSimilar(guess.song, correct.name, 0.8) &&
-    guess.artist !== undefined && isSimilar(guess.artist, correct.artist, 0.8)
+    guess.song !== undefined && isSimilar(guess.song, correct.answerNames, 0.8) &&
+    guess.artist !== undefined && isSimilar(guess.artist, correct.artists, 0.8)
   );
 }
 
@@ -245,7 +260,7 @@ export function gameReducer(game: Game, action: GameAction): Game {
 
       return {
         ...game,
-        originalGuesses: { [originalPlayer.uid]: action.guesses },
+        originalGuesses: { [String(originalPlayer.uid)]: action.guesses },
         circleGuessIndex: firstCircleIndex,
         phase: "CIRCLE_GUESS_TURN"
       };
@@ -278,7 +293,7 @@ export function gameReducer(game: Game, action: GameAction): Game {
       
       const nextCircle = {
         ...game.circleGuesses,
-        [action.playerId]: action.guesses
+        [String(action.playerId)]: action.guesses
       };
 
       // CHECK ACCURACY OF THIS GUESS
@@ -330,7 +345,9 @@ export function gameReducer(game: Game, action: GameAction): Game {
 
     let players = game.players.map(p => ({ ...p }));
 
-    const origGuess = game.originalGuesses[originalUidReveal];
+    const origGuess = game.originalGuesses[String(originalUidReveal)] ?? 
+                      game.originalGuesses[Number(originalUidReveal)];
+
     if (origGuess) {
       const acc = calculateAccuracy(origGuess, song);
       if (acc >= 60) {
@@ -347,7 +364,7 @@ export function gameReducer(game: Game, action: GameAction): Game {
       const acc = calculateAccuracy(guess, song);
       const heal = Math.floor(acc / 5);
       players = players.map(p =>
-        p.uid === Number(uid) && p.alive
+        String(p.uid) === String(uid) && p.alive
           ? { ...p, health: Math.min(100, p.health + heal) }
           : p
       );
@@ -365,7 +382,7 @@ export function gameReducer(game: Game, action: GameAction): Game {
         ...game,
         players: updated,
         phase: "GAME_OVER",
-        winner: alive[0]?.uid ?? null
+        winner: String(alive[0]?.uid) ?? null
       };
     }
 

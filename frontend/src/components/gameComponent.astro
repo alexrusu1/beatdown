@@ -131,15 +131,21 @@ const { gameCode = "" } = Astro.props;
 
       const index = Math.floor(Math.random() * availableSongs.length);
       const [song] = availableSongs.splice(index, 1);
+      console.log("Raw song from JSON:", song);
       
       // Convert songs.json format to Game format
       return {
-        name: song.displayName,
-        artist: song.displayArtists,
-        year: song.year,
+        displayName: song.displayName,
+        answerNames: song.answerNames,
         album: song.album,
-        previewURL: song.previewUrl
+        albumAnswers: song.albumAnswers,
+        displayArtists: song.displayArtists,
+        artists: song.artists,
+        year: song.year,
+        previewUrl: song.previewUrl,  // note: json has lowercase 'l', interface has uppercase 'L'
+        isPlaying: false
       };
+
     }
 
     // Initialize game state
@@ -158,13 +164,13 @@ const { gameCode = "" } = Astro.props;
     function getActiveGuesserId(): string | null {
       // during listening the original guesser is the 'active' player
       if (game.phase === "SONG_PLAYING") {
-        return game.players[game.turnIndex]?.uid ?? null;
+        return String(game.players[game.turnIndex]?.uid) ?? null;
       }
       if (game.phase === "ORIGINAL_GUESS_TURN") {
-        return game.players[game.turnIndex]?.uid ?? null;
+        return String(game.players[game.turnIndex]?.uid) ?? null;
       }
       if (game.phase === "CIRCLE_GUESS_TURN" && game.circleGuessIndex !== undefined) {
-        return game.players[game.circleGuessIndex]?.uid ?? null;
+        return String(game.players[game.circleGuessIndex]?.uid) ?? null;
       }
       return null;
     }
@@ -224,7 +230,7 @@ const { gameCode = "" } = Astro.props;
           console.log("maybeLoadSong deciding to fetch (orig or host)", { origGuesserId, host });
           try {
             const song = await getNextSong();
-            console.log("Loaded song:", song.name);
+            console.log("Loaded song:", song.displayName);
             dispatch({ type: "PLAY_SONG", song: { ...song, isPlaying: false } });
           } catch (err) {
             console.error("Failed to load initial song", err);
@@ -449,7 +455,7 @@ const { gameCode = "" } = Astro.props;
         const currentCirclePlayer = game.players[game.circleGuessIndex];
         dispatch({
           type: "CIRCLE_GUESS_SUBMIT",
-          playerId: currentCirclePlayer.uid,
+          playerId: String(currentCirclePlayer.uid),
           guesses: { song, artist, year, album }
         });
       }
@@ -579,8 +585,8 @@ const { gameCode = "" } = Astro.props;
       if (game.phase === "REVEAL_RESULTS" && game.currentSong) {
         resultsEl.innerHTML = `
           <h3>Answer:</h3>
-          <p>Song: ${game.currentSong.name}</p>
-          <p>Artist: ${game.currentSong.artist}</p>
+          <p>Song: ${game.currentSong.displayName}</p>
+          <p>Artist: ${game.currentSong.displayArtists}</p>
           <p>Year: ${game.currentSong.year}</p>
           <p>Album: ${game.currentSong.album}</p>
         `;

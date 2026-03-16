@@ -39,8 +39,8 @@ export function handleEngineEffects(
   console.log("handleEngineEffects", {
     prevPhase: prev.phase,
     nextPhase: next.phase,
-    prevSong: prev.currentSong?.name,
-    nextSong: next.currentSong?.name,
+    prevSong: prev.currentSong?.displayName,
+    nextSong: next.currentSong?.displayName,
     prevPlaying: prev.currentSong?.isPlaying,
     nextPlaying: next.currentSong?.isPlaying
   });
@@ -48,11 +48,11 @@ export function handleEngineEffects(
   // If we get a different preview URL (even mid-song), always reset the audio
   if (
     next.currentSong &&
-    prev.currentSong?.previewURL !== next.currentSong.previewURL
+    prev.currentSong?.previewUrl !== next.currentSong.previewUrl
   ) {
-    console.log("Setting audio src to:", next.currentSong.previewURL);
+    console.log("Setting audio src to:", next.currentSong.previewUrl);
     audioEl.pause();
-    audioEl.src = next.currentSong.previewURL;
+    audioEl.src = next.currentSong.previewUrl;
     audioEl.currentTime = 0;
     audioEl.load(); // Load the new audio source
   }
@@ -64,8 +64,8 @@ export function handleEngineEffects(
     next.currentSong
   ) {
     // source already set above if it changed, but ensure it exists
-    console.log("Entering SONG_PLAYING, setting src:", next.currentSong.previewURL);
-    audioEl.src = next.currentSong.previewURL;
+    console.log("Entering SONG_PLAYING, setting src:", next.currentSong.previewUrl);
+    audioEl.src = next.currentSong.previewUrl;
     audioEl.currentTime = 0;
     audioEl.load(); // Load the audio source
     // don't auto-play here; play state handled separately below
