@@ -100,7 +100,7 @@ function levenshteinDistance(a: string, b: string): number {
   return matrix[b.length][a.length];
 }
 
-function isSimilar(guess: string, correct: string[], threshold: number = 0.8): boolean {
+function isSimilar(guess: string, correct: string[], threshold: number = 0.6): boolean {
   if (!guess) return false;
   
   // Normalize correct to array - handle string, array, or undefined
@@ -134,10 +134,10 @@ function calculateAccuracy(guess: Guess, correct: Song): number {
   let score = 0;
   
   // Song name - allow 80% similarity
-  if (guess.song && isSimilar(guess.song, correct.answerNames, 0.8)) score += 30;
+  if (guess.song && isSimilar(guess.song, correct.answerNames, 0.6)) score += 30;
   
   // Artist - allow 80% similarity
-  if (guess.artist && isSimilar(guess.artist, correct.artists, 0.8)) score += 30;
+  if (guess.artist && isSimilar(guess.artist, correct.artists, 0.6)) score += 30;
   
   // Year - partial points based on proximity
   if (guess.year !== undefined) {
@@ -155,15 +155,15 @@ function calculateAccuracy(guess: Guess, correct: Song): number {
   }
   
   // Album - allow 80% similarity
-  if (guess.album && isSimilar(guess.album, correct.albumAnswers, 0.8)) score += 20;
+  if (guess.album && isSimilar(guess.album, correct.albumAnswers, 0.6)) score += 20;
   
   return score;
 }
 
 function isWinningGuess(guess: Guess, correct: Song): boolean {
   return (
-    guess.song !== undefined && isSimilar(guess.song, correct.answerNames, 0.8) &&
-    guess.artist !== undefined && isSimilar(guess.artist, correct.artists, 0.8)
+    guess.song !== undefined && isSimilar(guess.song, correct.answerNames, 0.6) &&
+    guess.artist !== undefined && isSimilar(guess.artist, correct.artists, 0.6)
   );
 }
 
