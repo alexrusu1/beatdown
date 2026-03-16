@@ -47,7 +47,7 @@ export interface Game {
   originalGuesses: Record<number, Guess>;
   circleGuesses: Record<number, Guess>;
   answerRevealed: boolean;
-  winner?: number | null;
+  winner?: string | number | null;
 }
 
 
@@ -58,7 +58,7 @@ export type GameAction =
   | { type: "END_SONG" }
   | { type: "SET_PLAYING"; playing: boolean }
   | { type: "ORIGINAL_GUESS_SUBMIT"; guesses: Guess }
-  | { type: "CIRCLE_GUESS_SUBMIT"; playerId: number; guesses: Guess }
+  | { type: "CIRCLE_GUESS_SUBMIT"; playerId: string | number; guesses: Guess }
   | { type: "REVEAL_ANSWERS" }
   | { type: "RESOLVE_ROUND" }
 
@@ -94,7 +94,7 @@ function levenshteinDistance(a: string, b: string): number {
   return matrix[b.length][a.length];
 }
 
-function isSimilar(guess: string, correct: string, threshold: number = 0.8): boolean {
+function isSimilar(guess: string, correct: string, threshold: number = 0.6): boolean {
   const g = guess.toLowerCase().trim();
   const c = correct.toLowerCase().trim();
   
@@ -115,11 +115,11 @@ function calculateAccuracy(
 ): number {
   let score = 0;
   
-  // Song name - allow 80% similarity
-  if (guess.song && isSimilar(guess.song, correct.name, 0.8)) score += 30;
+  // Song name - allow 60% similarity
+  if (guess.song && isSimilar(guess.song, correct.name, 0.6)) score += 30;
   
-  // Artist - allow 80% similarity
-  if (guess.artist && isSimilar(guess.artist, correct.artist, 0.8)) score += 30;
+  // Artist - allow 60% similarity
+  if (guess.artist && isSimilar(guess.artist, correct.artist, 0.6)) score += 30;
   
   // Year - partial points based on proximity
   if (guess.year !== undefined) {
@@ -136,8 +136,8 @@ function calculateAccuracy(
     // More than 10 years off = 0 points
   }
   
-  // Album - allow 80% similarity
-  if (guess.album && isSimilar(guess.album, correct.album, 0.8)) score += 20;
+  // Album - allow 60% similarity
+  if (guess.album && isSimilar(guess.album, correct.album, 0.6)) score += 20;
   
   return score;
 }
@@ -207,15 +207,13 @@ export function gameReducer(game: Game, action: GameAction): Game {
 
 
     // ───────── ORIGINAL GUESS
-    case "ORIGINAL_GUESS_TURN":
-      if (action.type !== "ORIGINAL_GUESS_SUBMIT" || !game.currentSong)
-        return game;
+    case "ORIGINAL_GUESS_TURN": {
+      if (action.type !== "ORIGINAL_GUESS_SUBMIT" || !game.currentSong) return game;
 
       const originalPlayer = game.players[game.turnIndex];
       const instantWin = isWinningGuess(action.guesses, game.currentSong);
       const acc = calculateAccuracy(action.guesses, game.currentSong);
 
-      // If instant win OR high accuracy (>= 60), skip circle guessing
       if (instantWin || acc >= 60) {
         return {
           ...game,
@@ -224,10 +222,9 @@ export function gameReducer(game: Game, action: GameAction): Game {
         };
       }
 
-      // Low accuracy (< 60): move to circle guessing
       let firstCircleIndex = (game.turnIndex + 1) % game.players.length;
       while (
-        !game.players[firstCircleIndex].alive || 
+        !game.players[firstCircleIndex].alive ||
         game.players[firstCircleIndex].uid === originalPlayer.uid
       ) {
         firstCircleIndex = (firstCircleIndex + 1) % game.players.length;
@@ -235,46 +232,40 @@ export function gameReducer(game: Game, action: GameAction): Game {
 
       return {
         ...game,
-        originalGuesses: { [originalPlayer.uid]: action.guesses },
+        originalGuesses: { [String(originalPlayer.uid)]: action.guesses },
         circleGuessIndex: firstCircleIndex,
         phase: "CIRCLE_GUESS_TURN"
       };
-
+    }
 
     // ───────── CIRCLE GUESS
-    case "CIRCLE_GUESS_TURN":
+    case "CIRCLE_GUESS_TURN": {
       if (action.type !== "CIRCLE_GUESS_SUBMIT") return game;
-      if (!game.currentSong) return game; // Add safety check
+      if (!game.currentSong) return game;
 
       const originalUid = game.players[game.turnIndex].uid;
-      if (action.playerId === originalUid) return game;
-      
-      // Initialize circleGuessIndex if not set
+      if (String(action.playerId) === String(originalUid)) return game;
+
       const circleIndex = game.circleGuessIndex ?? (game.turnIndex + 1) % game.players.length;
-      
-      // Find the next alive player who isn't the original guesser
+
       let expectedIndex = circleIndex;
       while (
-        !game.players[expectedIndex].alive || 
-        game.players[expectedIndex].uid === originalUid
+        !game.players[expectedIndex].alive ||
+        String(game.players[expectedIndex].uid) === String(originalUid)
       ) {
         expectedIndex = (expectedIndex + 1) % game.players.length;
       }
-      
+
       const expectedPlayer = game.players[expectedIndex];
-      
-      // Only accept guess from the expected player
-      if (action.playerId !== expectedPlayer.uid) return game;
-      
+      if (String(action.playerId) !== String(expectedPlayer.uid)) return game;
+
       const nextCircle = {
         ...game.circleGuesses,
-        [action.playerId]: action.guesses
+        [String(action.playerId)]: action.guesses
       };
 
-      // CHECK ACCURACY OF THIS GUESS
       const guessAcc = calculateAccuracy(action.guesses, game.currentSong);
-      
-      // If this circle guess has >= 60 accuracy, reveal immediately
+
       if (guessAcc >= 60) {
         return {
           ...game,
@@ -286,12 +277,11 @@ export function gameReducer(game: Game, action: GameAction): Game {
 
       const aliveCount = game.players.filter(p => p.alive).length - 1;
       const allGuessed = Object.keys(nextCircle).length >= aliveCount;
-      
-      // Move to next player in circle
+
       let nextCircleIndex = (expectedIndex + 1) % game.players.length;
       while (
-        !game.players[nextCircleIndex].alive || 
-        game.players[nextCircleIndex].uid === originalUid
+        !game.players[nextCircleIndex].alive ||
+        String(game.players[nextCircleIndex].uid) === String(originalUid)
       ) {
         nextCircleIndex = (nextCircleIndex + 1) % game.players.length;
       }
@@ -302,80 +292,77 @@ export function gameReducer(game: Game, action: GameAction): Game {
         circleGuessIndex: allGuessed ? undefined : nextCircleIndex,
         phase: allGuessed ? "WAITING_TO_REVEAL" : game.phase
       };
+    }
 
-    // ───────── WAITING TO REVEAL (add this after CIRCLE_GUESS_TURN)
+    // ───────── WAITING TO REVEAL
     case "WAITING_TO_REVEAL":
-    if (action.type === "REVEAL_ANSWERS") {
+      if (action.type === "REVEAL_ANSWERS") {
         return { ...game, phase: "REVEAL_RESULTS", answerRevealed: true };
-    }
-    return game;
-
-    // ───────── REVEAL
-  case "REVEAL_RESULTS":  
-  if (action.type === "RESOLVE_ROUND") {
-    if (!game.currentSong) return game;
-
-    const song = game.currentSong;
-    const originalUidReveal = game.players[game.turnIndex].uid;
-
-    let players = game.players.map(p => ({ ...p }));
-
-    const origGuess = game.originalGuesses[originalUidReveal];
-    if (origGuess) {
-      const acc = calculateAccuracy(origGuess, song);
-      if (acc >= 60) {
-        const dmg = 20 + Math.floor((acc - 60) / 2);
-        players = players.map(p =>
-          p.alive && p.uid !== originalUidReveal
-            ? { ...p, health: Math.max(0, p.health - dmg) }
-            : p
-        );
       }
+      return game;
+
+    // ───────── REVEAL RESULTS
+    case "REVEAL_RESULTS": {
+      if (action.type === "RESOLVE_ROUND") {
+        if (!game.currentSong) return game;
+
+        const song = game.currentSong;
+        const originalUidReveal = game.players[game.turnIndex].uid;
+        let players = game.players.map(p => ({ ...p }));
+
+        const origGuess = game.originalGuesses[String(originalUidReveal) as any];
+        if (origGuess) {
+          const acc = calculateAccuracy(origGuess, song);
+          if (acc >= 60) {
+            const dmg = 20 + Math.floor((acc - 60) / 2);
+            players = players.map(p =>
+              p.alive && String(p.uid) === String(originalUidReveal)
+                ? { ...p, health: Math.max(0, p.health - dmg) }
+                : p
+            );
+          }
+        }
+
+        Object.entries(game.circleGuesses).forEach(([uid, guess]) => {
+          const acc = calculateAccuracy(guess, song);
+          const heal = Math.floor(acc / 5);
+          players = players.map(p =>
+            String(p.uid) === uid && p.alive
+              ? { ...p, health: Math.min(100, p.health + heal) }
+              : p
+          );
+        });
+
+        const updated = players.map(p => ({ ...p, alive: p.health > 0 }));
+        const alive = updated.filter(p => p.alive);
+
+        if (alive.length <= 1) {
+          return {
+            ...game,
+            players: updated,
+            phase: "GAME_OVER",
+            winner: alive[0]?.uid ?? null
+          };
+        }
+
+        let nextTurn = (game.turnIndex + 1) % updated.length;
+        while (!updated[nextTurn].alive) {
+          nextTurn = (nextTurn + 1) % updated.length;
+        }
+
+        return {
+          ...game,
+          players: updated,
+          turnIndex: nextTurn,
+          phase: "SONG_PLAYING",
+          currentSong: null,
+          originalGuesses: {},
+          circleGuesses: {},
+          answerRevealed: false
+        };
+      }
+      return game;
     }
-
-    Object.entries(game.circleGuesses).forEach(([uid, guess]) => {
-      const acc = calculateAccuracy(guess, song);
-      const heal = Math.floor(acc / 5);
-      players = players.map(p =>
-        p.uid === Number(uid) && p.alive
-          ? { ...p, health: Math.min(100, p.health + heal) }
-          : p
-      );
-    });
-
-    // resolve round logic
-    const updated = players.map(p => ({
-      ...p,
-      alive: p.health > 0
-    }));
-
-    const alive = updated.filter(p => p.alive);
-    if (alive.length <= 1) {
-      return {
-        ...game,
-        players: updated,
-        phase: "GAME_OVER",
-        winner: alive[0]?.uid ?? null
-      };
-    }
-
-    let nextTurn = (game.turnIndex + 1) % updated.length;
-    while (!updated[nextTurn].alive) {
-      nextTurn = (nextTurn + 1) % updated.length;
-    }
-
-    return {
-      ...game,
-      players: updated,
-      turnIndex: nextTurn,
-      phase: "SONG_PLAYING",
-      currentSong: null,
-      originalGuesses: {},
-      circleGuesses: {},
-      answerRevealed: false
-    };
-  }
-  return game;
 
     // ───────── GAME OVER
     case "GAME_OVER":
