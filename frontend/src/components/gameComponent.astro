@@ -12,6 +12,14 @@ const { gameCode = "" } = Astro.props;
 
   <!-- ADD PLAYER NAME INPUT -->
   <div id="lobby-controls">
+    <div id="category-selection" style="margin-bottom: 20px;">
+      <h3>Select Song Categories:</h3>
+      <label><input type="checkbox" id="category-pop" checked> Pop</label>
+      <label><input type="checkbox" id="category-hiphop"> Hip-Hop/Rap</label>
+      <label><input type="checkbox" id="category-rnb"> R&B/Soul</label>
+      <label><input type="checkbox" id="category-dance"> Dance</label>
+      <label><input type="checkbox" id="category-alternative"> Alternative</label>
+    </div>
     <button id="start-game">Start Game</button>
   </div>
   
@@ -20,12 +28,18 @@ const { gameCode = "" } = Astro.props;
   
   <!-- Music Player Controls -->
   <div id="music-controls">
+<<<<<<< HEAD
   <button id="playBtn">▶</button>
   <button id="skip-btn" style="display:none">⏭ Skip</button>
   <audio id="player"></audio>
 
   <div id="song-progress">
     <div id="song-progress-bar"></div>
+=======
+    <button id="playBtn">▶</button>
+    <button id="skip-btn" style="display:none">⏭ Skip</button>
+    <audio id="player" crossorigin="anonymous"></audio>
+>>>>>>> ae65ddc1557c4025a90ea3eaf79c82b9989db1e0
   </div>
 </div>
 
@@ -83,36 +97,43 @@ const { gameCode = "" } = Astro.props;
       progressBar.style.width = percent + "%";
     });
 
-    // Song fetching logic (from MusicPlayer)
-    const playedTrackIds = new Set<number>();
+    // Song fetching logic (from songs.json)
+    let allSongs: any[] = [];
     let availableSongs: any[] = [];
-    let currentOffset = 0;
-    const PAGE_LIMIT = 200;
-    const SEARCH_TERM = "pop";
+    let selectedCategories: string[] = ['pop']; // Default to pop only
 
     async function loadSongs(): Promise<void> {
-      const url = `https://itunes.apple.com/search?term=${encodeURIComponent(
-        SEARCH_TERM
-      )}&media=music&entity=song&limit=${PAGE_LIMIT}&offset=${currentOffset}`;
-
-      const response = await fetch(url);
-      const data = await response.json();
-
-      if (!data.results || data.results.length === 0) {
-        throw new Error("No more songs found 😢");
+      console.log("loadSongs called with selectedCategories:", selectedCategories);
+      if (allSongs.length === 0) {
+        // Ensure we have categories selected
+        if (selectedCategories.length === 0) {
+          console.warn("No categories selected, defaulting to pop");
+          selectedCategories = ['pop'];
+        }
+        
+        // Load songs from API using POST with JSON body containing categories
+        const endpoint = '/api/songs';
+        console.log("POSTing to", endpoint, "with categories", selectedCategories);
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ categories: selectedCategories })
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Failed to fetch songs: ${response.status}`);
+        }
+        
+        allSongs = await response.json();
+        console.log("Loaded songs:", allSongs.length, "first categories:", allSongs[0]?.categories);
       }
-
-      const fresh = data.results.filter(
-        (song: any) => song.previewUrl && !playedTrackIds.has(song.trackId)
-      );
-
-      currentOffset += PAGE_LIMIT;
-
-      if (fresh.length === 0) {
-        return loadSongs();
+      
+      availableSongs = [...allSongs]; // All loaded songs are already filtered
+      
+      if (availableSongs.length === 0) {
+        throw new Error("No songs found for selected categories 😢");
       }
-
-      availableSongs = fresh;
+      console.log("Available songs:", availableSongs.length);
     }
 
     async function getNextSong() {
@@ -122,16 +143,21 @@ const { gameCode = "" } = Astro.props;
 
       const index = Math.floor(Math.random() * availableSongs.length);
       const [song] = availableSongs.splice(index, 1);
-      playedTrackIds.add(song.trackId);
+      console.log("Raw song from JSON:", song);
       
-      // Convert iTunes format to your Game format
+      // Convert songs.json format to Game format
       return {
-        name: song.trackName,
-        artist: song.artistName,
-        year: new Date(song.releaseDate).getFullYear(),
-        album: song.collectionName || "Unknown Album",
-        previewURL: song.previewUrl
+        displayName: song.displayName,
+        answerNames: song.answerNames,
+        album: song.album,
+        albumAnswers: song.albumAnswers,
+        displayArtists: song.displayArtists,
+        artists: song.artists,
+        year: song.year,
+        previewUrl: song.previewUrl,  // note: json has lowercase 'l', interface has uppercase 'L'
+        isPlaying: false
       };
+
     }
 
     // Initialize game state
@@ -142,21 +168,34 @@ const { gameCode = "" } = Astro.props;
       currentSong: null,
       originalGuesses: {},
       circleGuesses: {},
-      answerRevealed: false
+      answerRevealed: false,
+      categories: ['pop'] // Initialize with default categories
     };
 
     // helper to figure out whose turn it is to guess
     function getActiveGuesserId(): string | null {
       if (game.phase === "SONG_PLAYING") {
+<<<<<<< HEAD
         return game.players[game.turnIndex]?.uid?.toString() ?? null;
+=======
+        return String(game.players[game.turnIndex]?.uid) ?? null;
+>>>>>>> ae65ddc1557c4025a90ea3eaf79c82b9989db1e0
       }
 
       if (game.phase === "ORIGINAL_GUESS_TURN") {
+<<<<<<< HEAD
         return game.players[game.turnIndex]?.uid?.toString() ?? null;
+=======
+        return String(game.players[game.turnIndex]?.uid) ?? null;
+>>>>>>> ae65ddc1557c4025a90ea3eaf79c82b9989db1e0
       }
 
       if (game.phase === "CIRCLE_GUESS_TURN" && game.circleGuessIndex !== undefined) {
+<<<<<<< HEAD
         return game.players[game.circleGuessIndex]?.uid?.toString() ?? null;
+=======
+        return String(game.players[game.circleGuessIndex]?.uid) ?? null;
+>>>>>>> ae65ddc1557c4025a90ea3eaf79c82b9989db1e0
       }
 
       return null;
@@ -184,7 +223,15 @@ const { gameCode = "" } = Astro.props;
           delete gameToWrite.circleGuessIndex;
         }
         try {
-          set(gameRef, gameToWrite);
+            // Ensure players are stored in Firebase as an object keyed by uid
+            if (Array.isArray(gameToWrite.players)) {
+              const playersObj: any = {};
+              for (const p of gameToWrite.players) {
+                if (p && p.uid !== undefined) playersObj[p.uid] = p;
+              }
+              gameToWrite.players = playersObj;
+            }
+            set(gameRef, gameToWrite);
         } catch (err) {
           console.error("Failed to sync game to Firebase", err, gameToWrite);
         }
@@ -193,15 +240,21 @@ const { gameCode = "" } = Astro.props;
 
     // helper to load song when phase is SONG_PLAYING and none yet
     async function maybeLoadSong() {
-      console.log("maybeLoadSong invoked", { phase: game.phase, currentSong: !!game.currentSong, myPlayerId });
+      console.log("maybeLoadSong invoked", { phase: game.phase, currentSong: !!game.currentSong, myPlayerId, players: game.players.length });
       if (!myPlayerId) return;
       if (game.phase === "SONG_PLAYING" && !game.currentSong) {
         const origGuesserId = game.players[game.turnIndex]?.uid;
         const host = game.players.find(p => p.isHost)?.uid;
-        if (myPlayerId === origGuesserId || myPlayerId === host) {
+        
+        // Only the original guesser or host should load songs to prevent conflicts
+        const shouldLoad = myPlayerId === origGuesserId || myPlayerId === host;
+        console.log("maybeLoadSong decision", { origGuesserId, host, shouldLoad });
+        
+        if (shouldLoad) {
           console.log("maybeLoadSong deciding to fetch (orig or host)", { origGuesserId, host });
           try {
             const song = await getNextSong();
+            console.log("Loaded song:", song.displayName);
             dispatch({ type: "PLAY_SONG", song: { ...song, isPlaying: false } });
           } catch (err) {
             console.error("Failed to load initial song", err);
@@ -225,6 +278,60 @@ const { gameCode = "" } = Astro.props;
         console.warn("Game component: No user authenticated. User might have signed out or session expired.");
       }
     });
+    // Category selection logic
+    function updateSelectedCategories() {
+      console.log("updateSelectedCategories called");
+      const oldCategories = [...selectedCategories];
+      selectedCategories = [];
+      const checkboxes = [
+        { id: 'category-pop', value: 'pop' },
+        { id: 'category-hiphop', value: 'hiphop' },
+        { id: 'category-rnb', value: 'rnb' },
+        { id: 'category-dance', value: 'dance' },
+        { id: 'category-alternative', value: 'alternative' }
+      ];
+      
+      checkboxes.forEach(({ id, value }) => {
+        const checkbox = document.getElementById(id) as HTMLInputElement;
+        if (checkbox?.checked) {
+          selectedCategories.push(value);
+        }
+      });
+      
+      console.log("Selected categories:", selectedCategories);
+      
+      // Ensure at least one category is selected
+      if (selectedCategories.length === 0) {
+        selectedCategories = ['pop'];
+        const popCheckbox = document.getElementById('category-pop') as HTMLInputElement;
+        if (popCheckbox) popCheckbox.checked = true;
+      }
+      
+      // Dispatch SET_CATEGORIES action if categories changed (only for host)
+      if (JSON.stringify(oldCategories.sort()) !== JSON.stringify(selectedCategories.sort())) {
+        console.log("Categories changed, dispatching SET_CATEGORIES");
+        const host = game.players.find(p => p.isHost);
+        if (host?.uid === myPlayerId) {
+          dispatch({ type: "SET_CATEGORIES", categories: selectedCategories });
+        }
+        // Clear song cache if categories changed
+        allSongs = [];
+        availableSongs = [];
+      }
+    }
+
+    // Initialize category checkboxes
+    const categoryCheckboxes = ['category-pop', 'category-hiphop', 'category-rnb', 'category-dance', 'category-alternative'];
+    categoryCheckboxes.forEach(id => {
+      const checkbox = document.getElementById(id) as HTMLInputElement;
+      if (checkbox) {
+        checkbox.addEventListener('change', updateSelectedCategories);
+      }
+    });
+    
+    // Initial category update
+    updateSelectedCategories();
+
     // Initialize effects
     initEngineEffects(player, () => game, dispatch);
 
@@ -274,8 +381,23 @@ const { gameCode = "" } = Astro.props;
             originalGuesses: data.originalGuesses || {},
             circleGuesses: data.circleGuesses || {},
             answerRevealed: data.answerRevealed ?? false,
-            winner: data.winner ?? undefined
+            winner: data.winner ?? undefined,
+            categories: data.categories ?? ['pop']
           };
+
+          // Update selectedCategories from loaded game state
+          if (game.categories && game.categories.length > 0) {
+            const oldCategories = [...selectedCategories];
+            selectedCategories = [...game.categories];
+            console.log("Updated selectedCategories from Firebase:", selectedCategories);
+            
+            // Clear song cache when categories change for all players
+            if (JSON.stringify(oldCategories.sort()) !== JSON.stringify(selectedCategories.sort())) {
+              console.log("Categories changed from Firebase, clearing song cache");
+              allSongs = [];
+              availableSongs = [];
+            }
+          }
 
           console.log("Local game.players after Firebase update and transformation:", game.players);
           if (playersArray.length !== prevGame.players.length) {
@@ -304,10 +426,24 @@ const { gameCode = "" } = Astro.props;
         alert("Need at least 2 players to start!");
         return;
       }
+      
+      // Update selected categories before starting
+      updateSelectedCategories();
+      console.log("categories: ", selectedCategories);
+      
+      // Set categories in game state
+      dispatch({ type: "SET_CATEGORIES", categories: selectedCategories });
       dispatch({ type: "START_GAME" });
     });
 
-
+    skipBtn.onclick = () => {
+      // only the original guesser may skip
+      const origId = game.players[game.turnIndex]?.uid;
+      if (gameCode && origId !== myPlayerId) return;
+      if (game.phase === "SONG_PLAYING") {
+        dispatch({ type: "END_SONG" });
+      }
+    };
 
     playBtn.onclick = () => {
       // only the active guesser may toggle play/pause
@@ -319,15 +455,6 @@ const { gameCode = "" } = Astro.props;
       // toggle play state via reducer so it syncs to Firebase
       const currentlyPlaying = game.currentSong?.isPlaying ?? false;
       dispatch({ type: "SET_PLAYING", playing: !currentlyPlaying });
-    };
-
-    skipBtn.onclick = () => {
-      // only the original guesser may skip
-      const origId = game.players[game.turnIndex]?.uid;
-      if (gameCode && origId !== myPlayerId) return;
-      if (game.phase === "SONG_PLAYING") {
-        dispatch({ type: "END_SONG" });
-      }
     };
     submitGuessBtn.onclick = () => {
       const songInput = document.getElementById("song-input") as HTMLInputElement;
@@ -352,7 +479,11 @@ const { gameCode = "" } = Astro.props;
         const currentCirclePlayer = game.players[game.circleGuessIndex];
         dispatch({
           type: "CIRCLE_GUESS_SUBMIT",
+<<<<<<< HEAD
           playerId: currentCirclePlayer.uid as number,
+=======
+          playerId: String(currentCirclePlayer.uid),
+>>>>>>> ae65ddc1557c4025a90ea3eaf79c82b9989db1e0
           guesses: { song, artist, year, album }
         });
       }
@@ -400,6 +531,32 @@ const { gameCode = "" } = Astro.props;
       // HIDE LOBBY CONTROLS WHEN GAME STARTS
       if (lobbyControls) {
         lobbyControls.style.display = game.phase === "LOBBY" ? "block" : "none";
+      }
+      
+      // Update category checkboxes based on game state (only in lobby)
+      if (game.phase === "LOBBY" && game.categories) {
+        const categoryMap = {
+          'pop': 'category-pop',
+          'hiphop': 'category-hiphop', 
+          'rnb': 'category-rnb',
+          'dance': 'category-dance',
+          'alternative': 'category-alternative'
+        };
+        
+        const host = game.players.find(p => p.isHost);
+        const isHost = host?.uid === myPlayerId;
+        
+        Object.entries(categoryMap).forEach(([category, checkboxId]) => {
+          const checkbox = document.getElementById(checkboxId) as HTMLInputElement;
+          if (checkbox) {
+            checkbox.checked = game.categories!.includes(category);
+            checkbox.disabled = !isHost; // Only host can change categories
+          }
+        });
+        
+        // Update selectedCategories to match game state
+        selectedCategories = game.categories;
+        console.log("Updated selectedCategories from game state:", selectedCategories);
       }
       // show / hide start button and disable for non-hosts
       const host = game.players.find(p => p.isHost);
@@ -491,8 +648,8 @@ const { gameCode = "" } = Astro.props;
       if (game.phase === "REVEAL_RESULTS" && game.currentSong) {
         resultsEl.innerHTML = `
           <h3>Answer:</h3>
-          <p>Song: ${game.currentSong.name}</p>
-          <p>Artist: ${game.currentSong.artist}</p>
+          <p>Song: ${game.currentSong.displayName}</p>
+          <p>Artist: ${game.currentSong.displayArtists}</p>
           <p>Year: ${game.currentSong.year}</p>
           <p>Album: ${game.currentSong.album}</p>
         `;
