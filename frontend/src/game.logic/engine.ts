@@ -72,7 +72,7 @@ export type GameAction =
 // ──────────────────────────────────────────────── Helpers
 
 // Spelling Tolerance
-function levenshteinDistance(a: string, b: string): number {
+export function levenshteinDistance(a: string, b: string): number {
   const matrix: number[][] = [];
 
   for (let i = 0; i <= b.length; i++) {
@@ -100,7 +100,7 @@ function levenshteinDistance(a: string, b: string): number {
   return matrix[b.length][a.length];
 }
 
-function isSimilar(guess: string, correct: string[], threshold: number = 0.6): boolean {
+export function isSimilar(guess: string, correct: string[], threshold: number = 0.6): boolean {
   if (!guess) return false;
   
   // Normalize correct to array - handle string, array, or undefined
@@ -425,4 +425,3 @@ export function gameReducer(game: Game, action: GameAction): Game {
       return game;
   }
 }
-

@@ -13,7 +13,7 @@ function filterSongsByCategories(songsData: any[], categories: string[]) {
       if (lowerCat === 'rap' || lowerCat === 'hip-hop/rap' || lowerCat === 'hip-hop') {
         return categories.includes('hiphop');
       }
-      if (lowerCat === 'r&b/soul') {
+      if (lowerCat === 'r&b/soul' || lowerCat === 'r&b' || lowerCat === 'soul') {
         return categories.includes('rnb');
       }
       if (lowerCat === 'dance' || lowerCat === 'electronic' || lowerCat === 'edm') {

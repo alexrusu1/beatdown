@@ -8,7 +8,6 @@ const gameCode = Astro.url.searchParams.get("code") ?? "";
 ---
 
 <Layout>
-    <h1 id="game-code">{gameCode}</h1>
 	<div id="game-page">
 		<GameComponent gameCode={gameCode} />
 	</div>
@@ -21,20 +20,6 @@ const gameCode = Astro.url.searchParams.get("code") ?? "";
 
 <style>
 
-    #game-code {
-        width: 20vh;
-        height: 5vh;
-		color: rgb(255, 255, 255);
-		font-family: "Tilt Neon", sans-serif;
-		font-optical-sizing: auto;
-  		font-weight: 400;
-  		font-style: normal;
-		font-size: 50px;
-		text-shadow:
-			0 0 12px rgba(0, 234, 255, 0.9),
-			0 0 24px rgba(255, 0, 255, 0.7);
-		margin: 0;
-    }
 	#game-page {
 		display: flex;
 		flex-direction: column;
