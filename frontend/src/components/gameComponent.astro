@@ -56,6 +56,7 @@ const { gameCode = "" } = Astro.props;
   <div id="phase-controls">
     <button id="reveal-btn" style="display: none;">Reveal Answers</button>
     <button id="resolve-btn" style="display: none;">Continue to Next Round</button>
+    <button id="play-again-btn" style="display: none;">Play Again</button>
   </div>
 </div>
 
@@ -479,6 +480,7 @@ const { gameCode = "" } = Astro.props;
     // PHASE PROGRESSION BUTTONS
     const revealBtn = document.getElementById("reveal-btn") as HTMLButtonElement;
     const resolveBtn = document.getElementById("resolve-btn") as HTMLButtonElement;
+    const playAgainBtn = document.getElementById("play-again-btn") as HTMLButtonElement;
 
     revealBtn?.addEventListener("click", () => {
       dispatch({ type: "REVEAL_ANSWERS" });
@@ -487,6 +489,12 @@ const { gameCode = "" } = Astro.props;
     resolveBtn?.addEventListener("click", () => {
       dispatch({ type: "RESOLVE_ROUND" });
       setTimeout(() => renderGame(), 10);
+    });
+
+    playAgainBtn?.addEventListener("click", () => {
+      const host = game.players.find(p => p.isHost);
+      if (host?.uid !== myPlayerId) return; // only the host can choose to play again
+      dispatch({ type: "START_GAME" });
     });
 
     // Render game state to UI
@@ -501,6 +509,7 @@ const { gameCode = "" } = Astro.props;
       const lobbyControls = document.getElementById("lobby-controls");
       const revealBtn = document.getElementById("reveal-btn") as HTMLButtonElement;
       const resolveBtn = document.getElementById("resolve-btn") as HTMLButtonElement;
+      const playAgainBtn = document.getElementById("play-again-btn") as HTMLButtonElement;
 
       if (!statusEl || !playerListEl || !resultsEl) return;
 
@@ -653,6 +662,10 @@ const { gameCode = "" } = Astro.props;
       
       if (resolveBtn) resolveBtn.style.display = 
         game.phase === "REVEAL_RESULTS" ? "block" : "none";
+
+      if (playAgainBtn) {
+        playAgainBtn.style.display = (game.phase === "GAME_OVER" && host?.uid === myPlayerId) ? "block" : "none";
+      }
 
       // Enable/disable music controls based on phase, host status and active guesser
       const me = game.players.find(p => p.uid === myPlayerId);
