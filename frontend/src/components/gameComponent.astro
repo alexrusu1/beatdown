@@ -15,11 +15,13 @@ const { gameCode = "" } = Astro.props;
   <div id="lobby-controls">
     <div id="category-selection" style="margin-bottom: 20px;">
       <h3>Select Song Categories:</h3>
-      <label><input type="checkbox" id="category-pop" checked> Pop</label>
-      <label><input type="checkbox" id="category-hiphop"> Hip-Hop/Rap</label>
-      <label><input type="checkbox" id="category-rnb"> R&B/Soul</label>
-      <label><input type="checkbox" id="category-dance"> Dance</label>
-      <label><input type="checkbox" id="category-alternative"> Alternative</label>
+      <div class="checkbox-group">
+        <label class="neon-checkbox"><input type="checkbox" id="category-pop" checked> <span class="checkbox-label">Pop</span></label>
+        <label class="neon-checkbox"><input type="checkbox" id="category-hiphop"> <span class="checkbox-label">Hip-Hop/Rap</span></label>
+        <label class="neon-checkbox"><input type="checkbox" id="category-rnb"> <span class="checkbox-label">R&B/Soul</span></label>
+        <label class="neon-checkbox"><input type="checkbox" id="category-dance"> <span class="checkbox-label">Dance</span></label>
+        <label class="neon-checkbox"><input type="checkbox" id="category-alternative"> <span class="checkbox-label">Alternative</span></label>
+      </div>
     </div>
     <button id="start-game">Start Game</button>
   </div>
@@ -742,6 +744,10 @@ const { gameCode = "" } = Astro.props;
     filter: grayscale(100%);
   }
   <style>
+  :global(*) {
+    font-family: "Tilt Neon", sans-serif !important;
+  }
+
   #game-container {
     font-family: "Tilt Neon", sans-serif;
     color: white;
@@ -796,6 +802,54 @@ const { gameCode = "" } = Astro.props;
     text-shadow: none;
   }
 
+  .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .neon-checkbox input {
+    display: none;
+  }
+
+  .checkbox-label {
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    border: 2px solid rgba(0, 234, 255, 0.5);
+    cursor: pointer;
+    font-size: 1.25rem;
+    color: rgba(0, 234, 255, 0.5);
+    background: #02000a;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    display: inline-block;
+  }
+
+  .neon-checkbox:hover input:not(:disabled) + .checkbox-label {
+    border-color: #00eaff;
+    box-shadow: 0 0 10px rgba(0, 234, 255, 0.4);
+  }
+
+  .neon-checkbox input:checked + .checkbox-label {
+    color: #00eaff;
+    border-color: #00eaff;
+    text-shadow: 0 0 8px rgba(0, 234, 255, 0.9), 0 0 16px rgba(255, 0, 255, 0.7);
+    box-shadow: 0 0 15px rgba(0, 234, 255, 0.9), 0 0 30px rgba(255, 0, 255, 0.8);
+  }
+
+  .neon-checkbox:hover input:checked:not(:disabled) + .checkbox-label {
+    text-shadow: 0 0 12px rgba(0, 234, 255, 0.9), 0 0 24px rgba(255, 0, 255, 0.7);
+    box-shadow: 0 0 25px rgba(0, 234, 255, 0.9), 0 0 50px rgba(255, 0, 255, 0.8);
+  }
+
+  .neon-checkbox input:disabled + .checkbox-label {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+    text-shadow: none;
+  }
+
   #guess-form {
     display: flex;
     flex-direction: column;
@@ -834,17 +888,13 @@ const { gameCode = "" } = Astro.props;
   }
       
   #game-code {
-    width: 20vh;
-    height: 5vh;
 		color: rgb(255, 255, 255);
-		font-family: "Tilt Neon", sans-serif;
-		font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
 		font-size: 50px;
 		text-shadow:
 			0 0 12px rgba(0, 234, 255, 0.9),
 			0 0 24px rgba(255, 0, 255, 0.7);
-		margin: 0;
-    }
+		margin: 0 0 1rem 0;
+  }
 </style>
