@@ -335,7 +335,7 @@ export function gameReducer(game: Game, action: GameAction): Game {
           if (acc >= 60) {
             const dmg = 20 + Math.floor((acc - 60) / 2);
             players = players.map(p =>
-              p.alive && String(p.uid) === String(originalUidReveal)
+              p.alive && String(p.uid) !== String(originalUidReveal)
                 ? { ...p, health: Math.max(0, p.health - dmg) }
                 : p
             );
