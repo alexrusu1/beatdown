@@ -120,7 +120,7 @@ import Layout from '../layouts/Layout.astro';
             createBtn.style.display = "none";
             joinForm.style.display = "none";
 
-            submitNameBtn.style.display = "inline-block";
+            submitNameBtn.style.display = "flex";
             playerNameInput.focus();
         }
 
@@ -289,7 +289,8 @@ import Layout from '../layouts/Layout.astro';
 	}
 
 	#createBtn,
-	#submitCodeBtn {
+	#submitCodeBtn,
+	#submitNameBtn {
 		font-family: "Tilt Neon", sans-serif;
 		width: 80vw;
 		max-width: 320px;
@@ -314,7 +315,8 @@ import Layout from '../layouts/Layout.astro';
 	}
 
 	#createBtn:hover,
-	#submitCodeBtn:hover {
+	#submitCodeBtn:hover,
+	#submitNameBtn:hover {
 		text-shadow:
 			0 0 12px rgba(0, 234, 255, 0.9),
 			0 0 24px rgba(255, 0, 255, 0.7);
@@ -324,7 +326,8 @@ import Layout from '../layouts/Layout.astro';
 	}
 
 	#createBtn:active,
-	#submitCodeBtn:active {
+	#submitCodeBtn:active,
+	#submitNameBtn:active {
 		transform: scale(0.95);
 	}
 

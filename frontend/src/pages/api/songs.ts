@@ -1,7 +1,6 @@
 export const prerender = false;
 import type { APIRoute } from 'astro';
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import songsData from '../../data/songs.json';
 
 // Helper used by GET/POST for actual filtering
 function filterSongsByCategories(songsData: any[], categories: string[]) {
@@ -32,10 +31,6 @@ function filterSongsByCategories(songsData: any[], categories: string[]) {
     });
   });
 }
-
-// common logic to load songs data once
-const songsPath = join(process.cwd(), 'src', 'data', 'songs.json');
-const songsData: any[] = JSON.parse(readFileSync(songsPath, 'utf-8'));
 
 export const GET: APIRoute = async ({ url }) => {
   // attempt to read categories from query in case it ever works

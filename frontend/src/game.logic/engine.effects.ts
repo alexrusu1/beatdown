@@ -19,6 +19,8 @@ export function initEngineEffects(
 
   audioEl.onerror = (e) => {
     console.error("Audio error:", e);
+    // Ensure the game does not soft-lock if a track fails to load
+    dispatchInternal({ type: "END_SONG" });
   };
 
   audioEl.oncanplay = () => {
