@@ -6,14 +6,14 @@ import { getAuth } from "firebase/auth";
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyABBeG4HogtJHLqKokDx6Qt978jgwvjdJY",
-  authDomain: "beatdown-397a5.firebaseapp.com",
-  databaseURL: "https://beatdown-397a5-default-rtdb.firebaseio.com",
-  projectId: "beatdown-397a5",
-  storageBucket: "beatdown-397a5.firebasestorage.app",
-  messagingSenderId: "990560312117",
-  appId: "1:990560312117:web:0da80dffbe0ffe8b100a7c",
-  measurementId: "G-P3MN1DQ8JE",
+  apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY,
+  authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.PUBLIC_FIREBASE_DATABASE_URL,
+  projectId: import.meta.env.PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.PUBLIC_FIREBASE_APP_ID,
+  measurementId: import.meta.env.PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
