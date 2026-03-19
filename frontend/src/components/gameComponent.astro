@@ -1,12 +1,8 @@
 ---
-interface Props {
-  gameCode?: string;
-}
-const { gameCode = "" } = Astro.props;
 ---
 
-<div id="game-container" data-game-code={gameCode}>
-  <h1 id="game-code">{gameCode}</h1>
+<div id="game-container">
+  <h1 id="game-code"></h1>
   <!-- Game Status Display -->
   <div id="game-status"></div>
   <div id="turn-indicator"></div>
@@ -67,6 +63,7 @@ const { gameCode = "" } = Astro.props;
   import type { User } from "firebase/auth"
   import { ref, set, onValue, push, update } from "firebase/database"; // Import Realtime Database specific functions
   import { realtimeDb, analytics, auth } from "../libraries/firebase";
+  import songsData from "../data/songs.json";
 
   let currentUser: User | null = null; // Declare currentUser globally
   let myPlayerId: string | null = null; // To store the UID of the current user's player
@@ -82,11 +79,15 @@ const { gameCode = "" } = Astro.props;
     const guessForm = document.getElementById("guess-form") as HTMLDivElement;
     const submitGuessBtn = document.getElementById("submit-guess") as HTMLButtonElement;
     const startGameBtn = document.getElementById("start-game") as HTMLButtonElement;
-    const gameCode = container?.getAttribute("data-game-code") ?? "";
+    
+    // Extract the game code directly from the URL on the client-side
+    const urlParams = new URLSearchParams(window.location.search);
+    const gameCode = urlParams.get("code") ?? "";
     if (!gameCode) {
       console.error("No game code found");
       return;
     }
+    document.getElementById("game-code")!.textContent = gameCode;
 
     player.addEventListener("timeupdate", () => {
       if (!progressBar || !player.duration) return;
@@ -110,19 +111,33 @@ const { gameCode = "" } = Astro.props;
         }
         
         // Load songs from API using POST with JSON body containing categories
-        const endpoint = '/api/songs';
-        console.log("POSTing to", endpoint, "with categories", selectedCategories);
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ categories: selectedCategories })
-        });
+        // const endpoint = '/api/songs';
+        // console.log("POSTing to", endpoint, "with categories", selectedCategories);
+        // const response = await fetch(endpoint, {
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   body: JSON.stringify({ categories: selectedCategories })
+        // });np
         
-        if (!response.ok) {
-          throw new Error(`Failed to fetch songs: ${response.status}`);
-        }
+        // if (!response.ok) {
+        //   throw new Error(`Failed to fetch songs: ${response.status}`);
+        // }
         
-        allSongs = await response.json();
+        // allSongs = await response.json();
+
+        // Filter static JSON data directly on the client side
+        const categoryMap: Record<string, string> = {
+          'pop': 'Pop',
+          'hiphop': 'Hip-Hop/Rap',
+          'rnb': 'R&B/Soul',
+          'dance': 'Dance',
+          'alternative': 'Alternative'
+        };
+        const mappedCategories = selectedCategories.map(c => categoryMap[c] || c);
+        
+        allSongs = songsData.filter((song: any) => 
+          song.categories && song.categories.some((c: string) => mappedCategories.includes(c))
+        );
         console.log("Loaded songs:", allSongs.length, "first categories:", allSongs[0]?.categories);
       }
       

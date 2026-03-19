@@ -1,15 +1,11 @@
 ---
 import GameComponent from '../components/gameComponent.astro';
 import Layout from '../layouts/Layout.astro';
-
-export const prerender = false;    // or set `output: "server"` in astro.config.mjs
-
-const gameCode = Astro.url.searchParams.get("code") ?? "";
 ---
 
 <Layout>
 	<div id="game-page">
-		<GameComponent gameCode={gameCode} />
+		<GameComponent />
 	</div>
 </Layout>
 
