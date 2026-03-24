@@ -3,6 +3,7 @@ import type { Game } from "./engine";
 
 let game: Game;
 let dispatchInternal: (action: any) => void;
+let guessTimer: NodeJS.Timeout | null = null;
 
 export function initEngineEffects(
   audioEl: HTMLAudioElement,
@@ -32,7 +33,6 @@ export function initEngineEffects(
   };
 }
 
-// REPLACE THIS ENTIRE FUNCTION:
 export function handleEngineEffects(
   prev: Game,
   next: Game,
@@ -44,9 +44,31 @@ export function handleEngineEffects(
     prevSong: prev.currentSong?.displayName,
     nextSong: next.currentSong?.displayName,
     prevPlaying: prev.currentSong?.isPlaying,
-    nextPlaying: next.currentSong?.isPlaying
+    nextPlaying: next.currentSong?.isPlaying,
+    prevGuessStartTime: prev.guessStartTime,
+    nextGuessStartTime: next.guessStartTime,
+    nextPhase: next.phase
   });
   
+  // Clear any existing guess timer
+  if (guessTimer) {
+    clearTimeout(guessTimer);
+    guessTimer = null;
+  }
+
+  // Start a new guess timer if entering a guess phase
+  if (
+    (next.phase === "ORIGINAL_GUESS_TURN" || next.phase === "CIRCLE_GUESS_TURN") &&
+    next.guessStartTime !== null &&
+    next.guessTimeLimit > 0
+  ) {
+    const timeRemaining = next.guessTimeLimit * 1000 - (Date.now() - next.guessStartTime);
+    guessTimer = setTimeout(() => {
+      console.log("Guess timer timed out, dispatching GUESS_TIMEOUT");
+      dispatchInternal({ type: "GUESS_TIMEOUT" });
+    }, Math.max(0, timeRemaining)); // Ensure non-negative timeout
+  }
+
   // If we get a different preview URL (even mid-song), always reset the audio
   if (
     next.currentSong &&

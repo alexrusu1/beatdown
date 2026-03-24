@@ -19,6 +19,20 @@
         <label class="neon-checkbox"><input type="checkbox" id="category-alternative"> <span class="checkbox-label">Alternative</span></label>
       </div>
     </div>
+
+    <div id="year-selection" style="margin-bottom: 20px;">
+      <h3>Select Song Year Range:</h3>
+      <select id="year-range-select" class="neon-select">
+        <option value="all">All Years</option>
+        <option value="2020s">2020s+</option>
+        <option value="2010s">2010s</option>
+        <option value="2000s">2000s</option>
+        <option value="1990s">1990s</option>
+        <option value="1980s">1980s</option>
+        <option value="1970s">1970s</option>
+        <option value="1960s and before">1960s & Before</option>
+      </select>
+    </div>
     <button id="start-game">Start Game</button>
   </div>
   
@@ -44,6 +58,7 @@
     <input id="album-input" placeholder="Album" />
     <button id="submit-guess">Submit Guess</button>
   </div>
+  <div id="guess-timer" style="display: none; font-size: 2em; margin-top: 10px;"></div>
   
   <!-- Results Display -->
   <div id="results"></div>
@@ -77,6 +92,8 @@
     const player = document.getElementById("player") as HTMLAudioElement;
     const progressBar = document.getElementById("song-progress-bar") as HTMLDivElement;
     const guessForm = document.getElementById("guess-form") as HTMLDivElement;
+    const guessTimerEl = document.getElementById("guess-timer") as HTMLDivElement;
+    const yearRangeSelect = document.getElementById("year-range-select") as HTMLSelectElement;
     const submitGuessBtn = document.getElementById("submit-guess") as HTMLButtonElement;
     const startGameBtn = document.getElementById("start-game") as HTMLButtonElement;
     
@@ -100,6 +117,33 @@
     let allSongs: any[] = [];
     let availableSongs: any[] = [];
     let selectedCategories: string[] = ['pop']; // Default to pop only
+    let selectedYearRange: string = 'all'; // Default to all years
+
+    // Helper to filter songs by year range
+    function filterSongsByYear(songs: any[], yearRange: string): any[] {
+      if (!yearRange || yearRange === "all") return songs;
+
+      const currentYear = new Date().getFullYear();
+      let minYear = -Infinity;
+      let maxYear = Infinity;
+
+      if (yearRange === "2020s") {
+        minYear = 2020; maxYear = currentYear;
+      } else if (yearRange === "2010s") {
+        minYear = 2010; maxYear = 2019;
+      } else if (yearRange === "2000s") {
+        minYear = 2000; maxYear = 2009;
+      } else if (yearRange === "1990s") {
+        minYear = 1990; maxYear = 1999;
+      } else if (yearRange === "1980s") {
+        minYear = 1980; maxYear = 1989;
+      } else if (yearRange === "1970s") {
+        minYear = 1970; maxYear = 1979;
+      } else if (yearRange === "1960s and before") {
+        minYear = 0; maxYear = 1969; // Effectively any year before 1970
+      }
+      return songs.filter(song => song.year >= minYear && song.year <= maxYear);
+    }
 
     async function loadSongs(): Promise<void> {
       console.log("loadSongs called with selectedCategories:", selectedCategories);
@@ -136,7 +180,10 @@
         const mappedCategories = selectedCategories.map(c => categoryMap[c] || c);
         
         allSongs = songsData.filter((song: any) => 
-          song.categories && song.categories.some((c: string) => mappedCategories.includes(c))
+          song.categories && song.categories.some((c: string) => mappedCategories.includes(c)) &&
+          // Apply year filter here
+          filterSongsByYear([song], selectedYearRange).length > 0
+
         );
         console.log("Loaded songs:", allSongs.length, "first categories:", allSongs[0]?.categories);
       }
@@ -182,7 +229,10 @@
       originalGuesses: {},
       circleGuesses: {},
       answerRevealed: false,
-      categories: ['pop'] // Initialize with default categories
+      guessStartTime: null,
+      guessTimeLimit: 30, // 30 seconds for guessing
+      categories: ['pop'], // Initialize with default categories
+      selectedYearRange: 'all' // Initialize with default year range
     };
 
     // helper to figure out whose turn it is to guess
@@ -202,7 +252,7 @@
       return null;
     }
 
-    // retained for legacy logic but no longer tied to UI
+    let guessCountdownInterval: NodeJS.Timeout | null = null;
   let songPlayedThisRound = false;
 
     function dispatch(action: GameAction) {
@@ -211,6 +261,13 @@
 
       // Handle side effects
       handleEngineEffects(prevGame, game, player);
+
+      // Clear previous countdown if phase changes
+      if (game.phase !== prevGame.phase && guessCountdownInterval) {
+        clearInterval(guessCountdownInterval);
+        guessCountdownInterval = null;
+        guessTimerEl.style.display = 'none';
+      }
 
       // Update UI
       renderGame();
@@ -228,6 +285,9 @@
             if (Array.isArray(gameToWrite.players)) {
               const playersObj: any = {};
               for (const p of gameToWrite.players) {
+                // Firebase doesn't like undefined values, so ensure they are null or removed
+                if (p.isHost === undefined) delete p.isHost;
+                if (p.uid === undefined) delete p.uid; // Should not happen but for safety
                 if (p && p.uid !== undefined) playersObj[p.uid] = p;
               }
               gameToWrite.players = playersObj;
@@ -382,7 +442,10 @@
             originalGuesses: data.originalGuesses || {},
             circleGuesses: data.circleGuesses || {},
             answerRevealed: data.answerRevealed ?? false,
+            guessStartTime: data.guessStartTime ?? null,
+            guessTimeLimit: data.guessTimeLimit ?? 30, // Default to 30 seconds
             winner: data.winner ?? undefined,
+            selectedYearRange: data.selectedYearRange ?? 'all', // Default to 'all'
             categories: data.categories ?? ['pop']
           };
 
@@ -398,6 +461,12 @@
               allSongs = [];
               availableSongs = [];
             }
+
+            // Update year range select UI
+            if (yearRangeSelect && yearRangeSelect.value !== game.selectedYearRange) {
+              yearRangeSelect.value = game.selectedYearRange;
+            }
+
           }
 
           console.log("Local game.players after Firebase update and transformation:", game.players);
@@ -434,6 +503,7 @@
       
       // Set categories in game state
       dispatch({ type: "SET_CATEGORIES", categories: selectedCategories });
+      dispatch({ type: "SET_YEAR_RANGE", yearRange: selectedYearRange });
       dispatch({ type: "START_GAME" });
     });
 
@@ -525,6 +595,7 @@
       const revealBtn = document.getElementById("reveal-btn") as HTMLButtonElement;
       const resolveBtn = document.getElementById("resolve-btn") as HTMLButtonElement;
       const playAgainBtn = document.getElementById("play-again-btn") as HTMLButtonElement;
+      const yearSelection = document.getElementById("year-selection");
 
       if (!statusEl || !playerListEl || !resultsEl) return;
 
@@ -536,6 +607,10 @@
       // HIDE LOBBY CONTROLS WHEN GAME STARTS
       if (lobbyControls) {
         lobbyControls.style.display = game.phase === "LOBBY" ? "block" : "none";
+      }
+      // Hide year selection if not in lobby
+      if (yearSelection) {
+        yearSelection.style.display = game.phase === "LOBBY" ? "block" : "none";
       }
       
       // Update category checkboxes based on game state (only in lobby)
@@ -561,6 +636,11 @@
         
         // Update selectedCategories to match game state
         selectedCategories = game.categories;
+
+        // Update year range select UI
+        if (yearRangeSelect && yearRangeSelect.value !== game.selectedYearRange) {
+          yearRangeSelect.value = game.selectedYearRange;
+        }
         console.log("Updated selectedCategories from game state:", selectedCategories);
       }
       // show / hide start button and disable for non-hosts
@@ -647,6 +727,27 @@
         guessForm.style.display = "block";
       } else {
         guessForm.style.display = "none";
+      }
+
+      // Update and display guess timer
+      if ((game.phase === "ORIGINAL_GUESS_TURN" || game.phase === "CIRCLE_GUESS_TURN") && game.guessStartTime !== null) {
+        guessTimerEl.style.display = "block";
+        if (guessCountdownInterval) {
+          clearInterval(guessCountdownInterval);
+        }
+        guessCountdownInterval = setInterval(() => {
+          const elapsed = Math.floor((Date.now() - game.guessStartTime!) / 1000);
+          const remaining = Math.max(0, game.guessTimeLimit - elapsed);
+          guessTimerEl.textContent = `Time left: ${remaining}s`;
+          if (remaining <= 0) {
+            clearInterval(guessCountdownInterval!);
+            guessCountdownInterval = null;
+            // The GUESS_TIMEOUT action is dispatched by engine.effects.ts
+          }
+        }, 1000);
+      } else {
+        if (guessCountdownInterval) clearInterval(guessCountdownInterval);
+        guessTimerEl.style.display = 'none';
       }
 
       // Show results
@@ -907,6 +1008,11 @@
   input:focus {
     border-color: #00eaff;
     box-shadow: 0 0 20px rgba(0, 234, 255, 0.6);
+  }
+
+  .neon-select {
+    /* Add styling similar to neon-checkbox for consistency */
+    /* You might want to adjust padding/font-size for a select element */
   }
 
   #results h2, #results h3, #results p {
