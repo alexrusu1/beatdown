@@ -462,6 +462,18 @@
               availableSongs = [];
             }
 
+            // Update local year range from game state and clear song cache if needed
+            if (game.selectedYearRange && game.selectedYearRange !== selectedYearRange) {
+              const oldYearRange = selectedYearRange;
+              selectedYearRange = game.selectedYearRange;
+              console.log("Updated selectedYearRange from Firebase:", selectedYearRange);
+              if (oldYearRange !== selectedYearRange) {
+                console.log("Year range changed from Firebase, clearing song cache");
+                allSongs = [];
+                availableSongs = [];
+              }
+            }
+
             // Update year range select UI
             if (yearRangeSelect && yearRangeSelect.value !== game.selectedYearRange) {
               yearRangeSelect.value = game.selectedYearRange;
@@ -638,8 +650,11 @@
         selectedCategories = game.categories;
 
         // Update year range select UI
-        if (yearRangeSelect && yearRangeSelect.value !== game.selectedYearRange) {
-          yearRangeSelect.value = game.selectedYearRange;
+        if (yearRangeSelect) {
+          if (yearRangeSelect.value !== game.selectedYearRange) {
+            yearRangeSelect.value = game.selectedYearRange;
+          }
+          yearRangeSelect.disabled = !isHost;
         }
         console.log("Updated selectedCategories from game state:", selectedCategories);
       }

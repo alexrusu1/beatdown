@@ -192,6 +192,13 @@ export function gameReducer(game: Game, action: GameAction): Game {
         };
       }
 
+      if (action.type === "SET_YEAR_RANGE") {
+        return {
+          ...game,
+          selectedYearRange: action.yearRange
+        };
+      }
+
       if (action.type === "START_GAME" && game.players.length >= 2) {
         return {
           ...game,
@@ -214,7 +221,7 @@ export function gameReducer(game: Game, action: GameAction): Game {
       if (action.type === "PLAY_SONG") {
         // respect provided playing flag or default to false (so guesser must
         // hit play)
-        return { ...game,
+        return {
           guessStartTime: Date.now(), // Start timer when song begins playing
           ...game,
           currentSong: { ...action.song, isPlaying: action.song.isPlaying ?? false }
@@ -246,7 +253,7 @@ export function gameReducer(game: Game, action: GameAction): Game {
       if (instantWin || acc >= 60) {
         return {
           ...game,
-          originalGuesses: { [originalPlayer.uid]: action.guesses },
+          originalGuesses: { [originalPlayer.uid]: guesses },
           phase: "REVEAL_RESULTS"
         };
       }
@@ -262,69 +269,68 @@ export function gameReducer(game: Game, action: GameAction): Game {
       return {
         ...game,
         guessStartTime: Date.now(), // Reset timer for circle guess
-        ...game,
-        originalGuesses: { [String(originalPlayer.uid)]: action.guesses },
+        originalGuesses: { [String(originalPlayer.uid)]: guesses },
         circleGuessIndex: firstCircleIndex,
         phase: "CIRCLE_GUESS_TURN"
       };
     }
     // ───────── CIRCLE GUESS
     case "CIRCLE_GUESS_TURN": {
-      if (action.type !== "CIRCLE_GUESS_SUBMIT") return game;
-      if (!game.currentSong) return game;
+      if (action.type !== "CIRCLE_GUESS_SUBMIT" && action.type !== "GUESS_TIMEOUT") return game;
+      if (!game.currentSong || game.circleGuessIndex === undefined) return game;
 
       const originalUid = game.players[game.turnIndex].uid;
-      if (String(action.playerId) === String(originalUid)) return game;
+      const expectedPlayer = game.players[game.circleGuessIndex];
 
-      const circleIndex = game.circleGuessIndex ?? (game.turnIndex + 1) % game.players.length;
+      // On timeout, the "player" is the one whose turn it was.
+      // On submit, it's the one who sent the action.
+      const currentPlayerId = action.type === "CIRCLE_GUESS_SUBMIT" ? action.playerId : expectedPlayer.uid;
 
-      let expectedIndex = circleIndex;
-      while (
-        !game.players[expectedIndex].alive ||
-        String(game.players[expectedIndex].uid) === String(originalUid)
-      ) {
-        expectedIndex = (expectedIndex + 1) % game.players.length;
-      }
-
+      // Ignore submissions from unexpected players
+      if (String(currentPlayerId) !== String(expectedPlayer.uid)) return game;
+      
       const guesses = action.type === "CIRCLE_GUESS_SUBMIT" ? action.guesses : {};
-      const playerId = action.type === "CIRCLE_GUESS_SUBMIT" ? action.playerId : String(game.players[expectedIndex].uid);
-
-      // If it's a timeout, we don't process a guess, just move on
-      if (action.type === "CIRCLE_GUESS_SUBMIT" && String(playerId) !== String(game.players[expectedIndex].uid)) return game;
 
       const nextCircle = { ...game.circleGuesses,
-        [String(playerId)]: guesses
+        [String(currentPlayerId)]: guesses
       };
 
-      const guessAcc = calculateAccuracy(action.guesses, game.currentSong);
+      const guessAcc = calculateAccuracy(guesses, game.currentSong);
 
       if (guessAcc >= 60) {
         return {
           ...game,
           circleGuesses: nextCircle,
           circleGuessIndex: undefined,
-          phase: "WAITING_TO_REVEAL"
+          phase: "WAITING_TO_REVEAL",
+          guessStartTime: null
         };
       }
 
-      const aliveCount = game.players.filter(p => p.alive).length - 1;
-      const allGuessed = Object.keys(nextCircle).length >= aliveCount;
+      // Find next player for circle guess
+      const alivePlayers = game.players.filter(p => p.alive);
+      const circleOrder = alivePlayers.filter(p => String(p.uid) !== String(originalUid));
+      const guessedPlayerIds = Object.keys(nextCircle);
+      
+      const allGuessed = circleOrder.every(p => guessedPlayerIds.includes(String(p.uid)));
 
-      let nextCircleIndex = (expectedIndex + 1) % game.players.length;
-      while (
-        !game.players[nextCircleIndex].alive ||
-        String(game.players[nextCircleIndex].uid) === String(originalUid)
-      ) {
+      let nextCircleIndex = game.circleGuessIndex;
+      let nextPlayerFound = false;
+      for (let i = 0; i < game.players.length; i++) {
         nextCircleIndex = (nextCircleIndex + 1) % game.players.length;
+        const nextPlayer = game.players[nextCircleIndex];
+        if (nextPlayer.alive && String(nextPlayer.uid) !== String(originalUid) && !nextCircle[String(nextPlayer.uid)]) {
+          nextPlayerFound = true;
+          break;
+        }
       }
 
       return {
         ...game,
         guessStartTime: Date.now(), // Reset timer for next circle guess or reveal
-        ...game,
         circleGuesses: nextCircle,
-        circleGuessIndex: allGuessed ? undefined : nextCircleIndex,
-        phase: allGuessed ? "WAITING_TO_REVEAL" : game.phase
+        circleGuessIndex: allGuessed || !nextPlayerFound ? undefined : nextCircleIndex,
+        phase: allGuessed || !nextPlayerFound ? "WAITING_TO_REVEAL" : game.phase
       };
     }
 
@@ -419,13 +425,6 @@ export function gameReducer(game: Game, action: GameAction): Game {
       return game;
 
 
-    // ───────── SET YEAR RANGE
-    case "LOBBY":
-      if (action.type === "SET_YEAR_RANGE") {
-        return { ...game,
-          selectedYearRange: action.yearRange
-        };
-      }
     default:
       return game;
   }
