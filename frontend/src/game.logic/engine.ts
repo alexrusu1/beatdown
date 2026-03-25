@@ -37,7 +37,13 @@ export interface Song {
   artists: string[];
   year: number;
   previewUrl: string;
+  categories?: string[];
   isPlaying?: boolean; // used for multiplayer playback sync
+}
+
+export interface SongSelection {
+  year: string;
+  category: string;
 }
 
 
@@ -51,10 +57,9 @@ export interface Game {
   circleGuesses: Record<number, Guess>;
   answerRevealed: boolean;
   winner?: string | number | null;
-  guessStartTime: number | null; // Timestamp when the current guess phase started
+  guessStartTime: number | null; // Timestamp when the current guess phase started (milliseconds)
   guessTimeLimit: number; // Time limit for guessing in seconds
-  selectedYearRange: string; // e.g., "2020s", "1990s", "all"
-  categories?: string[];
+  songSelections: SongSelection[];
 }
 
 
@@ -66,11 +71,10 @@ export type GameAction =
   | { type: "SET_PLAYING"; playing: boolean }
   | { type: "ORIGINAL_GUESS_SUBMIT"; guesses: Guess }
   | { type: "CIRCLE_GUESS_SUBMIT"; playerId: String; guesses: Guess }
-  | { type: "REVEAL_ANSWERS" }
   | { type: "GUESS_TIMEOUT" } // New action for when guess time runs out
-  | { type: "SET_YEAR_RANGE"; yearRange: string } // New action for setting year range
+  | { type: "SET_SONG_SELECTIONS"; selections: SongSelection[] }
+  | { type: "REVEAL_ANSWERS" }
   | { type: "RESOLVE_ROUND" }
-  | { type: "SET_CATEGORIES"; categories: string[] }
 
 
 // ──────────────────────────────────────────────── Helpers
@@ -184,18 +188,10 @@ export function gameReducer(game: Game, action: GameAction): Game {
         };
       }
 
-      if (action.type === "SET_CATEGORIES") {
-        // update the set of allowed categories in lobby
+      if (action.type === "SET_SONG_SELECTIONS") {
         return {
           ...game,
-          categories: [...action.categories]
-        };
-      }
-
-      if (action.type === "SET_YEAR_RANGE") {
-        return {
-          ...game,
-          selectedYearRange: action.yearRange
+          songSelections: action.selections,
         };
       }
 
@@ -209,7 +205,7 @@ export function gameReducer(game: Game, action: GameAction): Game {
           circleGuesses: {},
           guessStartTime: null,
           answerRevealed: false,
-          selectedYearRange: game.selectedYearRange, // Carry over selected year range
+          songSelections: game.songSelections, // Carry over selections
           winner: undefined
         };
       }
@@ -336,7 +332,7 @@ export function gameReducer(game: Game, action: GameAction): Game {
 
     // ───────── WAITING TO REVEAL
     case "WAITING_TO_REVEAL":
-      if (action.type === "REVEAL_ANSWERS") {
+      if (action.type === "REVEAL_ANSWERS") { // This action was missing from GameAction type
         return { ...game, phase: "REVEAL_RESULTS", answerRevealed: true };
       }
       return game;
@@ -399,7 +395,7 @@ export function gameReducer(game: Game, action: GameAction): Game {
           currentSong: null,
           originalGuesses: {},
           circleGuesses: {},
-          selectedYearRange: game.selectedYearRange, // Carry over selected year range
+          songSelections: game.songSelections, // Carry over selected year range
           answerRevealed: false
         };
       }
@@ -416,8 +412,7 @@ export function gameReducer(game: Game, action: GameAction): Game {
             ...p,
             health: 100,
             alive: true
-            // Keep isHost status
-            // Keep categories
+            // Keep isHost status, songSelections, etc.
           })),
           winner: undefined
         };

@@ -5,34 +5,32 @@
   <h1 id="game-code"></h1>
   <!-- Game Status Display -->
   <div id="game-status"></div>
-  <div id="turn-indicator"></div>
+  <div id="turn-indicator"></div>  
 
-  <!-- ADD PLAYER NAME INPUT -->
   <div id="lobby-controls">
-    <div id="category-selection" style="margin-bottom: 20px;">
-      <h3>Select Song Categories:</h3>
-      <div class="checkbox-group">
-        <label class="neon-checkbox"><input type="checkbox" id="category-pop" checked> <span class="checkbox-label">Pop</span></label>
-        <label class="neon-checkbox"><input type="checkbox" id="category-hiphop"> <span class="checkbox-label">Hip-Hop/Rap</span></label>
-        <label class="neon-checkbox"><input type="checkbox" id="category-rnb"> <span class="checkbox-label">R&B/Soul</span></label>
-        <label class="neon-checkbox"><input type="checkbox" id="category-dance"> <span class="checkbox-label">Dance</span></label>
-        <label class="neon-checkbox"><input type="checkbox" id="category-alternative"> <span class="checkbox-label">Alternative</span></label>
+    <div class="song-selection-container">
+      <h4>Song Selection</h4>
+
+      <ul id="current-selections" class="selections-list">
+        <!-- Current selections will be rendered here by JavaScript -->
+      </ul>
+
+      <div class="options">
+        <div class="option-group">
+          <h5>1. Select a Decade</h5>
+          <div id="year-buttons" class="button-group">
+            <!-- Year buttons will be rendered here by JavaScript -->
+          </div>
+        </div>
+        <div class="option-group">
+          <h5>2. Select a Category</h5>
+          <div id="category-buttons" class="button-group">
+            <!-- Category buttons will be rendered here by JavaScript -->
+          </div>
+        </div>
       </div>
     </div>
-
-    <div id="year-selection" style="margin-bottom: 20px;">
-      <h3>Select Song Year Range:</h3>
-      <select id="year-range-select" class="neon-select">
-        <option value="all">All Years</option>
-        <option value="2020s">2020s+</option>
-        <option value="2010s">2010s</option>
-        <option value="2000s">2000s</option>
-        <option value="1990s">1990s</option>
-        <option value="1980s">1980s</option>
-        <option value="1970s">1970s</option>
-        <option value="1960s and before">1960s & Before</option>
-      </select>
-    </div>
+    
     <button id="start-game">Start Game</button>
   </div>
   
@@ -41,14 +39,11 @@
   
   <!-- Music Player Controls -->
   <div id="music-controls">
-  <button id="playBtn">▶</button>
-  <button id="skip-btn" style="display:none">⏭ Skip</button>
-  <audio id="player"></audio>
-
-  <div id="song-progress">
-    <div id="song-progress-bar"></div>
+    <audio id="player" src="" preload="auto"></audio>
+    <button id="playBtn">▶</button>
+    <button id="skip-btn">Skip Song</button>
+    <div id="song-progress"><div id="song-progress-bar"></div></div>
   </div>
-</div>
 
   <!-- Guess Form -->
   <div id="guess-form" style="display: none;">
@@ -72,29 +67,34 @@
 </div>
 
 <script>
-  import { gameReducer, type Game, type GameAction } from "../game.logic/engine";
+  import { gameReducer, type Game, type GameAction, type SongSelection } from "../game.logic/engine";
   import { initEngineEffects, handleEngineEffects } from "../game.logic/engine.effects";
+  import { filterSongs } from "../scripts/song-filtering"; // Corrected path
   import { onAuthStateChanged } from "firebase/auth"; // Import authentication functions
   import type { User } from "firebase/auth"
-  import { ref, set, onValue, push, update } from "firebase/database"; // Import Realtime Database specific functions
-  import { realtimeDb, analytics, auth } from "../libraries/firebase";
-  import songsData from "../data/songs.json";
-
+  import { ref, set, onValue, update } from "firebase/database"; // Added update for potential future use, though set is used here
+  import { realtimeDb, auth } from "../libraries/firebase"; // Removed analytics as it's not used
+  import allSongsData from "../data/songs.json";
   let currentUser: User | null = null; // Declare currentUser globally
   let myPlayerId: string | null = null; // To store the UID of the current user's player
 
 
 
+  let dispatchInternal: (action: GameAction) => void; // Declare dispatchInternal at a higher scope
   document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById("game-container");
-    const playBtn = document.getElementById("playBtn") as HTMLButtonElement;
-    const skipBtn = document.getElementById("skip-btn") as HTMLButtonElement;
+    const playBtn = document.getElementById("playBtn") as HTMLButtonElement; // Now exists in HTML
+    const skipBtn = document.getElementById("skip-btn") as HTMLButtonElement; // Now exists in HTML
     const player = document.getElementById("player") as HTMLAudioElement;
+    const guessTimerEl = document.getElementById("guess-timer") as HTMLDivElement;
     const progressBar = document.getElementById("song-progress-bar") as HTMLDivElement;
     const guessForm = document.getElementById("guess-form") as HTMLDivElement;
-    const guessTimerEl = document.getElementById("guess-timer") as HTMLDivElement;
-    const yearRangeSelect = document.getElementById("year-range-select") as HTMLSelectElement;
+    // const yearRangeSelect = document.getElementById("year-range-select") as HTMLSelectElement; // This element is removed from HTML
     const submitGuessBtn = document.getElementById("submit-guess") as HTMLButtonElement;
+    const yearButtonsContainer = document.getElementById("year-buttons") as HTMLDivElement;
+    const categoryButtonsContainer = document.getElementById("category-buttons") as HTMLDivElement;
+    const currentSelectionsList = document.getElementById("current-selections") as HTMLUListElement;
+
     const startGameBtn = document.getElementById("start-game") as HTMLButtonElement;
     
     // Extract the game code directly from the URL on the client-side
@@ -107,118 +107,36 @@
     document.getElementById("game-code")!.textContent = gameCode;
 
     player.addEventListener("timeupdate", () => {
-      if (!progressBar || !player.duration) return;
+      if (!progressBar || !player.duration || isNaN(player.duration) || !isFinite(player.duration)) return; // Check for NaN or Infinity duration
 
       const percent = (player.currentTime / player.duration) * 100;
       progressBar.style.width = percent + "%";
     });
 
-    // Song fetching logic (from songs.json)
-    let allSongs: any[] = [];
-    let availableSongs: any[] = [];
-    let selectedCategories: string[] = ['pop']; // Default to pop only
-    let selectedYearRange: string = 'all'; // Default to all years
+    // --- Song Selection State and Logic ---
+    const availableYears = ["All", "2020s", "2010s", "2000s", "1990s", "1980s", "1970s", "1960s"];
+    const allUniqueCategories = [...new Set(allSongsData.flatMap(s => s.categories || []).filter(c => c))].sort();
+    const availableCategories = ["All", ...allUniqueCategories];
+    let currentSelectedYear: string = 'All'; // To store the currently selected year for pairing with a category
+    let currentSongSelections: SongSelection[] = [{ year: 'All', category: 'All' }]; // Default selection
 
-    // Helper to filter songs by year range
-    function filterSongsByYear(songs: any[], yearRange: string): any[] {
-      if (!yearRange || yearRange === "all") return songs;
-
-      const currentYear = new Date().getFullYear();
-      let minYear = -Infinity;
-      let maxYear = Infinity;
-
-      if (yearRange === "2020s") {
-        minYear = 2020; maxYear = currentYear;
-      } else if (yearRange === "2010s") {
-        minYear = 2010; maxYear = 2019;
-      } else if (yearRange === "2000s") {
-        minYear = 2000; maxYear = 2009;
-      } else if (yearRange === "1990s") {
-        minYear = 1990; maxYear = 1999;
-      } else if (yearRange === "1980s") {
-        minYear = 1980; maxYear = 1989;
-      } else if (yearRange === "1970s") {
-        minYear = 1970; maxYear = 1979;
-      } else if (yearRange === "1960s and before") {
-        minYear = 0; maxYear = 1969; // Effectively any year before 1970
-      }
-      return songs.filter(song => song.year >= minYear && song.year <= maxYear);
+    function renderCurrentSelections() {
+      currentSelectionsList.innerHTML = '';
+      currentSongSelections.forEach(selection => {
+        const li = document.createElement('li');
+        li.classList.add('selection-item');
+        li.textContent = `${selection.year} - ${selection.category}`;
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.classList.add('btn-remove');
+        removeBtn.textContent = '×';
+        removeBtn.onclick = () => removeSelection(selection);
+        
+        li.appendChild(removeBtn);
+        currentSelectionsList.appendChild(li);
+      });
     }
 
-    async function loadSongs(): Promise<void> {
-      console.log("loadSongs called with selectedCategories:", selectedCategories);
-      if (allSongs.length === 0) {
-        // Ensure we have categories selected
-        if (selectedCategories.length === 0) {
-          console.warn("No categories selected, defaulting to pop");
-          selectedCategories = ['pop'];
-        }
-        
-        // Load songs from API using POST with JSON body containing categories
-        // const endpoint = '/api/songs';
-        // console.log("POSTing to", endpoint, "with categories", selectedCategories);
-        // const response = await fetch(endpoint, {
-        //   method: 'POST',
-        //   headers: { 'Content-Type': 'application/json' },
-        //   body: JSON.stringify({ categories: selectedCategories })
-        // });np
-        
-        // if (!response.ok) {
-        //   throw new Error(`Failed to fetch songs: ${response.status}`);
-        // }
-        
-        // allSongs = await response.json();
-
-        // Filter static JSON data directly on the client side
-        const categoryMap: Record<string, string> = {
-          'pop': 'Pop',
-          'hiphop': 'Hip-Hop/Rap',
-          'rnb': 'R&B/Soul',
-          'dance': 'Dance',
-          'alternative': 'Alternative'
-        };
-        const mappedCategories = selectedCategories.map(c => categoryMap[c] || c);
-        
-        allSongs = songsData.filter((song: any) => 
-          song.categories && song.categories.some((c: string) => mappedCategories.includes(c)) &&
-          // Apply year filter here
-          filterSongsByYear([song], selectedYearRange).length > 0
-
-        );
-        console.log("Loaded songs:", allSongs.length, "first categories:", allSongs[0]?.categories);
-      }
-      
-      availableSongs = [...allSongs]; // All loaded songs are already filtered
-      
-      if (availableSongs.length === 0) {
-        throw new Error("No songs found for selected categories 😢");
-      }
-      console.log("Available songs:", availableSongs.length);
-    }
-
-    async function getNextSong() {
-      if (availableSongs.length === 0) {
-        await loadSongs();
-      }
-
-      const index = Math.floor(Math.random() * availableSongs.length);
-      const [song] = availableSongs.splice(index, 1);
-      console.log("Raw song from JSON:", song);
-      
-      // Convert songs.json format to Game format
-      return {
-        displayName: song.displayName,
-        answerNames: song.answerNames,
-        album: song.album,
-        albumAnswers: song.albumAnswers,
-        displayArtists: song.displayArtists,
-        artists: song.artists,
-        year: song.year,
-        previewUrl: song.previewUrl,  // note: json has lowercase 'l', interface has uppercase 'L'
-        isPlaying: false
-      };
-
-    }
 
     // Initialize game state
     let game: Game = {
@@ -231,8 +149,7 @@
       answerRevealed: false,
       guessStartTime: null,
       guessTimeLimit: 30, // 30 seconds for guessing
-      categories: ['pop'], // Initialize with default categories
-      selectedYearRange: 'all' // Initialize with default year range
+      songSelections: currentSongSelections, // Use the new multi-selection structure
     };
 
     // helper to figure out whose turn it is to guess
@@ -252,14 +169,27 @@
       return null;
     }
 
+    // Song fetching logic (from songs.json)
+    let availableSongsForGame: any[] = [];
+    async function loadSongsForGame(): Promise<void> {
+      console.log("loadSongsForGame called with selections:", game.songSelections);
+      availableSongsForGame = filterSongs(game.songSelections);
+      if (availableSongsForGame.length === 0) {
+        console.warn("No songs found for selected criteria. Falling back to all songs.");
+        availableSongsForGame = allSongsData; // Fallback to all songs
+      }
+      console.log("Available songs for game:", availableSongsForGame.length);
+    }
+
+
     let guessCountdownInterval: NodeJS.Timeout | null = null;
   let songPlayedThisRound = false;
 
-    function dispatch(action: GameAction) {
-      const prevGame = game;
+    // Centralized dispatch function (assigned here, but declared above)
+    dispatchInternal = (action: GameAction) => {
+      const prevGame = { ...game }; // Create a shallow copy for handleEngineEffects
       game = gameReducer(game, action);
 
-      // Handle side effects
       handleEngineEffects(prevGame, game, player);
 
       // Clear previous countdown if phase changes
@@ -272,7 +202,7 @@
       // Update UI
       renderGame();
 
-      // Sync to Firebase if multiplayer
+      // Sync to Firebase if multiplayer (only if gameCode exists)
       if (gameCode) {
         const gameRef = ref(realtimeDb, `games/${gameCode}`);
         // Firestore/RealtimeDB rejects undefined values.
@@ -280,121 +210,152 @@
         if (gameToWrite.circleGuessIndex === undefined) {
           delete gameToWrite.circleGuessIndex;
         }
-        try {
-            // Ensure players are stored in Firebase as an object keyed by uid
-            if (Array.isArray(gameToWrite.players)) {
-              const playersObj: any = {};
-              for (const p of gameToWrite.players) {
-                // Firebase doesn't like undefined values, so ensure they are null or removed
-                if (p.isHost === undefined) delete p.isHost;
-                if (p.uid === undefined) delete p.uid; // Should not happen but for safety
-                if (p && p.uid !== undefined) playersObj[p.uid] = p;
-              }
-              gameToWrite.players = playersObj;
-            }
-            set(gameRef, gameToWrite);
-        } catch (err) {
-          console.error("Failed to sync game to Firebase", err, gameToWrite);
-        }
+        // Ensure players are stored in Firebase as an object keyed by uid, and handle potential undefined values
+        const playersObj: { [key: string]: any } = {}; // Explicitly type playersObj
+        gameToWrite.players.forEach((p: any) => playersObj[p.uid] = { ...p, uid: p.uid.toString() }); // Ensure uid is string
+        gameToWrite.players = playersObj; // Assign the object back
+        set(gameRef, gameToWrite)
+          .catch((err) => console.error("Failed to sync game to Firebase:", err));
       }
+    };
+
+    async function getNextSong() { // Moved outside dispatch for clarity
+      if (availableSongsForGame.length === 0) {
+        await loadSongsForGame();
+      }
+      if (availableSongsForGame.length === 0) {
+        console.error("No songs available to pick from after loading.");
+        return null;
+      }
+
+      const index = Math.floor(Math.random() * availableSongsForGame.length);
+      const [song] = availableSongsForGame.splice(index, 1);
+      console.log("Picked song:", song.displayName);
+      return song;
     }
 
-    // helper to load song when phase is SONG_PLAYING and none yet
-    async function maybeLoadSong() {
-      console.log("maybeLoadSong invoked", { phase: game.phase, currentSong: !!game.currentSong, myPlayerId, players: game.players.length });
-      if (!myPlayerId) return;
+    async function maybeLoadNewSongIntoGame() { // Renamed from maybeLoadSong
+      console.log("maybeLoadNewSongIntoGame invoked", { phase: game.phase, currentSong: !!game.currentSong, myPlayerId, players: game.players.length });
+      const host = game.players.find(p => p.isHost);
+      if (!myPlayerId || host?.uid !== myPlayerId) return; // Only host loads new songs
+
       if (game.phase === "SONG_PLAYING" && !game.currentSong) {
-        const origGuesserId = game.players[game.turnIndex]?.uid;
-        const host = game.players.find(p => p.isHost)?.uid;
-        
-        // Only the original guesser or host should load songs to prevent conflicts
-        const shouldLoad = myPlayerId === origGuesserId || myPlayerId === host;
-        console.log("maybeLoadSong decision", { origGuesserId, host, shouldLoad });
-        
-        if (shouldLoad) {
-          console.log("maybeLoadSong deciding to fetch (orig or host)", { origGuesserId, host });
-          try {
-            const song = await getNextSong();
-            console.log("Loaded song:", song.displayName);
-            dispatch({ type: "PLAY_SONG", song: { ...song, isPlaying: false } });
-          } catch (err) {
-            console.error("Failed to load initial song", err);
+        try {
+          const song = await getNextSong();
+          if (song) {
+            console.log("Loaded song:", song.displayName); // Log song details
+            dispatchInternal({ type: "PLAY_SONG", song: { ...song, isPlaying: false } });
+          } else {
+            console.warn("Could not get a new song.");
           }
-        } else {
-          console.log("maybeLoadSong - not authorized to fetch", { origGuesserId, host });
+        } catch (err) {
+          console.error("Failed to load initial song", err);
         }
       }
     }
 
-    // authentication observer moved inside DOMContentLoaded so dispatch is available
+    // authentication observer
     onAuthStateChanged(auth, (user) => {
       if (user) {
         currentUser = user;
         myPlayerId = user.uid; // Store the UID
-        console.log("Game component: Authenticated user UID:", myPlayerId);
-        maybeLoadSong(); // try load if phase already started
+        console.log("Authenticated user UID:", myPlayerId); // No need to call maybeLoadSong here, onValue will handle initial state sync
       } else {
         currentUser = null;
         myPlayerId = null;
-        console.warn("Game component: No user authenticated. User might have signed out or session expired.");
+        console.warn("No user authenticated. User might have signed out or session expired.");
       }
     });
-    // Category selection logic
-    function updateSelectedCategories() {
-      console.log("updateSelectedCategories called");
-      const oldCategories = [...selectedCategories];
-      selectedCategories = [];
-      const checkboxes = [
-        { id: 'category-pop', value: 'pop' },
-        { id: 'category-hiphop', value: 'hiphop' },
-        { id: 'category-rnb', value: 'rnb' },
-        { id: 'category-dance', value: 'dance' },
-        { id: 'category-alternative', value: 'alternative' }
-      ];
-      
-      checkboxes.forEach(({ id, value }) => {
-        const checkbox = document.getElementById(id) as HTMLInputElement;
-        if (checkbox?.checked) {
-          selectedCategories.push(value);
+
+    // --- Song Selection UI Logic ---
+    function renderYearButtons() {
+      yearButtonsContainer.innerHTML = '';
+      availableYears.forEach(year => {
+        const button = document.createElement('button');
+        button.textContent = year;
+        button.classList.add('year-button');
+        if (currentSelectedYear === year) {
+          button.classList.add('active');
         }
+        button.addEventListener('click', () => {
+          currentSelectedYear = year;
+          renderYearButtons(); // Re-render to update active state
+          renderCategoryButtons(); // Re-render category buttons to reflect selections for the new year
+        });
+        yearButtonsContainer.appendChild(button);
       });
-      
-      console.log("Selected categories:", selectedCategories);
-      
-      // Ensure at least one category is selected
-      if (selectedCategories.length === 0) {
-        selectedCategories = ['pop'];
-        const popCheckbox = document.getElementById('category-pop') as HTMLInputElement;
-        if (popCheckbox) popCheckbox.checked = true;
-      }
-      
-      // Dispatch SET_CATEGORIES action if categories changed (only for host)
-      if (JSON.stringify(oldCategories.sort()) !== JSON.stringify(selectedCategories.sort())) {
-        console.log("Categories changed, dispatching SET_CATEGORIES");
-        const host = game.players.find(p => p.isHost);
-        if (host?.uid === myPlayerId) {
-          dispatch({ type: "SET_CATEGORIES", categories: selectedCategories });
-        }
-        // Clear song cache if categories changed
-        allSongs = [];
-        availableSongs = [];
-      }
     }
 
-    // Initialize category checkboxes
-    const categoryCheckboxes = ['category-pop', 'category-hiphop', 'category-rnb', 'category-dance', 'category-alternative'];
-    categoryCheckboxes.forEach(id => {
-      const checkbox = document.getElementById(id) as HTMLInputElement;
-      if (checkbox) {
-        checkbox.addEventListener('change', updateSelectedCategories);
+    function renderCategoryButtons() {
+      categoryButtonsContainer.innerHTML = '';
+      availableCategories.forEach(category => {
+        const button = document.createElement('button');
+        button.textContent = category;
+        button.classList.add('category-button');
+        // Check if this specific year-category pair is already selected
+        const isSelected = currentSongSelections.some(s => s.year === currentSelectedYear && s.category === category);
+        if (isSelected) {
+          button.classList.add('active');
+        }
+        button.addEventListener('click', () => {
+          handleCategoryClick(category);
+        });
+        categoryButtonsContainer.appendChild(button);
+      });
+    }
+
+    function handleCategoryClick(category: string) { // This function is called by renderCategoryButtons
+      const newSelection: SongSelection = { year: currentSelectedYear, category };
+      let updatedSelections = [...currentSongSelections];
+
+      // Remove default 'All/All' if a specific selection is made
+      if (newSelection.year !== 'All' || newSelection.category !== 'All') {
+        updatedSelections = updatedSelections.filter(s => s.year !== 'All' || s.category !== 'All');
       }
-    });
-    
-    // Initial category update
-    updateSelectedCategories();
+
+      // Check if this specific year-category pair already exists
+      const existingIndex = updatedSelections.findIndex(s => s.year === newSelection.year && s.category === newSelection.category); // Use newSelection.year
+
+      if (newSelection.year === 'All' && newSelection.category === 'All') {
+        // If "All/All" is clicked, it should be the only selection
+        updatedSelections = [{ year: 'All', category: 'All' }];
+      } else if (existingIndex > -1) {
+        // If it exists, remove it (toggle off)
+        updatedSelections.splice(existingIndex, 1);
+      } else {
+        // Otherwise, add it
+        updatedSelections.push(newSelection);
+      }
+
+      // If no selections are left, default to 'All/All'
+      if (updatedSelections.length === 0) {
+        updatedSelections = [{ year: 'All', category: 'All' }];
+      }
+
+      currentSongSelections = updatedSelections;
+      dispatchInternal({ type: "SET_SONG_SELECTIONS", selections: currentSongSelections });
+      initializeSongSelectionControls();
+    }
+
+    function removeSelection(selectionToRemove: SongSelection) {
+      let updatedSelections = currentSongSelections.filter(s => !(s.year === selectionToRemove.year && s.category === selectionToRemove.category));
+      if (updatedSelections.length === 0) {
+        updatedSelections = [{ year: 'All', category: 'All' }];
+      }
+      currentSongSelections = updatedSelections;
+      dispatchInternal({ type: "SET_SONG_SELECTIONS", selections: currentSongSelections });
+      initializeSongSelectionControls();
+    }
+
+    // Initial rendering of song selection controls
+    function initializeSongSelectionControls() {
+      renderYearButtons();
+      renderCategoryButtons();
+      renderCurrentSelections();
+    }
 
     // Initialize effects
-    initEngineEffects(player, () => game, dispatch);
+    initEngineEffects(player, () => game, dispatchInternal); // Pass dispatchInternal
 
     // Firebase sync for multiplayer
     if (gameCode) {
@@ -444,41 +405,15 @@
             answerRevealed: data.answerRevealed ?? false,
             guessStartTime: data.guessStartTime ?? null,
             guessTimeLimit: data.guessTimeLimit ?? 30, // Default to 30 seconds
-            winner: data.winner ?? undefined,
-            selectedYearRange: data.selectedYearRange ?? 'all', // Default to 'all'
-            categories: data.categories ?? ['pop']
+            winner: data.winner ?? undefined, // Default to 'All/All'
+            songSelections: data.songSelections || [{ year: 'All', category: 'All' }]
           };
 
           // Update selectedCategories from loaded game state
-          if (game.categories && game.categories.length > 0) {
-            const oldCategories = [...selectedCategories];
-            selectedCategories = [...game.categories];
-            console.log("Updated selectedCategories from Firebase:", selectedCategories);
-            
-            // Clear song cache when categories change for all players
-            if (JSON.stringify(oldCategories.sort()) !== JSON.stringify(selectedCategories.sort())) {
-              console.log("Categories changed from Firebase, clearing song cache");
-              allSongs = [];
-              availableSongs = [];
-            }
-
-            // Update local year range from game state and clear song cache if needed
-            if (game.selectedYearRange && game.selectedYearRange !== selectedYearRange) {
-              const oldYearRange = selectedYearRange;
-              selectedYearRange = game.selectedYearRange;
-              console.log("Updated selectedYearRange from Firebase:", selectedYearRange);
-              if (oldYearRange !== selectedYearRange) {
-                console.log("Year range changed from Firebase, clearing song cache");
-                allSongs = [];
-                availableSongs = [];
-              }
-            }
-
-            // Update year range select UI
-            if (yearRangeSelect && yearRangeSelect.value !== game.selectedYearRange) {
-              yearRangeSelect.value = game.selectedYearRange;
-            }
-
+          if (JSON.stringify(game.songSelections) !== JSON.stringify(currentSongSelections)) {
+            currentSongSelections = game.songSelections;
+            availableSongsForGame = []; // Clear song cache if selections changed
+            initializeSongSelectionControls();
           }
 
           console.log("Local game.players after Firebase update and transformation:", game.players);
@@ -489,7 +424,7 @@
           handleEngineEffects(prevGame, game, player);
           // if we're in SONG_PLAYING and still have no song, check again
           if (game.phase === "SONG_PLAYING" && !game.currentSong) {
-            maybeLoadSong();
+            maybeLoadNewSongIntoGame();
           }
           renderGame();
         } else {
@@ -507,16 +442,9 @@
       if (game.players.length < 2) {
         alert("Need at least 2 players to start!");
         return;
-      }
-      
-      // Update selected categories before starting
-      updateSelectedCategories();
-      console.log("categories: ", selectedCategories);
-      
-      // Set categories in game state
-      dispatch({ type: "SET_CATEGORIES", categories: selectedCategories });
-      dispatch({ type: "SET_YEAR_RANGE", yearRange: selectedYearRange });
-      dispatch({ type: "START_GAME" });
+      }      
+      // Dispatch the current song selections to the game state (already done by handleCategoryClick/removeSelection)
+      dispatchInternal({ type: "START_GAME" });
     });
 
     skipBtn.onclick = () => {
@@ -524,7 +452,7 @@
       const origId = game.players[game.turnIndex]?.uid;
       if (gameCode && origId !== myPlayerId) return;
       if (game.phase === "SONG_PLAYING") {
-        dispatch({ type: "END_SONG" });
+        dispatchInternal({ type: "END_SONG" });
       }
     };
 
@@ -537,7 +465,7 @@
       }
       // toggle play state via reducer so it syncs to Firebase
       const currentlyPlaying = game.currentSong?.isPlaying ?? false;
-      dispatch({ type: "SET_PLAYING", playing: !currentlyPlaying });
+      dispatchInternal({ type: "SET_PLAYING", playing: !currentlyPlaying });
     };
     submitGuessBtn.onclick = () => {
       const songInput = document.getElementById("song-input") as HTMLInputElement;
@@ -553,14 +481,14 @@
       const activeId = getActiveGuesserId();
       if (game.phase === "ORIGINAL_GUESS_TURN") {
         if (activeId !== myPlayerId) return; // ignore others
-        dispatch({
+        dispatchInternal({
           type: "ORIGINAL_GUESS_SUBMIT",
           guesses: { song, artist, year, album }
         });
       } else if (game.phase === "CIRCLE_GUESS_TURN" && game.circleGuessIndex !== undefined) {
         if (activeId !== myPlayerId) return;
         const currentCirclePlayer = game.players[game.circleGuessIndex];
-        dispatch({
+        dispatchInternal({
         type: "CIRCLE_GUESS_SUBMIT",
         playerId: String(currentCirclePlayer.uid),  // ← use String() instead of as number
         guesses: { song, artist, year, album }
@@ -580,18 +508,18 @@
     const playAgainBtn = document.getElementById("play-again-btn") as HTMLButtonElement;
 
     revealBtn?.addEventListener("click", () => {
-      dispatch({ type: "REVEAL_ANSWERS" });
+      dispatchInternal({ type: "REVEAL_ANSWERS" });
     });
 
     resolveBtn?.addEventListener("click", () => {
-      dispatch({ type: "RESOLVE_ROUND" });
-      setTimeout(() => renderGame(), 10);
+      dispatchInternal({ type: "RESOLVE_ROUND" });
+      // renderGame is called by dispatchInternal
     });
 
     playAgainBtn?.addEventListener("click", () => {
       const host = game.players.find(p => p.isHost);
       if (host?.uid !== myPlayerId) return; // only the host can choose to play again
-      dispatch({ type: "START_GAME" });
+      dispatchInternal({ type: "START_GAME" });
     });
 
     // Render game state to UI
@@ -607,7 +535,6 @@
       const revealBtn = document.getElementById("reveal-btn") as HTMLButtonElement;
       const resolveBtn = document.getElementById("resolve-btn") as HTMLButtonElement;
       const playAgainBtn = document.getElementById("play-again-btn") as HTMLButtonElement;
-      const yearSelection = document.getElementById("year-selection");
 
       if (!statusEl || !playerListEl || !resultsEl) return;
 
@@ -620,44 +547,6 @@
       if (lobbyControls) {
         lobbyControls.style.display = game.phase === "LOBBY" ? "block" : "none";
       }
-      // Hide year selection if not in lobby
-      if (yearSelection) {
-        yearSelection.style.display = game.phase === "LOBBY" ? "block" : "none";
-      }
-      
-      // Update category checkboxes based on game state (only in lobby)
-      if (game.phase === "LOBBY" && game.categories) {
-        const categoryMap = {
-          'pop': 'category-pop',
-          'hiphop': 'category-hiphop', 
-          'rnb': 'category-rnb',
-          'dance': 'category-dance',
-          'alternative': 'category-alternative'
-        };
-        
-        const host = game.players.find(p => p.isHost);
-        const isHost = host?.uid === myPlayerId;
-        
-        Object.entries(categoryMap).forEach(([category, checkboxId]) => {
-          const checkbox = document.getElementById(checkboxId) as HTMLInputElement;
-          if (checkbox) {
-            checkbox.checked = game.categories!.includes(category);
-            checkbox.disabled = !isHost; // Only host can change categories
-          }
-        });
-        
-        // Update selectedCategories to match game state
-        selectedCategories = game.categories;
-
-        // Update year range select UI
-        if (yearRangeSelect) {
-          if (yearRangeSelect.value !== game.selectedYearRange) {
-            yearRangeSelect.value = game.selectedYearRange;
-          }
-          yearRangeSelect.disabled = !isHost;
-        }
-        console.log("Updated selectedCategories from game state:", selectedCategories);
-      }
       // show / hide start button and disable for non-hosts
       const host = game.players.find(p => p.isHost);
       if (startGameBtn) {
@@ -669,10 +558,21 @@
         startGameBtn.disabled = game.players.length < 2;
       }
 
-      // Update phase display (fallback to LOBBY if DB missing)
+      // Update song selection controls visibility based on lobby phase
+      if (game.phase === "LOBBY") {
+        initializeSongSelectionControls(); // Re-render controls to reflect currentSongSelections
+        yearButtonsContainer.style.display = 'flex';
+        categoryButtonsContainer.style.display = 'flex';
+        currentSelectionsList.style.display = 'block';
+      } else {
+        yearButtonsContainer.style.display = 'none';
+        categoryButtonsContainer.style.display = 'none';
+        currentSelectionsList.style.display = 'none';
+      }
+
       const phaseDisplay = game.phase || "LOBBY";
       statusEl.textContent = `Phase: ${phaseDisplay}`;
-
+      
     if (game.players.length > 0) {
       // make sure indices are valid to avoid undefined access
       if (game.turnIndex >= game.players.length || game.turnIndex < 0) {
@@ -689,7 +589,7 @@
         const circlePlayer = game.players[game.circleGuessIndex] || { name: "(none)" };
         statusEl.textContent += ` | Circle Turn: ${circlePlayer.name}`;
       }
-    }
+    } // End of if (game.players.length > 0)
 
       // Update player list, marking host
       playerListEl.innerHTML = game.players
@@ -737,7 +637,7 @@
       }
       if (
         (game.phase === "ORIGINAL_GUESS_TURN" || game.phase === "CIRCLE_GUESS_TURN") &&
-        activeId === myPlayerId
+        activeId === myPlayerId // Only show form to the active guesser
       ) {
         guessForm.style.display = "block";
       } else {
@@ -798,19 +698,19 @@
         playAgainBtn.style.display = (game.phase === "GAME_OVER" && host?.uid === myPlayerId) ? "block" : "none";
       }
 
-      // Enable/disable music controls based on phase, host status and active guesser
+      // Enable/disable music controls based on phase and active guesser
       const me = game.players.find(p => p.uid === myPlayerId);
-      const isHost = me?.isHost;
-      // activeId already computed above when showing the guess form
-      playBtn.disabled = gameCode ? myPlayerId !== activeId : false;
+      if (playBtn) { // Ensure playBtn exists
+        playBtn.disabled = (game.phase === "SONG_PLAYING" && activeId === myPlayerId) ? false : true;
+        playBtn.style.display = game.phase === "SONG_PLAYING" ? "inline-block" : "none";
+      }
 
-      // hide play button when not listening
-      playBtn.style.display = game.phase === "SONG_PLAYING" ? "inline-block" : "none";
-
-      // show skip button only when a song is loaded and only for the original
-      // guesser (turn player) while listening
       const origGuesserId = game.players[game.turnIndex]?.uid;
       if (skipBtn) {
+        // Only show skip button to the original guesser during SONG_PLAYING phase
+        // and if a song is actually loaded.
+        // The condition `origGuesserId === myPlayerId` ensures only the current turn player can skip.
+        // The condition `game.currentSong` ensures there's actually a song to skip.
         skipBtn.style.display =
           game.phase === "SONG_PLAYING" &&
           game.currentSong &&
@@ -819,13 +719,15 @@
             : "none";
       }
 
-      // reflect play button based on state
-      if (game.currentSong?.isPlaying) {
-        playBtn.textContent = "⏸";
-      } else {
-        playBtn.textContent = "▶";
+      if (playBtn) { // Ensure playBtn exists before accessing its properties
+        // reflect play button based on state
+        if (game.currentSong?.isPlaying) {
+          playBtn.textContent = "⏸";
+        } else {
+          playBtn.textContent = "▶";
+        }
       }
-    }  // ← Function closes HERE, not earlier
+    }
 
     // Initial render
     renderGame();
@@ -834,11 +736,6 @@
 
 <style>
   /* IDs are fine as-is since they're in static HTML */
-  #turn-indicator { ... }
-  #song-progress { ... }
-  #song-progress-bar { ... }
-  #player-list { ... }
-  #playBtn { ... }
 
   /* These need :global() because they're created via innerHTML */
   :global(.player-card) {
@@ -888,6 +785,7 @@
     filter: grayscale(100%);
   }
   :global(*) {
+    /* This is a global reset, consider if it should be more targeted */
     font-family: "Tilt Neon", sans-serif !important;
   }
 
@@ -904,6 +802,7 @@
     text-align: center;
   }
 
+  /* Existing button styles */
   button {
     font-family: "Tilt Neon", sans-serif;
     padding: 0.75rem 1.5rem;
@@ -944,54 +843,98 @@
     text-shadow: none;
   }
 
-  .checkbox-group {
+  /* New styles for song selection controls */
+  .song-selection-container {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    width: 90%;
+    max-width: 600px;
+  }
+  .song-selection-container h4 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #eee;
+    text-align: center;
+    font-weight: 600;
+  }
+  .selections-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+    max-height: 120px;
+    overflow-y: auto;
+  }
+  .selection-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.08);
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+  .btn-remove {
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    font-size: 1rem;
+    line-height: 22px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  .btn-remove:hover {
+    background: #d32f2f;
+  }
+  .options {
+    border-top: 1px solid #444;
+    padding-top: 1rem;
+  }
+  .option-group h5 {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    color: #aaa;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+  }
+  .button-group {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 1rem;
+  }
+
+  /* Existing styles for other elements */
+  #turn-indicator {
+    color: #eee;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  #song-progress {
+    width: 80%;
+    height: 8px;
+    background-color: #444;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+  #song-progress-bar {
+    height: 100%;
+    width: 0%;
+    background-color: #00eaff;
+    border-radius: 5px;
+  }
+  #player-list {
+    width: 90%;
+    max-width: 400px;
     margin-top: 1rem;
   }
-
-  .neon-checkbox input {
-    display: none;
-  }
-
-  .checkbox-label {
-    padding: 0.75rem 1.5rem;
-    border-radius: 10px;
-    border: 2px solid rgba(0, 234, 255, 0.5);
-    cursor: pointer;
-    font-size: 1.25rem;
-    color: rgba(0, 234, 255, 0.5);
-    background: #02000a;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-    display: inline-block;
-  }
-
-  .neon-checkbox:hover input:not(:disabled) + .checkbox-label {
-    border-color: #00eaff;
-    box-shadow: 0 0 10px rgba(0, 234, 255, 0.4);
-  }
-
-  .neon-checkbox input:checked + .checkbox-label {
-    color: #00eaff;
-    border-color: #00eaff;
-    text-shadow: 0 0 8px rgba(0, 234, 255, 0.9), 0 0 16px rgba(255, 0, 255, 0.7);
-    box-shadow: 0 0 15px rgba(0, 234, 255, 0.9), 0 0 30px rgba(255, 0, 255, 0.8);
-  }
-
-  .neon-checkbox:hover input:checked:not(:disabled) + .checkbox-label {
-    text-shadow: 0 0 12px rgba(0, 234, 255, 0.9), 0 0 24px rgba(255, 0, 255, 0.7);
-    box-shadow: 0 0 25px rgba(0, 234, 255, 0.9), 0 0 50px rgba(255, 0, 255, 0.8);
-  }
-
-  .neon-checkbox input:disabled + .checkbox-label {
-    opacity: 0.5;
-    cursor: not-allowed;
-    box-shadow: none;
-    text-shadow: none;
-  }
-
   #guess-form {
     display: flex;
     flex-direction: column;
@@ -999,8 +942,7 @@
     gap: 1rem;
     margin-top: 1rem;
   }
-
-  input {
+  #guess-form input {
     font-family: "Tilt Neon", sans-serif;
     font-size: 1.25rem;
     padding: 0.75rem 1rem;
@@ -1015,25 +957,16 @@
     box-shadow: 0 0 12px rgba(0, 234, 255, 0.3);
     text-align: center;
   }
-
-  input::placeholder {
+  #guess-form input::placeholder {
     color: rgba(0, 234, 255, 0.5);
   }
-
-  input:focus {
+  #guess-form input:focus {
     border-color: #00eaff;
     box-shadow: 0 0 20px rgba(0, 234, 255, 0.6);
   }
-
-  .neon-select {
-    /* Add styling similar to neon-checkbox for consistency */
-    /* You might want to adjust padding/font-size for a select element */
-  }
-
   #results h2, #results h3, #results p {
     margin: 0.5rem 0;
   }
-      
   #game-code {
 		color: rgb(255, 255, 255);
     font-weight: 400;

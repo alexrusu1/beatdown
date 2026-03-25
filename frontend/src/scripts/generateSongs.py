@@ -324,7 +324,7 @@ def fetch_songs(target_total, existing_songs, existing_keys, terms="", search_na
                 "displayArtists": artist_name,
                 "artists": all_artists,
                 "previewUrl": result.get("previewUrl"),
-                "categories": [result.get("primaryGenreName")]
+                "categories": [result["primaryGenreName"]] if result.get("primaryGenreName") else []
             }
 
             songs.append(song_obj)

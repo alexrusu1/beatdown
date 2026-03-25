@@ -1,6 +1,5 @@
-import { gameReducer } from "./engine";
 import type { Game } from "./engine";
-
+// The game variable is not used here, it's passed into initEngineEffects as a getter.
 let game: Game;
 let dispatchInternal: (action: any) => void;
 let guessTimer: NodeJS.Timeout | null = null;
@@ -9,7 +8,7 @@ export function initEngineEffects(
   audioEl: HTMLAudioElement,
   getGame: () => Game,
   dispatch: (action: any) => void
-) {
+) { // Renamed parameter to 'dispatch' to avoid conflict with global 'dispatchInternal'
   game = getGame();
   dispatchInternal = dispatch;
 
@@ -62,7 +61,7 @@ export function handleEngineEffects(
     next.guessStartTime !== null &&
     next.guessTimeLimit > 0
   ) {
-    const timeRemaining = next.guessTimeLimit * 1000 - (Date.now() - next.guessStartTime);
+    const timeRemaining = next.guessTimeLimit * 1000 - (Date.now() - (next.guessStartTime || 0)); // Ensure next.guessStartTime is not null
     guessTimer = setTimeout(() => {
       console.log("Guess timer timed out, dispatching GUESS_TIMEOUT");
       dispatchInternal({ type: "GUESS_TIMEOUT" });
