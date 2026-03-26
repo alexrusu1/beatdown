@@ -218,13 +218,14 @@ export function gameReducer(game: Game, action: GameAction): Game {
         // respect provided playing flag or default to false (so guesser must
         // hit play)
         return {
-          guessStartTime: Date.now(), // Start timer when song begins playing
           ...game,
           currentSong: { ...action.song, isPlaying: action.song.isPlaying ?? false }
         };
       }
       if (action.type === "END_SONG") {
-        return { ...game, phase: "ORIGINAL_GUESS_TURN" };
+        return { ...game, 
+          phase: "ORIGINAL_GUESS_TURN",
+          guessStartTime: Date.now() };
       }
       if (action.type === "SET_PLAYING") {
         if (!game.currentSong) return game;

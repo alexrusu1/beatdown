@@ -45,8 +45,7 @@ export function handleEngineEffects(
     prevPlaying: prev.currentSong?.isPlaying,
     nextPlaying: next.currentSong?.isPlaying,
     prevGuessStartTime: prev.guessStartTime,
-    nextGuessStartTime: next.guessStartTime,
-    nextPhase: next.phase
+    nextGuessStartTime: next.guessStartTime
   });
   
   // Clear any existing guess timer

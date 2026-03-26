@@ -14,21 +14,36 @@ function getDecade(year: number): string {
  * @returns A filtered array of Song objects.
  */
 export function filterSongs(selections: SongSelection[]): Song[] {
-  if (!selections || selections.length === 0 || (selections.length === 1 && selections[0].year === 'All' && selections[0].category === 'All')) {
-    return allSongs as Song[];
+  // If no selections are made, return an empty array. The game logic will handle this.
+  if (!selections || selections.length === 0) {
+    return [];
   }
 
-  const songSet = new Set<Song>();
-  for (const selection of selections) {
-    for (const song of allSongs) {
-      const songDecade = getDecade(song.year);
-      const songCategories = song.categories || [];
-      const yearMatch = selection.year === 'All' || songDecade === selection.year;
-      const categoryMatch = selection.category === 'All' || songCategories.some(c => c === selection.category);
-      if (yearMatch && categoryMatch) {
-        songSet.add(song as Song);
+  // Group selections by category for efficient lookup.
+  // E.g., { 'Pop' => Set(['1980s', '1990s']), 'Rock' => Set(['2000s']) }
+  const selectionsByCategory = new Map<string, Set<string>>();
+  for (const { category, year } of selections) {
+    if (!selectionsByCategory.has(category)) {
+      selectionsByCategory.set(category, new Set<string>());
+    }
+    selectionsByCategory.get(category)!.add(year);
+  }
+
+  const filteredSongs = (allSongs as Song[]).filter(song => {
+    const songDecade = getDecade(song.year);
+    const songCategories = song.categories || [];
+
+    // Check if the song's category and decade match any of the selections.
+    for (const songCategory of songCategories) {
+      if (selectionsByCategory.has(songCategory)) {
+        const selectedYears = selectionsByCategory.get(songCategory)!;
+        if (selectedYears.has(songDecade)) {
+          return true; // Found a match, include this song.
+        }
       }
     }
-  }
-  return Array.from(songSet);
+    return false; // No match found for this song.
+  });
+
+  return filteredSongs;
 }

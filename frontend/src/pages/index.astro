@@ -224,8 +224,9 @@ import Layout from '../layouts/Layout.astro';
 					joinedAt: Date.now(),
 					health: 100,
 					alive: true
-				}
-			}
+				},
+			},
+			songSelections: []
 		};
 
 		await set(gameRef, initialState);

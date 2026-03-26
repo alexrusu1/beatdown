@@ -8,26 +8,10 @@
   <div id="turn-indicator"></div>  
 
   <div id="lobby-controls">
-    <div class="song-selection-container">
-      <h4>Song Selection</h4>
-
-      <ul id="current-selections" class="selections-list">
-        <!-- Current selections will be rendered here by JavaScript -->
-      </ul>
-
-      <div class="options">
-        <div class="option-group">
-          <h5>1. Select a Decade</h5>
-          <div id="year-buttons" class="button-group">
-            <!-- Year buttons will be rendered here by JavaScript -->
-          </div>
-        </div>
-        <div class="option-group">
-          <h5>2. Select a Category</h5>
-          <div id="category-buttons" class="button-group">
-            <!-- Category buttons will be rendered here by JavaScript -->
-          </div>
-        </div>
+    <div id="song-mixer-container" class="song-selection-container">
+      <h4>The DJ Equalizer</h4>
+      <div id="mixer-board">
+        <!-- Mixer channels will be rendered here by JavaScript -->
       </div>
     </div>
     
@@ -89,15 +73,10 @@
     const guessTimerEl = document.getElementById("guess-timer") as HTMLDivElement;
     const progressBar = document.getElementById("song-progress-bar") as HTMLDivElement;
     const guessForm = document.getElementById("guess-form") as HTMLDivElement;
-    // const yearRangeSelect = document.getElementById("year-range-select") as HTMLSelectElement; // This element is removed from HTML
     const submitGuessBtn = document.getElementById("submit-guess") as HTMLButtonElement;
-    const yearButtonsContainer = document.getElementById("year-buttons") as HTMLDivElement;
-    const categoryButtonsContainer = document.getElementById("category-buttons") as HTMLDivElement;
-    const currentSelectionsList = document.getElementById("current-selections") as HTMLUListElement;
 
     const startGameBtn = document.getElementById("start-game") as HTMLButtonElement;
     
-    // Extract the game code directly from the URL on the client-side
     const urlParams = new URLSearchParams(window.location.search);
     const gameCode = urlParams.get("code") ?? "";
     if (!gameCode) {
@@ -114,29 +93,9 @@
     });
 
     // --- Song Selection State and Logic ---
-    const availableYears = ["All", "2020s", "2010s", "2000s", "1990s", "1980s", "1970s", "1960s"];
-    const allUniqueCategories = [...new Set(allSongsData.flatMap(s => s.categories || []).filter(c => c))].sort();
-    const availableCategories = ["All", ...allUniqueCategories];
-    let currentSelectedYear: string = 'All'; // To store the currently selected year for pairing with a category
-    let currentSongSelections: SongSelection[] = [{ year: 'All', category: 'All' }]; // Default selection
-
-    function renderCurrentSelections() {
-      currentSelectionsList.innerHTML = '';
-      currentSongSelections.forEach(selection => {
-        const li = document.createElement('li');
-        li.classList.add('selection-item');
-        li.textContent = `${selection.year} - ${selection.category}`;
-        
-        const removeBtn = document.createElement('button');
-        removeBtn.classList.add('btn-remove');
-        removeBtn.textContent = '×';
-        removeBtn.onclick = () => removeSelection(selection);
-        
-        li.appendChild(removeBtn);
-        currentSelectionsList.appendChild(li);
-      });
-    }
-
+    const availableYears = ["2020s", "2010s", "2000s", "1990s", "1980s", "1970s", "1960s"];
+    const availableCategories = ["Rock", "Hip-Hop/Rap", "R&B/Soul", "Pop", "Dance", "Alternative"];
+    let currentSongSelections: SongSelection[] = []; // Default to empty (all songs)
 
     // Initialize game state
     let game: Game = {
@@ -149,7 +108,7 @@
       answerRevealed: false,
       guessStartTime: null,
       guessTimeLimit: 30, // 30 seconds for guessing
-      songSelections: currentSongSelections, // Use the new multi-selection structure
+      songSelections: [], 
     };
 
     // helper to figure out whose turn it is to guess
@@ -174,10 +133,6 @@
     async function loadSongsForGame(): Promise<void> {
       console.log("loadSongsForGame called with selections:", game.songSelections);
       availableSongsForGame = filterSongs(game.songSelections);
-      if (availableSongsForGame.length === 0) {
-        console.warn("No songs found for selected criteria. Falling back to all songs.");
-        availableSongsForGame = allSongsData; // Fallback to all songs
-      }
       console.log("Available songs for game:", availableSongsForGame.length);
     }
 
@@ -268,90 +223,81 @@
     });
 
     // --- Song Selection UI Logic ---
-    function renderYearButtons() {
-      yearButtonsContainer.innerHTML = '';
-      availableYears.forEach(year => {
-        const button = document.createElement('button');
-        button.textContent = year;
-        button.classList.add('year-button');
-        if (currentSelectedYear === year) {
-          button.classList.add('active');
-        }
-        button.addEventListener('click', () => {
-          currentSelectedYear = year;
-          renderYearButtons(); // Re-render to update active state
-          renderCategoryButtons(); // Re-render category buttons to reflect selections for the new year
-        });
-        yearButtonsContainer.appendChild(button);
-      });
-    }
+    function renderMixer() {
+      const mixerBoard = document.getElementById("mixer-board");
+      if (!mixerBoard) return;
 
-    function renderCategoryButtons() {
-      categoryButtonsContainer.innerHTML = '';
+      mixerBoard.innerHTML = ''; // Clear previous state
+
       availableCategories.forEach(category => {
-        const button = document.createElement('button');
-        button.textContent = category;
-        button.classList.add('category-button');
-        // Check if this specific year-category pair is already selected
-        const isSelected = currentSongSelections.some(s => s.year === currentSelectedYear && s.category === category);
-        if (isSelected) {
-          button.classList.add('active');
-        }
-        button.addEventListener('click', () => {
-          handleCategoryClick(category);
+        const channel = document.createElement('div');
+        channel.className = 'mixer-channel';
+
+        const genreTitle = document.createElement('h5');
+        genreTitle.className = 'genre-title';
+        genreTitle.textContent = category;
+        genreTitle.addEventListener('click', () => handleGenreTitleClick(category));
+        
+        const decadeButtons = document.createElement('div');
+        decadeButtons.className = 'decade-buttons';
+
+        availableYears.forEach(year => {
+          const button = document.createElement('button');
+          button.className = 'decade-button';
+          button.dataset.year = year;
+          button.dataset.category = category;
+          button.textContent = year;
+
+          const isSelected = currentSongSelections.some(s => s.year === year && s.category === category);
+          if (isSelected) {
+            button.classList.add('active');
+          }
+
+          button.addEventListener('click', () => {
+            handleMixerClick(year, category);
+          });
+
+          decadeButtons.appendChild(button);
         });
-        categoryButtonsContainer.appendChild(button);
+
+        channel.appendChild(decadeButtons);
+        channel.appendChild(genreTitle);
+        mixerBoard.appendChild(channel);
       });
     }
 
-    function handleCategoryClick(category: string) { // This function is called by renderCategoryButtons
-      const newSelection: SongSelection = { year: currentSelectedYear, category };
-      let updatedSelections = [...currentSongSelections];
+    function handleMixerClick(year: string, category: string) {
+      const selection = { year, category };
+      const existingIndex = currentSongSelections.findIndex(s => s.year === year && s.category === category);
 
-      // Remove default 'All/All' if a specific selection is made
-      if (newSelection.year !== 'All' || newSelection.category !== 'All') {
-        updatedSelections = updatedSelections.filter(s => s.year !== 'All' || s.category !== 'All');
-      }
-
-      // Check if this specific year-category pair already exists
-      const existingIndex = updatedSelections.findIndex(s => s.year === newSelection.year && s.category === newSelection.category); // Use newSelection.year
-
-      if (newSelection.year === 'All' && newSelection.category === 'All') {
-        // If "All/All" is clicked, it should be the only selection
-        updatedSelections = [{ year: 'All', category: 'All' }];
-      } else if (existingIndex > -1) {
+      if (existingIndex > -1) {
         // If it exists, remove it (toggle off)
-        updatedSelections.splice(existingIndex, 1);
+        currentSongSelections.splice(existingIndex, 1);
       } else {
         // Otherwise, add it
-        updatedSelections.push(newSelection);
+        currentSongSelections.push(selection);
       }
 
-      // If no selections are left, default to 'All/All'
-      if (updatedSelections.length === 0) {
-        updatedSelections = [{ year: 'All', category: 'All' }];
+      dispatchInternal({ type: "SET_SONG_SELECTIONS", selections: currentSongSelections });
+    }
+
+    function handleGenreTitleClick(category: string) {
+      const yearsForCategory = availableYears;
+      const selectionsForCategory = currentSongSelections.filter(s => s.category === category);
+      const allSelected = yearsForCategory.length > 0 && yearsForCategory.length === selectionsForCategory.length;
+
+      // First, remove all existing selections for this category
+      let updatedSelections = currentSongSelections.filter(s => s.category !== category);
+
+      if (!allSelected) {
+        // If not all were selected (i.e. it was off or partially on), turn them all on.
+        const newSelections = yearsForCategory.map(year => ({ year, category }));
+        updatedSelections.push(...newSelections);
       }
+      // If all were already selected, we've now removed them, so we do nothing more.
 
       currentSongSelections = updatedSelections;
       dispatchInternal({ type: "SET_SONG_SELECTIONS", selections: currentSongSelections });
-      initializeSongSelectionControls();
-    }
-
-    function removeSelection(selectionToRemove: SongSelection) {
-      let updatedSelections = currentSongSelections.filter(s => !(s.year === selectionToRemove.year && s.category === selectionToRemove.category));
-      if (updatedSelections.length === 0) {
-        updatedSelections = [{ year: 'All', category: 'All' }];
-      }
-      currentSongSelections = updatedSelections;
-      dispatchInternal({ type: "SET_SONG_SELECTIONS", selections: currentSongSelections });
-      initializeSongSelectionControls();
-    }
-
-    // Initial rendering of song selection controls
-    function initializeSongSelectionControls() {
-      renderYearButtons();
-      renderCategoryButtons();
-      renderCurrentSelections();
     }
 
     // Initialize effects
@@ -406,14 +352,14 @@
             guessStartTime: data.guessStartTime ?? null,
             guessTimeLimit: data.guessTimeLimit ?? 30, // Default to 30 seconds
             winner: data.winner ?? undefined, // Default to 'All/All'
-            songSelections: data.songSelections || [{ year: 'All', category: 'All' }]
+            songSelections: data.songSelections || []
           };
 
           // Update selectedCategories from loaded game state
           if (JSON.stringify(game.songSelections) !== JSON.stringify(currentSongSelections)) {
-            currentSongSelections = game.songSelections;
+            currentSongSelections = game.songSelections || [];
             availableSongsForGame = []; // Clear song cache if selections changed
-            initializeSongSelectionControls();
+            renderMixer();
           }
 
           console.log("Local game.players after Firebase update and transformation:", game.players);
@@ -442,8 +388,18 @@
       if (game.players.length < 2) {
         alert("Need at least 2 players to start!");
         return;
-      }      
-      // Dispatch the current song selections to the game state (already done by handleCategoryClick/removeSelection)
+      }
+      const selectedSongs = filterSongs(currentSongSelections);
+
+      if (selectedSongs.length < 50) {
+        if (currentSongSelections.length === 0) {
+          alert("Please select at least one song pack to start the game.");
+        } else {
+          alert(`Your current selection only has ${selectedSongs.length} songs. Please select at least 50 songs to start the game.`);
+        }
+        return;
+      }
+
       dispatchInternal({ type: "START_GAME" });
     });
 
@@ -531,6 +487,7 @@
       const turnIndicator = document.getElementById("turn-indicator");
       const playerListEl = document.getElementById("player-list");
       const resultsEl = document.getElementById("results");
+      const mixerContainer = document.getElementById("song-mixer-container");
       const lobbyControls = document.getElementById("lobby-controls");
       const revealBtn = document.getElementById("reveal-btn") as HTMLButtonElement;
       const resolveBtn = document.getElementById("resolve-btn") as HTMLButtonElement;
@@ -559,15 +516,13 @@
       }
 
       // Update song selection controls visibility based on lobby phase
-      if (game.phase === "LOBBY") {
-        initializeSongSelectionControls(); // Re-render controls to reflect currentSongSelections
-        yearButtonsContainer.style.display = 'flex';
-        categoryButtonsContainer.style.display = 'flex';
-        currentSelectionsList.style.display = 'block';
-      } else {
-        yearButtonsContainer.style.display = 'none';
-        categoryButtonsContainer.style.display = 'none';
-        currentSelectionsList.style.display = 'none';
+      if (mixerContainer) {
+        if (game.phase === "LOBBY") {
+          mixerContainer.style.display = 'block';
+          renderMixer(); // Re-render to reflect current state
+        } else {
+          mixerContainer.style.display = 'none';
+        }
       }
 
       const phaseDisplay = game.phase || "LOBBY";
@@ -842,68 +797,97 @@
     box-shadow: none;
     text-shadow: none;
   }
-
-  /* New styles for song selection controls */
+  
+  /* Song Mixer Styles */
   .song-selection-container {
-    background: rgba(0, 0, 0, 0.2);
+    background: #1a1a1a;
     padding: 1rem;
     border-radius: 8px;
     margin-bottom: 1rem;
-    width: 90%;
-    max-width: 600px;
+    width: 100%;
+    max-width: 800px;
+    border: 2px solid #444;
   }
   .song-selection-container h4 {
     margin-top: 0;
     margin-bottom: 1rem;
-    color: #eee;
+    color: #00eaff;
     text-align: center;
     font-weight: 600;
+    text-shadow: 0 0 8px rgba(0, 234, 255, 0.7);
   }
-  .selections-list {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 1rem 0;
-    max-height: 120px;
-    overflow-y: auto;
-  }
-  .selection-item {
+
+  :global(#mixer-board) {
     display: flex;
-    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: #282828; /* Dark metallic-ish */
+    border-radius: 8px;
+    overflow-x: auto;
+    justify-content: center;
+    border: 1px solid #555;
+  }
+
+  :global(.mixer-channel) {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.08);
-    padding: 0.5rem 0.75rem;
-    border-radius: 4px;
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
+    gap: 0.75rem;
+    padding: 0.75rem 0.5rem;
+    background: #1e1e1e;
+    border-radius: 6px;
+    border: 1px solid #444;
   }
-  .btn-remove {
-    background: #f44336;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 22px;
-    height: 22px;
-    font-size: 1rem;
-    line-height: 22px;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  .btn-remove:hover {
-    background: #d32f2f;
-  }
-  .options {
-    border-top: 1px solid #444;
-    padding-top: 1rem;
-  }
-  .option-group h5 {
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
-    color: #aaa;
+
+  :global(.genre-title) {
+    color: #999;
+    font-weight: bold;
     text-transform: uppercase;
     font-size: 0.8rem;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    margin: 0;
+    padding: 0.5rem 0;
     letter-spacing: 1px;
+    cursor: pointer;
+    transition: color 0.2s ease;
   }
+
+  :global(.genre-title:hover) {
+    color: #fff;
+  }
+
+  :global(.decade-buttons) {
+    display: flex;
+    flex-direction: column-reverse; /* 60s at bottom, 2020s at top */
+    gap: 0.5rem;
+  }
+
+  :global(.decade-button) {
+    padding: 0.5rem 0.75rem;
+    margin: 0;
+    border-radius: 4px;
+    border: 1px solid #555;
+    background-color: #3a3a3a;
+    color: #888;
+    font-size: 0.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 70px;
+    text-align: center;
+  }
+
+  :global(.decade-button.active) { color: white; }
+  :global(.decade-button[data-year="2020s"].active) { background-color: #ff00ff; box-shadow: 0 0 8px #ff00ff, 0 0 15px #ff00ff; }
+  :global(.decade-button[data-year="2010s"].active) { background-color: #00ffff; box-shadow: 0 0 8px #00ffff, 0 0 15px #00ffff; }
+  :global(.decade-button[data-year="2000s"].active) { background-color: #00ff00; box-shadow: 0 0 8px #00ff00, 0 0 15px #00ff00; }
+  :global(.decade-button[data-year="1990s"].active) { background-color: #ffff00; box-shadow: 0 0 8px #ffff00, 0 0 15px #ffff00; color: #333; }
+  :global(.decade-button[data-year="1980s"].active) { background-color: #ff00c8; box-shadow: 0 0 8px #ff00c8, 0 0 15px #ff00c8; }
+  :global(.decade-button[data-year="1970s"].active) { background-color: #ff8800; box-shadow: 0 0 8px #ff8800, 0 0 15px #ff8800; }
+  :global(.decade-button[data-year="1960s"].active) { background-color: #ff4136; box-shadow: 0 0 8px #ff4136, 0 0 15px #ff4136; }
+
   .button-group {
     display: flex;
     flex-wrap: wrap;
