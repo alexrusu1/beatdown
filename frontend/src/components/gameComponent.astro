@@ -105,6 +105,7 @@
       currentSong: null,
       originalGuesses: {},
       circleGuesses: {},
+          preFireGuesses: {}, // Initialize preFireGuesses
       answerRevealed: false,
       guessStartTime: null,
       guessTimeLimit: 30, // 30 seconds for guessing
@@ -348,6 +349,7 @@
             currentSong: data.currentSong ?? null,
             originalGuesses: data.originalGuesses || {},
             circleGuesses: data.circleGuesses || {},
+            preFireGuesses: data.preFireGuesses || {}, // Ensure preFireGuesses is loaded from Firebase
             answerRevealed: data.answerRevealed ?? false,
             guessStartTime: data.guessStartTime ?? null,
             guessTimeLimit: data.guessTimeLimit ?? 30, // Default to 30 seconds
@@ -665,13 +667,13 @@
         // Only show skip button to the original guesser during SONG_PLAYING phase
         // and if a song is actually loaded.
         // The condition `origGuesserId === myPlayerId` ensures only the current turn player can skip.
-        // The condition `game.currentSong` ensures there's actually a song to skip.
-        skipBtn.style.display =
+        // The condition `game.currentSong?.hasBeenPlayed` ensures the play button has been clicked.
+        skipBtn.style.display = (
           game.phase === "SONG_PLAYING" &&
           game.currentSong &&
+          game.currentSong.hasBeenPlayed && // Only show if the song has actually started playing
           origGuesserId === myPlayerId
-            ? "inline-block"
-            : "none";
+        ) ? "inline-block" : "none";
       }
 
       if (playBtn) { // Ensure playBtn exists before accessing its properties
