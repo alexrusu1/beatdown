@@ -35,7 +35,7 @@
     <input id="artist-input" placeholder="Artist" />
     <input id="year-input" type="number" placeholder="Year" />
     <input id="album-input" placeholder="Album" />
-    <button id="submit-guess">Submit Guess</button>
+    <button id="submit-guess">Pass</button>
   </div>
   <div id="guess-timer" style="display: none; font-size: 2em; margin-top: 10px;"></div>
   
@@ -74,6 +74,10 @@
     const progressBar = document.getElementById("song-progress-bar") as HTMLDivElement;
     const guessForm = document.getElementById("guess-form") as HTMLDivElement;
     const submitGuessBtn = document.getElementById("submit-guess") as HTMLButtonElement;
+    const songInput = document.getElementById("song-input") as HTMLInputElement;
+    const artistInput = document.getElementById("artist-input") as HTMLInputElement;
+    const yearInput = document.getElementById("year-input") as HTMLInputElement;
+    const albumInput = document.getElementById("album-input") as HTMLInputElement;
 
     const startGameBtn = document.getElementById("start-game") as HTMLButtonElement;
     
@@ -91,6 +95,12 @@
       const percent = (player.currentTime / player.duration) * 100;
       progressBar.style.width = percent + "%";
     });
+
+    const updateSubmitButtonText = () => {
+      const hasInput = songInput.value || artistInput.value || yearInput.value || albumInput.value;
+      submitGuessBtn.textContent = hasInput ? "Submit Guess" : "Pass";
+    };
+    [songInput, artistInput, yearInput, albumInput].forEach(el => el.addEventListener('input', updateSubmitButtonText));
 
     // --- Song Selection State and Logic ---
     const availableYears = ["2020s", "2010s", "2000s", "1990s", "1980s", "1970s", "1960s"];
@@ -426,38 +436,27 @@
       dispatchInternal({ type: "SET_PLAYING", playing: !currentlyPlaying });
     };
     submitGuessBtn.onclick = () => {
-      const songInput = document.getElementById("song-input") as HTMLInputElement;
-      const artistInput = document.getElementById("artist-input") as HTMLInputElement;
-      const yearInput = document.getElementById("year-input") as HTMLInputElement;
-      const albumInput = document.getElementById("album-input") as HTMLInputElement;
+      if (!myPlayerId) return; // Can't submit without being a player
 
-      const song = songInput.value;
-      const artist = artistInput.value;
-      const year = parseInt(yearInput.value);
-      const album = albumInput.value;
+      const guesses: Guess = {};
+      if (songInput.value.trim()) guesses.song = songInput.value.trim();
+      if (artistInput.value.trim()) guesses.artist = artistInput.value.trim();
+      if (yearInput.value.trim()) guesses.year = parseInt(yearInput.value.trim());
+      if (albumInput.value.trim()) guesses.album = albumInput.value.trim();
 
-      const activeId = getActiveGuesserId();
-      if (game.phase === "ORIGINAL_GUESS_TURN") {
-        if (activeId !== myPlayerId) return; // ignore others
-        dispatchInternal({
-          type: "ORIGINAL_GUESS_SUBMIT",
-          guesses: { song, artist, year, album }
-        });
-      } else if (game.phase === "CIRCLE_GUESS_TURN" && game.circleGuessIndex !== undefined) {
-        if (activeId !== myPlayerId) return;
-        const currentCirclePlayer = game.players[game.circleGuessIndex];
-        dispatchInternal({
-        type: "CIRCLE_GUESS_SUBMIT",
-        playerId: String(currentCirclePlayer.uid),  // ← use String() instead of as number
-        guesses: { song, artist, year, album }
+      // Dispatch the unified SUBMIT_GUESS action for any player at any time
+      dispatchInternal({
+        type: "SUBMIT_GUESS",
+        playerId: myPlayerId,
+        guesses: guesses,
       });
-      }
 
       // Clear all input fields after submitting
       songInput.value = "";
       artistInput.value = "";
       yearInput.value = "";
       albumInput.value = "";
+      updateSubmitButtonText();
     };
 
     // PHASE PROGRESSION BUTTONS
@@ -494,6 +493,22 @@
       const revealBtn = document.getElementById("reveal-btn") as HTMLButtonElement;
       const resolveBtn = document.getElementById("resolve-btn") as HTMLButtonElement;
       const playAgainBtn = document.getElementById("play-again-btn") as HTMLButtonElement;
+
+      const activeId = getActiveGuesserId();
+
+      // Auto-submit pre-fired guess if it is my turn
+      if ((game.phase === "ORIGINAL_GUESS_TURN" || game.phase === "CIRCLE_GUESS_TURN") && activeId === myPlayerId) {
+        if (game.preFireGuesses[myPlayerId] !== undefined) {
+          console.log("Auto-submitting pre-fired guess for", myPlayerId);
+          setTimeout(() => {
+            dispatchInternal({
+              type: "SUBMIT_GUESS",
+              playerId: myPlayerId!,
+              guesses: game.preFireGuesses[myPlayerId!]
+            });
+          }, 0);
+        }
+      }
 
       if (!statusEl || !playerListEl || !resultsEl) return;
 
@@ -552,7 +567,6 @@
       playerListEl.innerHTML = game.players
       .map(p => {
 
-        const activeId = getActiveGuesserId();
         const isActive = p.uid === activeId;
 
         return `
@@ -582,8 +596,17 @@
       })
       .join("");
 
-      // Show/hide guess form based on phase *and* active guesser
-      const activeId = getActiveGuesserId();
+      // Show/hide guess form based on phase. Now ALL players can see it.
+      const isGuessingPhase = game.phase === "SONG_PLAYING" || game.phase === "ORIGINAL_GUESS_TURN" || game.phase === "CIRCLE_GUESS_TURN";
+      
+      // Determine if the local player has already submitted a guess for this round.
+      // We check preFireGuesses (staged), originalGuesses (processed), and circleGuesses (processed).
+      const hasGuessed = myPlayerId && (
+        game.preFireGuesses[myPlayerId] !== undefined || 
+        game.originalGuesses[myPlayerId] !== undefined || 
+        game.circleGuesses[myPlayerId] !== undefined
+      );
+
       const activePlayer = game.players.find(p => p.uid === activeId);
       if (turnIndicator) {
         if (activePlayer) {
@@ -592,10 +615,8 @@
           turnIndicator.textContent = "";
         }
       }
-      if (
-        (game.phase === "ORIGINAL_GUESS_TURN" || game.phase === "CIRCLE_GUESS_TURN") &&
-        activeId === myPlayerId // Only show form to the active guesser
-      ) {
+
+      if (isGuessingPhase && myPlayerId && !hasGuessed) {
         guessForm.style.display = "block";
       } else {
         guessForm.style.display = "none";

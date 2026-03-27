@@ -54,8 +54,8 @@ export interface Game {
   turnIndex: number;
   circleGuessIndex?: number;
   currentSong: Song | null;
-  originalGuesses: Record<number, Guess>;
-  circleGuesses: Record<number, Guess>;
+  originalGuesses: Record<string | number, Guess>;
+  circleGuesses: Record<string | number, Guess>;
   preFireGuesses: Record<string | number, Guess>; // Stores guesses submitted by players not currently guessing
   answerRevealed: boolean;
   winner?: string | number | null;
@@ -71,10 +71,8 @@ export type GameAction =
   | { type: "PLAY_SONG"; song: Song }
   | { type: "END_SONG" }
   | { type: "SET_PLAYING"; playing: boolean }
-  | { type: "PRE_FIRE_GUESS_SUBMIT"; playerId: string | number; guesses: Guess }
-  | { type: "ORIGINAL_GUESS_SUBMIT"; guesses: Guess }
-  | { type: "CIRCLE_GUESS_SUBMIT"; playerId: String; guesses: Guess }
-  | { type: "GUESS_TIMEOUT" } // New action for when guess time runs out
+  | { type: "SUBMIT_GUESS"; playerId: string | number; guesses: Guess }
+  | { type: "GUESS_TIMEOUT" }
   | { type: "SET_SONG_SELECTIONS"; selections: SongSelection[] }
   | { type: "REVEAL_ANSWERS" }
   | { type: "RESOLVE_ROUND" }
@@ -178,19 +176,6 @@ function isWinningGuess(guess: Guess, correct: Song): boolean {
 
 
 export function gameReducer(game: Game, action: GameAction): Game {
-  // Handle actions that can occur in (almost) any phase first
-  if (action.type === "PRE_FIRE_GUESS_SUBMIT") {
-    // Check if it's currently this player's turn to make an official guess
-    const isPlayerGuessingTurn =
-      (game.phase === "ORIGINAL_GUESS_TURN" && game.players[game.turnIndex].uid === action.playerId) ||
-      (game.phase === "CIRCLE_GUESS_TURN" && game.circleGuessIndex !== undefined && game.players[game.circleGuessIndex].uid === action.playerId);
-
-    // Only store pre-fire if it's NOT their turn
-    if (!isPlayerGuessingTurn) {
-      return { ...game, preFireGuesses: { ...game.preFireGuesses, [action.playerId]: action.guesses } };
-    }
-    return game;
-  }
   switch (game.phase) {
     // ───────── LOBBY
     case "LOBBY":
@@ -231,6 +216,15 @@ export function gameReducer(game: Game, action: GameAction): Game {
 
     // ───────── SONG_PLAYING
     case "SONG_PLAYING":
+      if (action.type === "SUBMIT_GUESS") { // Allow pre-firing during song playback
+        console.log(
+          `[reducer:SONG_PLAYING] SUBMIT_GUESS received from player ${action.playerId}. Storing as pre-fire.`
+        );
+        return {
+          ...game,
+          preFireGuesses: { ...game.preFireGuesses, [String(action.playerId)]: action.guesses }
+        };
+      }
       if (action.type === "PLAY_SONG") {
         // respect provided playing flag or default to false (so guesser must
         // hit play)
@@ -240,22 +234,10 @@ export function gameReducer(game: Game, action: GameAction): Game {
         };
       }
       if (action.type === "END_SONG") {
-        const originalPlayerUid = game.players[game.turnIndex].uid;
-        const preFireGuess = game.preFireGuesses[originalPlayerUid];
-        let newOriginalGuesses = { ...game.originalGuesses };
-        let newPreFireGuesses = { ...game.preFireGuesses };
-
-        if (preFireGuess) {
-          newOriginalGuesses[originalPlayerUid] = preFireGuess;
-          delete newPreFireGuesses[originalPlayerUid];
-        }
-
         return {
           ...game,
           phase: "ORIGINAL_GUESS_TURN",
           guessStartTime: Date.now(),
-          originalGuesses: newOriginalGuesses,
-          preFireGuesses: newPreFireGuesses,
         };
       }
       if (action.type === "SET_PLAYING") {
@@ -274,20 +256,47 @@ export function gameReducer(game: Game, action: GameAction): Game {
     // ───────── ORIGINAL GUESS
     case "ORIGINAL_GUESS_TURN": {
       if (!game.currentSong) return game;
-      if (action.type !== "ORIGINAL_GUESS_SUBMIT" && action.type !== "GUESS_TIMEOUT") return game;
 
-      const originalPlayer = game.players[game.turnIndex];
-      // If a new guess is submitted, it overrides any pre-fire guess. If timed out, use existing (pre-fire or empty).
-      const submittedGuess = action.type === "ORIGINAL_GUESS_SUBMIT" ? action.guesses : (game.originalGuesses[originalPlayer.uid] || {});
+      let updatedGame = game;
+      if (action.type === "SUBMIT_GUESS") {
+        console.log(
+          `[reducer:ORIGINAL_GUESS_TURN] SUBMIT_GUESS received from player ${action.playerId}.`
+        );
+        updatedGame = {
+          ...game,
+          preFireGuesses: { ...game.preFireGuesses, [String(action.playerId)]: action.guesses }
+        };
+      }
+      const originalPlayerId = updatedGame.players[updatedGame.turnIndex].uid;
+      const isTurnEnd = (action.type === "SUBMIT_GUESS" && String(action.playerId) === String(originalPlayerId)) || action.type === "GUESS_TIMEOUT";
+      
+      if (action.type === "SUBMIT_GUESS" && !isTurnEnd) {
+        console.log(
+          `[reducer:ORIGINAL_GUESS_TURN] Player ${action.playerId} is not the active guesser. Storing pre-fire and waiting.`
+        );
+        return updatedGame;
+      }
+
+      if (!isTurnEnd) {
+        return updatedGame;
+      }
+      
+      console.log(`[reducer:ORIGINAL_GUESS_TURN] Turn ending for player ${originalPlayerId}. Processing guess.`);
+      // Get the guess to evaluate from the staging area.
+      const submittedGuess = updatedGame.preFireGuesses[originalPlayerId] || {};
       const instantWin = isWinningGuess(submittedGuess, game.currentSong);
       const acc = calculateAccuracy(submittedGuess, game.currentSong);
-
-      const updatedOriginalGuesses = { ...game.originalGuesses, [originalPlayer.uid]: submittedGuess };
+      
+      // Move the processed guess to the official originalGuesses map and remove from pre-fire.
+      const updatedOriginalGuesses = { ...game.originalGuesses, [String(originalPlayerId)]: submittedGuess };
+      const updatedPreFireGuesses = { ...updatedGame.preFireGuesses };
+      delete updatedPreFireGuesses[originalPlayerId];
  
       if (instantWin || acc >= 60) {
         return {
-          ...game,
+          ...updatedGame,
           originalGuesses: updatedOriginalGuesses,
+          preFireGuesses: updatedPreFireGuesses,
           phase: "REVEAL_RESULTS"
         };
       }
@@ -295,28 +304,17 @@ export function gameReducer(game: Game, action: GameAction): Game {
       let firstCircleIndex = (game.turnIndex + 1) % game.players.length;
       while (
         !game.players[firstCircleIndex].alive ||
-        game.players[firstCircleIndex].uid === originalPlayer.uid
+        game.players[firstCircleIndex].uid === originalPlayerId
       ) {
         firstCircleIndex = (firstCircleIndex + 1) % game.players.length;
       }
-      
-      // Apply pre-fire guess for the first circle player if available
-      let newCircleGuesses = { ...game.circleGuesses };
-      let newPreFireGuesses = { ...game.preFireGuesses };
-      const firstCirclePlayerUid = game.players[firstCircleIndex].uid;
-      const firstCirclePreFireGuess = game.preFireGuesses[firstCirclePlayerUid];
-      if (firstCirclePreFireGuess) {
-        newCircleGuesses[firstCirclePlayerUid] = firstCirclePreFireGuess;
-        delete newPreFireGuesses[firstCirclePlayerUid];
-      }
 
       return {
-        ...game,
+        ...updatedGame,
         guessStartTime: Date.now(), // Reset timer for circle guess
         originalGuesses: updatedOriginalGuesses,
+        preFireGuesses: updatedPreFireGuesses,
         circleGuessIndex: firstCircleIndex,
-        circleGuesses: newCircleGuesses,
-        preFireGuesses: newPreFireGuesses,
         phase: "CIRCLE_GUESS_TURN",
       };
     }
@@ -324,87 +322,92 @@ export function gameReducer(game: Game, action: GameAction): Game {
 
     // ───────── CIRCLE GUESS
     case "CIRCLE_GUESS_TURN": {
-      if (action.type !== "CIRCLE_GUESS_SUBMIT" && action.type !== "GUESS_TIMEOUT") return game;
-      if (!game.currentSong || game.circleGuessIndex === undefined) return game;
+      if (!game.currentSong || game.circleGuessIndex === undefined) return game; // Ensure currentSong and circleGuessIndex are defined
+      
+      let updatedGame = game;
+      if (action.type === "SUBMIT_GUESS") {
+        console.log(
+          `[reducer:CIRCLE_GUESS_TURN] SUBMIT_GUESS received from player ${action.playerId}.`
+        );
+        updatedGame = {
+          ...game,
+          preFireGuesses: { ...game.preFireGuesses, [String(action.playerId)]: action.guesses }
+        };
+      }
+      const currentGuesserId = updatedGame.players[updatedGame.circleGuessIndex].uid;
+      const isTurnEnd = (action.type === "SUBMIT_GUESS" && String(action.playerId) === String(currentGuesserId)) || action.type === "GUESS_TIMEOUT";
+      
+      if (action.type === "SUBMIT_GUESS" && !isTurnEnd) {
+        console.log(
+          `[reducer:CIRCLE_GUESS_TURN] Player ${action.playerId} is not the active guesser. Storing pre-fire and waiting.`
+        );
+        return updatedGame;
+      }
 
-      const originalUid = game.players[game.turnIndex].uid;
-      const expectedPlayer = game.players[game.circleGuessIndex];
+      if (!isTurnEnd) return updatedGame;
 
-      // On timeout, the "player" is the one whose turn it was.
-      // On submit, it's the one who sent the action.
-      const currentPlayerId = action.type === "CIRCLE_GUESS_SUBMIT" ? action.playerId : expectedPlayer.uid;
-
-      // If a new guess is submitted, it overrides any pre-fire guess. If timed out, use existing (pre-fire or empty).
-      const submittedGuess = action.type === "CIRCLE_GUESS_SUBMIT" ? action.guesses : (game.circleGuesses[String(currentPlayerId)] || {});
-
-      // Only process if it's the expected player's turn or if it's a pre-fire guess for another player
-      if (String(currentPlayerId) !== String(expectedPlayer.uid)) return game;
-
-      let newCircleGuesses = { ...game.circleGuesses, [String(currentPlayerId)]: submittedGuess };
-      let newPreFireGuesses = { ...game.preFireGuesses };
-
-      // Evaluate the guess for the current player
+      console.log(`[reducer:CIRCLE_GUESS_TURN] Turn ending for player ${currentGuesserId}. Processing guess.`);
+      // Get the guess to evaluate from the staging area.
+      const submittedGuess = updatedGame.preFireGuesses[currentGuesserId] || {};
       const guessAcc = calculateAccuracy(submittedGuess, game.currentSong);
+
+      // Move the processed guess to the official circleGuesses map and remove from pre-fire.
+      const updatedCircleGuesses = { ...updatedGame.circleGuesses, [String(currentGuesserId)]: submittedGuess };
+      const updatedPreFireGuesses = { ...updatedGame.preFireGuesses };
+      delete updatedPreFireGuesses[currentGuesserId];
 
       if (guessAcc >= 60) {
         return {
-          ...game,
-          circleGuesses: newCircleGuesses,
+          ...updatedGame,
+          circleGuesses: updatedCircleGuesses,
+          preFireGuesses: updatedPreFireGuesses,
           circleGuessIndex: undefined,
           phase: "WAITING_TO_REVEAL",
           guessStartTime: null,
-          preFireGuesses: { ...newPreFireGuesses, [String(currentPlayerId)]: undefined }, // Clear pre-fire guess for this player
         };
       }
 
       // Find next player for circle guess
       const alivePlayers = game.players.filter(p => p.alive);
-      const circleOrder = alivePlayers.filter(p => String(p.uid) !== String(originalUid));
-      const guessedPlayerIds = Object.keys(newCircleGuesses);
+      const originalPlayerId = game.players[game.turnIndex].uid;
+      const circleOrder = alivePlayers.filter(p => String(p.uid) !== String(originalPlayerId));
+      const guessedPlayerIds = Object.keys(updatedCircleGuesses);
 
       const allGuessed = circleOrder.every(p => guessedPlayerIds.includes(String(p.uid)));
 
-      let nextCircleIndex = game.circleGuessIndex;
+      let nextCircleIndex = updatedGame.circleGuessIndex;
       let nextPlayerFound = false;
-      let potentialNextPlayerUid: string | number | undefined;
 
       for (let i = 0; i < game.players.length; i++) {
         nextCircleIndex = (nextCircleIndex + 1) % game.players.length;
         const nextPlayer = game.players[nextCircleIndex];
-        if (nextPlayer.alive && String(nextPlayer.uid) !== String(originalUid) && !newCircleGuesses[String(nextPlayer.uid)]) {
+        if (nextPlayer.alive && String(nextPlayer.uid) !== String(originalPlayerId) && !updatedCircleGuesses[String(nextPlayer.uid)]) {
           nextPlayerFound = true;
-          potentialNextPlayerUid = nextPlayer.uid;
           break;
         }
       }
 
-      // Apply pre-fire guess for the next player if available
-      if (potentialNextPlayerUid !== undefined) {
-        const nextPlayerPreFireGuess = game.preFireGuesses[potentialNextPlayerUid];
-        if (nextPlayerPreFireGuess) {
-          newCircleGuesses = {
-            ...newCircleGuesses,
-            [potentialNextPlayerUid]: nextPlayerPreFireGuess,
-          };
-          delete newPreFireGuesses[potentialNextPlayerUid];
-        }
-      }
-
-      // Clear the current player's pre-fire guess after their turn is processed
-      delete newPreFireGuesses[String(currentPlayerId)];
-
       return {
-        ...game,
-        guessStartTime: Date.now(), // Reset timer for the next turn
-        circleGuesses: newCircleGuesses,
+        ...updatedGame,
+        circleGuesses: updatedCircleGuesses,
+        preFireGuesses: updatedPreFireGuesses,
         circleGuessIndex: allGuessed || !nextPlayerFound ? undefined : nextCircleIndex,
-        phase: allGuessed || !nextPlayerFound ? "WAITING_TO_REVEAL" : game.phase,
-        preFireGuesses: newPreFireGuesses,
+        phase: allGuessed || !nextPlayerFound ? "WAITING_TO_REVEAL" : game.phase, // Transition phase if circle is done
+        guessStartTime: Date.now(), // Reset timer for the next turn
       };
     }
 
     // ───────── WAITING TO REVEAL
     case "WAITING_TO_REVEAL":
+      if (action.type === "SUBMIT_GUESS") { // Allow pre-firing for the next round
+        console.log(
+          `[reducer:WAITING_TO_REVEAL] SUBMIT_GUESS received from player ${action.playerId}. Storing as pre-fire for next round.`
+        );
+        return {
+          ...game,
+          preFireGuesses: { ...game.preFireGuesses, [String(action.playerId)]: action.guesses }
+        };
+      }
       if (action.type === "REVEAL_ANSWERS") { // This action was missing from GameAction type
         return { ...game, phase: "REVEAL_RESULTS", answerRevealed: true };
       }
@@ -419,7 +422,7 @@ export function gameReducer(game: Game, action: GameAction): Game {
         const originalUidReveal = game.players[game.turnIndex].uid;
         let players = game.players.map(p => ({ ...p }));
 
-        const origGuess = game.originalGuesses[String(originalUidReveal) as any];
+        const origGuess = game.originalGuesses[originalUidReveal];
         if (origGuess && Object.keys(origGuess).length > 0) { // Only deal damage if there was an actual guess
           const acc = calculateAccuracy(origGuess, song);
           if (acc >= 60) {
