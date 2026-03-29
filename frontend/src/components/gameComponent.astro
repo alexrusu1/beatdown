@@ -8,6 +8,15 @@
   <div id="turn-indicator"></div>  
 
   <div id="lobby-controls">
+    <!-- Mode Selector -->
+    <div class="game-mode-selector">
+      <label for="mode-select">Game Mode:</label>
+      <select id="mode-select">
+        <option value="CLASSIC">Classic</option>
+        <option value="RACE">Race</option>
+      </select>
+    </div>
+
     <div id="song-mixer-container" class="song-selection-container">
       <h4>The DJ Equalizer</h4>
       <div id="mixer-board">
@@ -22,7 +31,7 @@
   <div id="player-list"></div>
   
   <!-- Music Player Controls -->
-  <div id="music-controls">
+  <div id="music-controls" style="display: none;">
     <audio id="player" src="" preload="auto"></audio>
     <button id="playBtn">▶</button>
     <button id="skip-btn">Skip Song</button>
@@ -73,6 +82,7 @@
     const guessTimerEl = document.getElementById("guess-timer") as HTMLDivElement;
     const progressBar = document.getElementById("song-progress-bar") as HTMLDivElement;
     const guessForm = document.getElementById("guess-form") as HTMLDivElement;
+    const modeSelect = document.getElementById("mode-select") as HTMLSelectElement;
     const submitGuessBtn = document.getElementById("submit-guess") as HTMLButtonElement;
     const songInput = document.getElementById("song-input") as HTMLInputElement;
     const artistInput = document.getElementById("artist-input") as HTMLInputElement;
@@ -90,17 +100,15 @@
     document.getElementById("game-code")!.textContent = gameCode;
 
     player.addEventListener("timeupdate", () => {
-      if (!progressBar || !player.duration || isNaN(player.duration) || !isFinite(player.duration)) return; // Check for NaN or Infinity duration
+      if (!progressBar) return;
+      if (!player.duration || isNaN(player.duration) || !isFinite(player.duration)) {
+        progressBar.style.width = "0%";
+        return;
+      }
 
       const percent = (player.currentTime / player.duration) * 100;
       progressBar.style.width = percent + "%";
     });
-
-    const updateSubmitButtonText = () => {
-      const hasInput = songInput.value || artistInput.value || yearInput.value || albumInput.value;
-      submitGuessBtn.textContent = hasInput ? "Submit Guess" : "Pass";
-    };
-    [songInput, artistInput, yearInput, albumInput].forEach(el => el.addEventListener('input', updateSubmitButtonText));
 
     // --- Song Selection State and Logic ---
     const availableYears = ["2020s", "2010s", "2000s", "1990s", "1980s", "1970s", "1960s"];
@@ -110,6 +118,9 @@
     // Initialize game state
     let game: Game = {
       phase: "LOBBY",
+      mode: "CLASSIC",
+      readyPlayers: [],
+      skipVotes: [],
       players: [],
       turnIndex: 0,
       currentSong: null,
@@ -120,6 +131,24 @@
       guessStartTime: null,
       guessTimeLimit: 30, // 30 seconds for guessing
       songSelections: [], 
+    };
+
+    const updateSubmitButtonText = () => {
+      if (game.mode === "RACE") {
+        submitGuessBtn.textContent = "Submit Guess";
+      } else {
+        const hasInput = songInput.value || artistInput.value || yearInput.value || albumInput.value;
+        submitGuessBtn.textContent = hasInput ? "Submit Guess" : "Pass";
+      }
+    };
+    [songInput, artistInput, yearInput, albumInput].forEach(el => el.addEventListener('input', updateSubmitButtonText));
+
+    const clearGuessInputs = () => {
+      songInput.value = "";
+      artistInput.value = "";
+      yearInput.value = "";
+      albumInput.value = "";
+      updateSubmitButtonText();
     };
 
     // helper to figure out whose turn it is to guess
@@ -163,6 +192,11 @@
         clearInterval(guessCountdownInterval);
         guessCountdownInterval = null;
         guessTimerEl.style.display = 'none';
+      }
+      
+      // Clear inputs at the start of a new round
+      if (game.phase === "SONG_PLAYING" && prevGame.phase !== "SONG_PLAYING") {
+        clearGuessInputs();
       }
 
       // Update UI
@@ -210,7 +244,7 @@
           const song = await getNextSong();
           if (song) {
             console.log("Loaded song:", song.displayName); // Log song details
-            dispatchInternal({ type: "PLAY_SONG", song: { ...song, isPlaying: false } });
+            dispatchInternal({ type: "PLAY_SONG", song: { ...song, isPlaying: game.mode === "RACE" } });
           } else {
             console.warn("Could not get a new song.");
           }
@@ -353,6 +387,10 @@
           // build new game state with defaults for missing fields
           game = {
             phase: data.phase ?? "LOBBY",
+            mode: data.mode ?? "CLASSIC",
+            readyPlayers: data.readyPlayers || [],
+            skipVotes: data.skipVotes || [],
+            roundWinner: data.roundWinner || null,
             players: playersArray,
             turnIndex: data.turnIndex ?? 0,
             circleGuessIndex: data.circleGuessIndex,
@@ -374,6 +412,11 @@
             renderMixer();
           }
 
+          // Clear inputs at the start of a new round for all clients
+          if (game.phase === "SONG_PLAYING" && prevGame.phase !== "SONG_PLAYING") {
+            clearGuessInputs();
+          }
+
           console.log("Local game.players after Firebase update and transformation:", game.players);
           if (playersArray.length !== prevGame.players.length) {
             console.log("Players count changed from", prevGame.players.length, "to", playersArray.length);
@@ -392,6 +435,16 @@
     }
 
     // UI Event Handlers
+
+    modeSelect?.addEventListener("change", (e) => {
+      const target = e.target as HTMLSelectElement;
+      const host = game.players.find(p => p.isHost);
+      if (host?.uid === myPlayerId) {
+        dispatchInternal({ type: "SET_GAME_MODE", mode: target.value as GameMode });
+      } else {
+        target.value = game.mode || "CLASSIC";
+      }
+    });
 
 // START GAME HANDLER
     startGameBtn.addEventListener("click", () => {
@@ -416,7 +469,11 @@
     });
 
     skipBtn.onclick = () => {
-      // only the original guesser may skip
+      if (game.mode === "RACE" && myPlayerId) {
+        dispatchInternal({ type: "VOTE_SKIP", playerId: myPlayerId });
+        return;
+      }
+
       const origId = game.players[game.turnIndex]?.uid;
       if (gameCode && origId !== myPlayerId) return;
       if (game.phase === "SONG_PLAYING") {
@@ -425,9 +482,9 @@
     };
 
     playBtn.onclick = () => {
-      // only the active guesser may toggle play/pause
       const activeId = getActiveGuesserId();
-      if (gameCode && myPlayerId !== activeId) {
+      const isAllowed = myPlayerId === activeId && game.mode !== "RACE";
+      if (gameCode && !isAllowed) {
         console.log("🔒 play/pause disabled for non-active player");
         return;
       }
@@ -452,11 +509,7 @@
       });
 
       // Clear all input fields after submitting
-      songInput.value = "";
-      artistInput.value = "";
-      yearInput.value = "";
-      albumInput.value = "";
-      updateSubmitButtonText();
+      clearGuessInputs();
     };
 
     // PHASE PROGRESSION BUTTONS
@@ -469,8 +522,11 @@
     });
 
     resolveBtn?.addEventListener("click", () => {
-      dispatchInternal({ type: "RESOLVE_ROUND" });
-      // renderGame is called by dispatchInternal
+      if (game.mode === "RACE" && myPlayerId) {
+        dispatchInternal({ type: "PLAYER_READY", playerId: myPlayerId });
+      } else {
+        dispatchInternal({ type: "RESOLVE_ROUND" });
+      }
     });
 
     playAgainBtn?.addEventListener("click", () => {
@@ -530,6 +586,10 @@
           startGameBtn.style.display = "inline-block";
         }
         startGameBtn.disabled = game.players.length < 2;
+      }
+      if (modeSelect) {
+        modeSelect.value = game.mode || "CLASSIC";
+        modeSelect.disabled = host?.uid !== myPlayerId;
       }
 
       // Update song selection controls visibility based on lobby phase
@@ -596,12 +656,12 @@
       })
       .join("");
 
-      // Show/hide guess form based on phase. Now ALL players can see it.
-      const isGuessingPhase = game.phase === "SONG_PLAYING" || game.phase === "ORIGINAL_GUESS_TURN" || game.phase === "CIRCLE_GUESS_TURN";
+      // Show/hide guess form based on phase.
+      const isGuessingPhase = game.phase === "ORIGINAL_GUESS_TURN" || game.phase === "CIRCLE_GUESS_TURN" || (game.phase === "SONG_PLAYING" && game.mode === "RACE");
       
       // Determine if the local player has already submitted a guess for this round.
       // We check preFireGuesses (staged), originalGuesses (processed), and circleGuesses (processed).
-      const hasGuessed = myPlayerId && (
+      const hasGuessed = myPlayerId && game.mode !== "RACE" && (
         game.preFireGuesses[myPlayerId] !== undefined || 
         game.originalGuesses[myPlayerId] !== undefined || 
         game.circleGuesses[myPlayerId] !== undefined
@@ -609,7 +669,9 @@
 
       const activePlayer = game.players.find(p => p.uid === activeId);
       if (turnIndicator) {
-        if (activePlayer) {
+        if (game.mode === "RACE") {
+          turnIndicator.textContent = "🏎️ RACE MODE - Fastest guess wins!";
+        } else if (activePlayer) {
           turnIndicator.textContent = `🎤 ${activePlayer.name}'s Turn`;
         } else {
           turnIndicator.textContent = "";
@@ -618,12 +680,14 @@
 
       if (isGuessingPhase && myPlayerId && !hasGuessed) {
         guessForm.style.display = "block";
+        updateSubmitButtonText();
       } else {
         guessForm.style.display = "none";
       }
 
       // Update and display guess timer
-      if ((game.phase === "ORIGINAL_GUESS_TURN" || game.phase === "CIRCLE_GUESS_TURN") && game.guessStartTime !== null) {
+      const isRacePostSong = game.phase === "SONG_PLAYING" && game.mode === "RACE" && game.guessStartTime !== null;
+      if ((game.phase === "ORIGINAL_GUESS_TURN" || game.phase === "CIRCLE_GUESS_TURN" || isRacePostSong) && game.guessStartTime !== null) {
         guessTimerEl.style.display = "block";
         if (guessCountdownInterval) {
           clearInterval(guessCountdownInterval);
@@ -645,7 +709,15 @@
 
       // Show results
       if (game.phase === "REVEAL_RESULTS" && game.currentSong) {
+        let raceWinnerText = "";
+        if (game.mode === "RACE") {
+          const winner = game.players.find(p => String(p.uid) === game.roundWinner);
+          raceWinnerText = winner 
+            ? `<h2 style="color: #42d67d;">🏎️ ${winner.name} got the right answer!</h2>` 
+            : `<h2 style="color: #ff4136;">No one guessed it!</h2>`;
+        }
         resultsEl.innerHTML = `
+          ${raceWinnerText}
           <h3>Answer:</h3>
           <p>Song: ${game.currentSong.displayName}</p>
           <p>Artist: ${game.currentSong.displayArtists}</p>
@@ -669,8 +741,17 @@
       if (revealBtn) revealBtn.style.display = 
         game.phase === "WAITING_TO_REVEAL" ? "block" : "none";
       
-      if (resolveBtn) resolveBtn.style.display = 
-        game.phase === "REVEAL_RESULTS" ? "block" : "none";
+      if (resolveBtn) {
+        resolveBtn.style.display = game.phase === "REVEAL_RESULTS" ? "block" : "none";
+        if (game.mode === "RACE" && myPlayerId) {
+          const isReady = game.readyPlayers?.includes(myPlayerId);
+          resolveBtn.textContent = isReady ? "Waiting for others..." : "Ready Up";
+          resolveBtn.disabled = isReady;
+        } else {
+          resolveBtn.textContent = "Continue to Next Round";
+          resolveBtn.disabled = false;
+        }
+      }
 
       if (playAgainBtn) {
         playAgainBtn.style.display = (game.phase === "GAME_OVER" && host?.uid === myPlayerId) ? "block" : "none";
@@ -678,23 +759,37 @@
 
       // Enable/disable music controls based on phase and active guesser
       const me = game.players.find(p => p.uid === myPlayerId);
+
+      const musicControls = document.getElementById("music-controls");
+      if (musicControls) {
+        musicControls.style.display = game.phase === "SONG_PLAYING" ? "block" : "none";
+      }
+
       if (playBtn) { // Ensure playBtn exists
-        playBtn.disabled = (game.phase === "SONG_PLAYING" && activeId === myPlayerId) ? false : true;
-        playBtn.style.display = game.phase === "SONG_PLAYING" ? "inline-block" : "none";
+        const isGuesser = activeId === myPlayerId;
+        playBtn.disabled = (game.phase === "SONG_PLAYING" && isGuesser && game.mode !== "RACE") ? false : true;
+        playBtn.style.display = (game.phase === "SONG_PLAYING" && game.mode !== "RACE") ? "inline-block" : "none";
       }
 
       const origGuesserId = game.players[game.turnIndex]?.uid;
       if (skipBtn) {
-        // Only show skip button to the original guesser during SONG_PLAYING phase
-        // and if a song is actually loaded.
-        // The condition `origGuesserId === myPlayerId` ensures only the current turn player can skip.
-        // The condition `game.currentSong?.hasBeenPlayed` ensures the play button has been clicked.
-        skipBtn.style.display = (
-          game.phase === "SONG_PLAYING" &&
-          game.currentSong &&
-          game.currentSong.hasBeenPlayed && // Only show if the song has actually started playing
-          origGuesserId === myPlayerId
-        ) ? "inline-block" : "none";
+        if (game.mode === "RACE") {
+          const alivePlayers = game.players.filter(p => p.alive).length;
+          const hasVoted = !!(myPlayerId && game.skipVotes?.includes(myPlayerId));
+          skipBtn.style.display = game.phase === "SONG_PLAYING" && myPlayerId && game.players.find(p => p.uid === myPlayerId)?.alive ? "inline-block" : "none";
+          skipBtn.textContent = hasVoted ? `Skip (${game.skipVotes?.length || 0}/${alivePlayers})` : "Vote Skip";
+          skipBtn.disabled = hasVoted;
+        } else {
+          skipBtn.style.display = (
+            game.phase === "SONG_PLAYING" &&
+            game.currentSong &&
+            game.currentSong.hasBeenPlayed &&
+            origGuesserId === myPlayerId
+          ) ? "inline-block" : "none";
+          skipBtn.textContent = "Skip Song";
+          skipBtn.disabled = false;
+        }
+
       }
 
       if (playBtn) { // Ensure playBtn exists before accessing its properties
@@ -821,6 +916,27 @@
     text-shadow: none;
   }
   
+  .game-mode-selector {
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    color: #00eaff;
+  }
+  .game-mode-selector label {
+    margin-right: 0.5rem;
+    text-shadow: 0 0 8px rgba(0, 234, 255, 0.7);
+  }
+  .game-mode-selector select {
+    font-family: "Tilt Neon", sans-serif;
+    font-size: 1.1rem;
+    padding: 0.3rem 0.5rem;
+    border-radius: 8px;
+    background: #1a1a1a;
+    color: #00eaff;
+    border: 2px solid #00eaff;
+    outline: none;
+    cursor: pointer;
+  }
+  
   /* Song Mixer Styles */
   .song-selection-container {
     background: #1a1a1a;
@@ -924,12 +1040,16 @@
     font-size: 1.5rem;
     margin-bottom: 1rem;
   }
+  #music-controls {
+    width: 100%;
+    max-width: 400px;
+  }
   #song-progress {
     width: 80%;
     height: 8px;
     background-color: #444;
     border-radius: 5px;
-    margin-top: 10px;
+    margin: 10px auto 0 auto;
   }
   #song-progress-bar {
     height: 100%;

@@ -25,6 +25,7 @@ export interface Guess {
   artist?: string;
   year?: number;
   album?: string;
+  isPass?: boolean;
 }
 
 
@@ -47,9 +48,14 @@ export interface SongSelection {
   category: string;
 }
 
+export type GameMode = "CLASSIC" | "RACE";
 
 export interface Game {
   phase: GamePhase;
+  mode: GameMode;
+  readyPlayers: string[];
+  skipVotes: string[];
+  roundWinner?: string | null;
   players: Player[];
   turnIndex: number;
   circleGuessIndex?: number;
@@ -76,6 +82,10 @@ export type GameAction =
   | { type: "SET_SONG_SELECTIONS"; selections: SongSelection[] }
   | { type: "REVEAL_ANSWERS" }
   | { type: "RESOLVE_ROUND" }
+  | { type: "SET_GAME_MODE"; mode: GameMode }
+  | { type: "PLAYER_READY"; playerId: string | number }
+  | { type: "VOTE_SKIP"; playerId: string | number }
+  | { type: "SKIP_BROKEN_SONG"; src: string }
 
 
 // ──────────────────────────────────────────────── Helpers
@@ -182,6 +192,9 @@ export function gameReducer(game: Game, action: GameAction): Game {
       if (action.type === "ADD_PLAYER") {
         return {
           ...game,
+          mode: game.mode || "CLASSIC",
+          readyPlayers: [],
+          skipVotes: [],
           players: [
             ...game.players,
             { ...action.player, health: 100, alive: true }
@@ -196,6 +209,10 @@ export function gameReducer(game: Game, action: GameAction): Game {
         };
       }
 
+      if (action.type === "SET_GAME_MODE") {
+        return { ...game, mode: action.mode };
+      }
+
       if (action.type === "START_GAME" && game.players.length >= 2) {
         return {
           ...game,
@@ -206,9 +223,13 @@ export function gameReducer(game: Game, action: GameAction): Game {
           circleGuesses: {},
           preFireGuesses: {}, // Initialize pre-fire guesses
           guessStartTime: null,
+          guessTimeLimit: 30, // Reset default guess limit
           answerRevealed: false,
           songSelections: game.songSelections, // Carry over selections
-          winner: undefined
+          winner: undefined,
+          readyPlayers: [],
+          skipVotes: [],
+          roundWinner: null
         };
       }
       return game;
@@ -216,14 +237,56 @@ export function gameReducer(game: Game, action: GameAction): Game {
 
     // ───────── SONG_PLAYING
     case "SONG_PLAYING":
-      if (action.type === "SUBMIT_GUESS") { // Allow pre-firing during song playback
-        console.log(
-          `[reducer:SONG_PLAYING] SUBMIT_GUESS received from player ${action.playerId}. Storing as pre-fire.`
-        );
-        return {
-          ...game,
-          preFireGuesses: { ...game.preFireGuesses, [String(action.playerId)]: action.guesses }
-        };
+      if (action.type === "GUESS_TIMEOUT" && game.mode === "RACE") {
+        return { ...game, phase: "REVEAL_RESULTS", roundWinner: null, readyPlayers: [], skipVotes: [] };
+      }
+      if (action.type === "VOTE_SKIP" && game.mode === "RACE") {
+        const player = game.players.find(p => String(p.uid) === String(action.playerId));
+        if (!player || !player.alive) return game; // Only alive players can vote
+
+        const newVotes = [...new Set([...(game.skipVotes || []), String(action.playerId)])];
+        const alivePlayers = game.players.filter(p => p.alive);
+        
+        if (newVotes.length >= alivePlayers.length) {
+          return { ...game, phase: "REVEAL_RESULTS", roundWinner: null, readyPlayers: [], skipVotes: [] };
+        }
+        return { ...game, skipVotes: newVotes };
+      }
+      if (action.type === "SUBMIT_GUESS" && game.mode === "RACE" && game.currentSong) {
+        const acc = calculateAccuracy(action.guesses, game.currentSong);
+        if (acc >= 60 || isWinningGuess(action.guesses, game.currentSong)) {
+          // A player guessed correctly! Deal damage to everyone else.
+          const dmg = 20 + Math.floor((acc - 60) / 2);
+          let players = game.players.map(p =>
+            p.alive && String(p.uid) !== String(action.playerId)
+              ? { ...p, health: Math.max(0, p.health - dmg) }
+              : p
+          );
+
+          const updated = players.map(p => ({ ...p, alive: p.health > 0 }));
+          const alive = updated.filter(p => p.alive);
+
+          if (alive.length <= 1) {
+            return {
+              ...game,
+              players: updated,
+              phase: "GAME_OVER",
+              winner: alive[0]?.uid ?? String(action.playerId)
+            };
+          }
+
+          return {
+            ...game,
+            players: updated,
+            phase: "REVEAL_RESULTS",
+            roundWinner: String(action.playerId),
+            readyPlayers: [],
+            skipVotes: [],
+            originalGuesses: { [String(action.playerId)]: action.guesses } 
+          };
+        }
+        // Incorrect guesses in race mode are simply ignored to allow spamming
+        return game;
       }
       if (action.type === "PLAY_SONG") {
         // respect provided playing flag or default to false (so guesser must
@@ -234,6 +297,10 @@ export function gameReducer(game: Game, action: GameAction): Game {
         };
       }
       if (action.type === "END_SONG") {
+        if (game.mode === "RACE") {
+          // If the song ends, start a 20-second grace period for final guesses
+          return { ...game, guessStartTime: Date.now(), guessTimeLimit: 20 };
+        }
         return {
           ...game,
           phase: "ORIGINAL_GUESS_TURN",
@@ -250,6 +317,12 @@ export function gameReducer(game: Game, action: GameAction): Game {
           currentSong: { ...game.currentSong, isPlaying: action.playing, hasBeenPlayed: action.playing || game.currentSong.hasBeenPlayed }
         };
       }
+      if (action.type === "SKIP_BROKEN_SONG") {
+        if (game.currentSong && action.src.includes(game.currentSong.previewUrl)) {
+          return { ...game, currentSong: null };
+        }
+        return game;
+      }
       return game;
 
 
@@ -262,9 +335,10 @@ export function gameReducer(game: Game, action: GameAction): Game {
         console.log(
           `[reducer:ORIGINAL_GUESS_TURN] SUBMIT_GUESS received from player ${action.playerId}.`
         );
+        const safeGuesses = Object.keys(action.guesses).length === 0 ? { isPass: true } : action.guesses;
         updatedGame = {
           ...game,
-          preFireGuesses: { ...game.preFireGuesses, [String(action.playerId)]: action.guesses }
+          preFireGuesses: { ...game.preFireGuesses, [String(action.playerId)]: safeGuesses }
         };
       }
       const originalPlayerId = updatedGame.players[updatedGame.turnIndex].uid;
@@ -329,9 +403,10 @@ export function gameReducer(game: Game, action: GameAction): Game {
         console.log(
           `[reducer:CIRCLE_GUESS_TURN] SUBMIT_GUESS received from player ${action.playerId}.`
         );
+        const safeGuesses = Object.keys(action.guesses).length === 0 ? { isPass: true } : action.guesses;
         updatedGame = {
           ...game,
-          preFireGuesses: { ...game.preFireGuesses, [String(action.playerId)]: action.guesses }
+          preFireGuesses: { ...game.preFireGuesses, [String(action.playerId)]: safeGuesses }
         };
       }
       const currentGuesserId = updatedGame.players[updatedGame.circleGuessIndex].uid;
@@ -403,9 +478,10 @@ export function gameReducer(game: Game, action: GameAction): Game {
         console.log(
           `[reducer:WAITING_TO_REVEAL] SUBMIT_GUESS received from player ${action.playerId}. Storing as pre-fire for next round.`
         );
+        const safeGuesses = Object.keys(action.guesses).length === 0 ? { isPass: true } : action.guesses;
         return {
           ...game,
-          preFireGuesses: { ...game.preFireGuesses, [String(action.playerId)]: action.guesses }
+          preFireGuesses: { ...game.preFireGuesses, [String(action.playerId)]: safeGuesses }
         };
       }
       if (action.type === "REVEAL_ANSWERS") { // This action was missing from GameAction type
@@ -415,6 +491,34 @@ export function gameReducer(game: Game, action: GameAction): Game {
 
     // ───────── REVEAL RESULTS
     case "REVEAL_RESULTS": {
+      if (action.type === "PLAYER_READY" && game.mode === "RACE") {
+        const newReady = [...new Set([...(game.readyPlayers || []), String(action.playerId)])];
+        const alivePlayers = game.players.filter(p => p.alive);
+
+        if (newReady.length >= alivePlayers.length) {
+          // Everyone is ready! Start next round automatically
+          let nextTurn = (game.turnIndex + 1) % game.players.length;
+          while (!game.players[nextTurn].alive) {
+            nextTurn = (nextTurn + 1) % game.players.length;
+          }
+
+          return {
+            ...game,
+            turnIndex: nextTurn,
+            phase: "SONG_PLAYING",
+            currentSong: null,
+            originalGuesses: {},
+            circleGuesses: {},
+            preFireGuesses: {},
+            guessStartTime: null,
+            guessTimeLimit: 30,
+            readyPlayers: [],
+            skipVotes: [],
+            roundWinner: null
+          };
+        }
+        return { ...game, readyPlayers: newReady };
+      }
       if (action.type === "RESOLVE_ROUND") {
         if (!game.currentSong) return game;
 
@@ -423,7 +527,7 @@ export function gameReducer(game: Game, action: GameAction): Game {
         let players = game.players.map(p => ({ ...p }));
 
         const origGuess = game.originalGuesses[originalUidReveal];
-        if (origGuess && Object.keys(origGuess).length > 0) { // Only deal damage if there was an actual guess
+        if (origGuess && Object.keys(origGuess).some(k => k !== "isPass")) { // Only deal damage if there was an actual guess
           const acc = calculateAccuracy(origGuess, song);
           if (acc >= 60) {
             const dmg = 20 + Math.floor((acc - 60) / 2);
@@ -436,7 +540,7 @@ export function gameReducer(game: Game, action: GameAction): Game {
         }
 
         Object.entries(game.circleGuesses).forEach(([uid, guess]) => {
-          if (Object.keys(guess).length > 0) { // Only heal if there was an actual guess
+          if (Object.keys(guess).some(k => k !== "isPass")) { // Only heal if there was an actual guess
             const acc = calculateAccuracy(guess, song);
             const heal = Math.floor(acc / 5);
             players = players.map(p =>
@@ -469,6 +573,7 @@ export function gameReducer(game: Game, action: GameAction): Game {
           players: updated,
           turnIndex: nextTurn,
           guessStartTime: null, // Reset timer for next round
+          guessTimeLimit: 30,
           phase: "SONG_PLAYING",
           currentSong: null,
           originalGuesses: {},

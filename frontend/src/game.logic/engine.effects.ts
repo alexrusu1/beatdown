@@ -19,8 +19,8 @@ export function initEngineEffects(
 
   audioEl.onerror = (e) => {
     console.error("Audio error:", e);
-    // Ensure the game does not soft-lock if a track fails to load
-    dispatchInternal({ type: "END_SONG" });
+    // If a track fails to load (e.g. 403), request a new song instead of skipping the round
+    dispatchInternal({ type: "SKIP_BROKEN_SONG", src: audioEl.src });
   };
 
   audioEl.oncanplay = () => {
@@ -55,8 +55,9 @@ export function handleEngineEffects(
   }
 
   // Start a new guess timer if entering a guess phase
+  const isRacePostSong = next.phase === "SONG_PLAYING" && next.mode === "RACE" && next.guessStartTime !== null;
   if (
-    (next.phase === "ORIGINAL_GUESS_TURN" || next.phase === "CIRCLE_GUESS_TURN") &&
+    (next.phase === "ORIGINAL_GUESS_TURN" || next.phase === "CIRCLE_GUESS_TURN" || isRacePostSong) &&
     next.guessStartTime !== null &&
     next.guessTimeLimit > 0
   ) {
@@ -111,22 +112,9 @@ export function handleEngineEffects(
     console.log("Play/pause change:", prevPlaying, "->", nextPlaying);
     if (nextPlaying) {
       console.log("Attempting to play audio");
-      // Check if audio is ready to play
-      if (audioEl.readyState >= 2) { // HAVE_CURRENT_DATA or higher
-        audioEl.play().catch((err) => {
-          console.error("Failed to play audio:", err);
-        });
-      } else {
-        console.log("Audio not ready, waiting for canplay event");
-        const onCanPlay = () => {
-          console.log("Audio can now play, starting playback");
-          audioEl.play().catch((err) => {
-            console.error("Failed to play audio after canplay:", err);
-          });
-          audioEl.removeEventListener('canplay', onCanPlay);
-        };
-        audioEl.addEventListener('canplay', onCanPlay);
-      }
+      audioEl.play().catch((err) => {
+        console.error("Failed to play audio:", err);
+      });
     } else {
       console.log("Pausing audio");
       audioEl.pause();
