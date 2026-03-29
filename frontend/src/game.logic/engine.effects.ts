@@ -1,6 +1,5 @@
 import type { Game } from "./engine";
-// The game variable is not used here, it's passed into initEngineEffects as a getter.
-let game: Game;
+let getGameInternal: () => Game;
 let dispatchInternal: (action: any) => void;
 let guessTimer: NodeJS.Timeout | null = null;
 
@@ -8,19 +7,25 @@ export function initEngineEffects(
   audioEl: HTMLAudioElement,
   getGame: () => Game,
   dispatch: (action: any) => void
-) { // Renamed parameter to 'dispatch' to avoid conflict with global 'dispatchInternal'
-  game = getGame();
+) {
+  getGameInternal = getGame;
   dispatchInternal = dispatch;
 
   audioEl.onended = () => {
     console.log("Audio ended, dispatching END_SONG");
-    dispatch({ type: "END_SONG" });
+    const currentGame = getGameInternal();
+    if (currentGame?.currentSong) {
+      dispatchInternal({ type: "END_SONG" });
+    }
   };
 
   audioEl.onerror = (e) => {
     console.error("Audio error:", e);
+    const currentGame = getGameInternal();
     // If a track fails to load (e.g. 403), request a new song instead of skipping the round
-    dispatchInternal({ type: "SKIP_BROKEN_SONG", src: audioEl.src });
+    if (currentGame?.currentSong) {
+      dispatchInternal({ type: "SKIP_BROKEN_SONG", src: audioEl.src });
+    }
   };
 
   audioEl.oncanplay = () => {

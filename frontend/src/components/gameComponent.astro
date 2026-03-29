@@ -32,7 +32,7 @@
   
   <!-- Music Player Controls -->
   <div id="music-controls" style="display: none;">
-    <audio id="player" src="" preload="auto"></audio>
+    <audio id="player" preload="auto"></audio>
     <button id="playBtn">▶</button>
     <button id="skip-btn">Skip Song</button>
     <div id="song-progress"><div id="song-progress-bar"></div></div>
@@ -179,6 +179,7 @@
 
     let guessCountdownInterval: NodeJS.Timeout | null = null;
   let songPlayedThisRound = false;
+  let isFirebaseLoaded = false;
 
     // Centralized dispatch function (assigned here, but declared above)
     dispatchInternal = (action: GameAction) => {
@@ -203,7 +204,7 @@
       renderGame();
 
       // Sync to Firebase if multiplayer (only if gameCode exists)
-      if (gameCode) {
+      if (gameCode && isFirebaseLoaded) {
         const gameRef = ref(realtimeDb, `games/${gameCode}`);
         // Firestore/RealtimeDB rejects undefined values.
         let gameToWrite: any = JSON.parse(JSON.stringify(game));
@@ -260,10 +261,12 @@
         currentUser = user;
         myPlayerId = user.uid; // Store the UID
         console.log("Authenticated user UID:", myPlayerId); // No need to call maybeLoadSong here, onValue will handle initial state sync
+        renderGame();
       } else {
         currentUser = null;
         myPlayerId = null;
         console.warn("No user authenticated. User might have signed out or session expired.");
+        renderGame();
       }
     });
 
@@ -355,6 +358,7 @@
       onValue(gameRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
+          isFirebaseLoaded = true;
           const prevGame = game;
 
           // sanitize players list from firebase object

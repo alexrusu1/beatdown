@@ -49,36 +49,25 @@ import Layout from '../layouts/Layout.astro';
 			console.log("Landing page authenticated as:", user.uid);
 		} else {
 			console.log("Landing page not authenticated.");
-			signInAnonymously(auth)
-				.then(userCredential => {
-					currentUser = userCredential.user;
-					console.log("Signed in anonymously during auth state change:", currentUser.uid);
-				})
-				.catch(error => {
-					console.error("Error signing in anonymously during auth state change:", error);
-					alert("Could not authenticate. Please check your internet connection.");
-				});
 		}
 	});
 
 
 	async function ensureAuthenticatedUserUid(): Promise<string> {
-        
-		await new Promise(resolve => setTimeout(resolve, 50)); // Wait a bit before checking again
+		await auth.authStateReady(); // Wait for Firebase to load the saved auth state
 
-		if (!currentUser) {
+		if (!auth.currentUser) {
 			try {
-				const userCredential = await signInAnonymously(auth);
-				currentUser = userCredential.user;
+				await signInAnonymously(auth);
 			} catch (error) {
 				console.error("Anonymous sign-in failed on landing page:", error);
 				throw new Error("Authentication required to join or create a game.");
 			}
 		}
-		if (!currentUser?.uid) {
+		if (!auth.currentUser?.uid) {
 			throw new Error("Authenticated user has no UID.");
 		}
-		return currentUser.uid;
+		return auth.currentUser.uid;
 	}
 
 	function generateRoomCode(length = 6): string {
@@ -144,15 +133,27 @@ import Layout from '../layouts/Layout.astro';
             if (hidden) {
                 const code = gameCodeInput.value.trim();
                 if (!code) return;
-                // check existence
-                const exists = await checkCodeExists(code);
-                if (!exists) {
-                    alert("Game not found");
-                    return;
+                
+                submitCodeBtn.disabled = true;
+                submitCodeBtn.textContent = "Checking...";
+                
+                try {
+                    // check existence
+                    const exists = await checkCodeExists(code);
+                    if (!exists) {
+                        alert("Game not found");
+                        return;
+                    }
+                    pendingCode = code.toUpperCase();
+                    awaitingNameFor = "join";
+                    showNameInput();
+                } catch (error) {
+                    console.error("Error checking code:", error);
+                    alert("Could not connect to the game server. Please try again.");
+                } finally {
+                    submitCodeBtn.disabled = false;
+                    submitCodeBtn.textContent = "Join Game";
                 }
-                pendingCode = code.toUpperCase();
-                awaitingNameFor = "join";
-                showNameInput();
                 return;
             }
             // won't reach here; submitCodeBtn is hidden once name input shown
@@ -170,12 +171,12 @@ import Layout from '../layouts/Layout.astro';
             try {
                 if (awaitingNameFor === "create") {
                     const code = await createGame(playerName);
-                    window.location.href = `game?code=${encodeURIComponent(code)}`;
+                    window.location.href = `/game?code=${encodeURIComponent(code)}`;
                 } else if (awaitingNameFor === "join") {
                     const code = pendingCode;
                     const ok = await joinGame(code, playerName);
                     if (ok) {
-                        window.location.href = `game?code=${encodeURIComponent(code)}`;
+                        window.location.href = `/game?code=${encodeURIComponent(code)}`;
                     } else {
                         alert("Game not found or you're already in it.");
                         submitNameBtn.disabled = false;
@@ -189,6 +190,7 @@ import Layout from '../layouts/Layout.astro';
         });
 
         async function checkCodeExists(code: string): Promise<boolean> {
+            await ensureAuthenticatedUserUid(); // Wait for auth before querying Firebase
             const normalized = code.trim().toUpperCase();
             if (!normalized) return false;
             const gameRef = ref(realtimeDb, `games/${normalized}`);
