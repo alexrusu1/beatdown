@@ -119,15 +119,21 @@ export function levenshteinDistance(a: string, b: string): number {
   return matrix[b.length][a.length];
 }
 
-function isSimilar(guess: string, correct: string[], threshold: number = 0.6): boolean {
-  if (!guess) return false;
+export function isSimilar(guess: string, correct: any, threshold: number = 0.6): boolean {
+  if (!guess || !correct) return false;
   
-  // Normalize correct to array - handle string, array, or undefined
+  // Normalize correct to array - handle string, array, or Firebase objects
     
   const g = guess.toLowerCase().trim();
-  const candidates = Array.isArray(correct) 
-    ? correct.map(s => s.toLowerCase().trim())
-    : [correct.toLowerCase().trim()];
+  let candidates: string[] = [];
+  
+  if (Array.isArray(correct)) {
+    candidates = correct.map(s => String(s).toLowerCase().trim());
+  } else if (typeof correct === 'object') {
+    candidates = Object.values(correct).map(s => String(s).toLowerCase().trim());
+  } else {
+    candidates = [String(correct).toLowerCase().trim()];
+  }
 
   // Exact match
   if (candidates.some(c => g === c)) return true;
@@ -357,28 +363,40 @@ export function gameReducer(game: Game, action: GameAction): Game {
       
       console.log(`[reducer:ORIGINAL_GUESS_TURN] Turn ending for player ${originalPlayerId}. Processing guess.`);
       // Get the guess to evaluate from the staging area.
-      const submittedGuess = updatedGame.preFireGuesses[originalPlayerId] || {};
+      const submittedGuess = updatedGame.preFireGuesses[String(originalPlayerId)] || {};
       const instantWin = isWinningGuess(submittedGuess, game.currentSong);
       const acc = calculateAccuracy(submittedGuess, game.currentSong);
       
       // Move the processed guess to the official originalGuesses map and remove from pre-fire.
       const updatedOriginalGuesses = { ...game.originalGuesses, [String(originalPlayerId)]: submittedGuess };
       const updatedPreFireGuesses = { ...updatedGame.preFireGuesses };
-      delete updatedPreFireGuesses[originalPlayerId];
+      delete updatedPreFireGuesses[String(originalPlayerId)];
  
       if (instantWin || acc >= 60) {
         return {
           ...updatedGame,
           originalGuesses: updatedOriginalGuesses,
           preFireGuesses: updatedPreFireGuesses,
-          phase: "REVEAL_RESULTS"
+          phase: "REVEAL_RESULTS",
+          roundWinner: String(originalPlayerId)
+        };
+      }
+
+      const aliveOthers = updatedGame.players.filter(p => p.alive && String(p.uid) !== String(originalPlayerId));
+      if (aliveOthers.length === 0) {
+        return {
+          ...updatedGame,
+          guessStartTime: null,
+          originalGuesses: updatedOriginalGuesses,
+          preFireGuesses: updatedPreFireGuesses,
+          phase: "WAITING_TO_REVEAL"
         };
       }
 
       let firstCircleIndex = (game.turnIndex + 1) % game.players.length;
       while (
         !game.players[firstCircleIndex].alive ||
-        game.players[firstCircleIndex].uid === originalPlayerId
+        String(game.players[firstCircleIndex].uid) === String(originalPlayerId)
       ) {
         firstCircleIndex = (firstCircleIndex + 1) % game.players.length;
       }
@@ -409,7 +427,7 @@ export function gameReducer(game: Game, action: GameAction): Game {
           preFireGuesses: { ...game.preFireGuesses, [String(action.playerId)]: safeGuesses }
         };
       }
-      const currentGuesserId = updatedGame.players[updatedGame.circleGuessIndex].uid;
+      const currentGuesserId = updatedGame.players[updatedGame.circleGuessIndex!].uid;
       const isTurnEnd = (action.type === "SUBMIT_GUESS" && String(action.playerId) === String(currentGuesserId)) || action.type === "GUESS_TIMEOUT";
       
       if (action.type === "SUBMIT_GUESS" && !isTurnEnd) {
@@ -423,13 +441,13 @@ export function gameReducer(game: Game, action: GameAction): Game {
 
       console.log(`[reducer:CIRCLE_GUESS_TURN] Turn ending for player ${currentGuesserId}. Processing guess.`);
       // Get the guess to evaluate from the staging area.
-      const submittedGuess = updatedGame.preFireGuesses[currentGuesserId] || {};
+      const submittedGuess = updatedGame.preFireGuesses[String(currentGuesserId)] || {};
       const guessAcc = calculateAccuracy(submittedGuess, game.currentSong);
 
       // Move the processed guess to the official circleGuesses map and remove from pre-fire.
       const updatedCircleGuesses = { ...updatedGame.circleGuesses, [String(currentGuesserId)]: submittedGuess };
       const updatedPreFireGuesses = { ...updatedGame.preFireGuesses };
-      delete updatedPreFireGuesses[currentGuesserId];
+      delete updatedPreFireGuesses[String(currentGuesserId)];
 
       if (guessAcc >= 60) {
         return {
@@ -439,6 +457,7 @@ export function gameReducer(game: Game, action: GameAction): Game {
           circleGuessIndex: undefined,
           phase: "WAITING_TO_REVEAL",
           guessStartTime: null,
+          roundWinner: String(currentGuesserId)
         };
       }
 
@@ -450,7 +469,7 @@ export function gameReducer(game: Game, action: GameAction): Game {
 
       const allGuessed = circleOrder.every(p => guessedPlayerIds.includes(String(p.uid)));
 
-      let nextCircleIndex = updatedGame.circleGuessIndex;
+      let nextCircleIndex = updatedGame.circleGuessIndex!;
       let nextPlayerFound = false;
 
       for (let i = 0; i < game.players.length; i++) {
@@ -526,7 +545,7 @@ export function gameReducer(game: Game, action: GameAction): Game {
         const originalUidReveal = game.players[game.turnIndex].uid;
         let players = game.players.map(p => ({ ...p }));
 
-        const origGuess = game.originalGuesses[originalUidReveal];
+        const origGuess = game.originalGuesses[String(originalUidReveal)];
         if (origGuess && Object.keys(origGuess).some(k => k !== "isPass")) { // Only deal damage if there was an actual guess
           const acc = calculateAccuracy(origGuess, song);
           if (acc >= 60) {
@@ -580,7 +599,8 @@ export function gameReducer(game: Game, action: GameAction): Game {
           circleGuesses: {},
           preFireGuesses: {}, // Clear all pre-fire guesses for the new round
           songSelections: game.songSelections,
-          answerRevealed: false
+          answerRevealed: false,
+          roundWinner: null
         };
       }
       return game;

@@ -3,8 +3,6 @@
 
 <div id="game-container">
   <h1 id="game-code"></h1>
-  <!-- Game Status Display -->
-  <div id="game-status"></div>
   <div id="turn-indicator"></div>  
 
   <div id="lobby-controls">
@@ -60,7 +58,7 @@
 </div>
 
 <script>
-  import { gameReducer, type Game, type GameAction, type SongSelection } from "../game.logic/engine";
+  import { gameReducer, type Game, type GameAction, type SongSelection, type GameMode, type Guess, isSimilar } from "../game.logic/engine";
   import { initEngineEffects, handleEngineEffects } from "../game.logic/engine.effects";
   import { filterSongs } from "../scripts/song-filtering"; // Corrected path
   import { onAuthStateChanged } from "firebase/auth"; // Import authentication functions
@@ -346,7 +344,14 @@
     }
 
     // Initialize effects
-    initEngineEffects(player, () => game, dispatchInternal); // Pass dispatchInternal
+    initEngineEffects(player, () => game, (action: GameAction) => {
+      // Only the host should dispatch automatic events to prevent multiple triggers from clients
+      if (action.type === "GUESS_TIMEOUT" || action.type === "END_SONG" || action.type === "SKIP_BROKEN_SONG") {
+        const host = game.players.find(p => p.isHost);
+        if (host?.uid !== myPlayerId) return;
+      }
+      dispatchInternal(action);
+    });
 
     // Firebase sync for multiplayer
     if (gameCode) {
@@ -540,7 +545,6 @@
       
       console.log("Rendering game. Current players in renderGame():", game.players);
 
-      const statusEl = document.getElementById("game-status");
       const turnIndicator = document.getElementById("turn-indicator");
       const playerListEl = document.getElementById("player-list");
       const resultsEl = document.getElementById("results");
@@ -554,7 +558,7 @@
 
       // Auto-submit pre-fired guess if it is my turn
       if ((game.phase === "ORIGINAL_GUESS_TURN" || game.phase === "CIRCLE_GUESS_TURN") && activeId === myPlayerId) {
-        if (game.preFireGuesses[myPlayerId] !== undefined) {
+        if (game.preFireGuesses[myPlayerId!] !== undefined) {
           console.log("Auto-submitting pre-fired guess for", myPlayerId);
           setTimeout(() => {
             dispatchInternal({
@@ -566,7 +570,7 @@
         }
       }
 
-      if (!statusEl || !playerListEl || !resultsEl) return;
+      if (!playerListEl || !resultsEl) return;
 
       // ADD THIS: Reset song flag when entering SONG_PLAYING phase
       if (game.phase === "SONG_PLAYING" && songPlayedThisRound) {
@@ -601,27 +605,6 @@
           mixerContainer.style.display = 'none';
         }
       }
-
-      const phaseDisplay = game.phase || "LOBBY";
-      statusEl.textContent = `Phase: ${phaseDisplay}`;
-      
-    if (game.players.length > 0) {
-      // make sure indices are valid to avoid undefined access
-      if (game.turnIndex >= game.players.length || game.turnIndex < 0) {
-        console.warn("renderGame: turnIndex out of bounds", game.turnIndex, game.players.length);
-      }
-      const currentPlayer = game.players[game.turnIndex] || { name: "(none)" };
-      statusEl.textContent += ` | Original Guesser: ${currentPlayer.name}`;
-      
-      // Show circle guesser
-      if (game.phase === "CIRCLE_GUESS_TURN" && game.circleGuessIndex !== undefined) {
-        if (game.circleGuessIndex >= game.players.length || game.circleGuessIndex < 0) {
-          console.warn("renderGame: circleGuessIndex out of bounds", game.circleGuessIndex, game.players.length);
-        }
-        const circlePlayer = game.players[game.circleGuessIndex] || { name: "(none)" };
-        statusEl.textContent += ` | Circle Turn: ${circlePlayer.name}`;
-      }
-    } // End of if (game.players.length > 0)
 
       // Update player list, marking host
       playerListEl.innerHTML = game.players
@@ -662,9 +645,9 @@
       // Determine if the local player has already submitted a guess for this round.
       // We check preFireGuesses (staged), originalGuesses (processed), and circleGuesses (processed).
       const hasGuessed = myPlayerId && game.mode !== "RACE" && (
-        game.preFireGuesses[myPlayerId] !== undefined || 
-        game.originalGuesses[myPlayerId] !== undefined || 
-        game.circleGuesses[myPlayerId] !== undefined
+        game.preFireGuesses[myPlayerId!] !== undefined || 
+        game.originalGuesses[myPlayerId!] !== undefined || 
+        game.circleGuesses[myPlayerId!] !== undefined
       );
 
       const activePlayer = game.players.find(p => p.uid === activeId);
@@ -709,20 +692,59 @@
 
       // Show results
       if (game.phase === "REVEAL_RESULTS" && game.currentSong) {
-        let raceWinnerText = "";
-        if (game.mode === "RACE") {
-          const winner = game.players.find(p => String(p.uid) === game.roundWinner);
-          raceWinnerText = winner 
-            ? `<h2 style="color: #42d67d;">🏎️ ${winner.name} got the right answer!</h2>` 
-            : `<h2 style="color: #ff4136;">No one guessed it!</h2>`;
+        let resultHeaderText = "";
+        let guessToEvaluate: any = null;
+        let guesserName = "";
+
+        const winner = game.players.find(p => String(p.uid) === game.roundWinner);
+
+        if (winner) {
+          const raceEmoji = game.mode === 'RACE' ? '🏎️ ' : '';
+          resultHeaderText = `<h2 style="color: #42d67d;">${raceEmoji}${winner.name} got the right answer!</h2>`;
+          // The winner's guess could be in originalGuesses or circleGuesses.
+          guessToEvaluate = game.originalGuesses[String(winner.uid)] || game.circleGuesses[String(winner.uid)];
+          guesserName = winner.name + "'s Guess";
+        } else {
+          resultHeaderText = `<h2 style="color: #ff4136;">No one guessed it!</h2>`;
+          // If no one won, we don't evaluate any specific guess.
+          guessToEvaluate = null; 
+          guesserName = "";
         }
+
+        let songCheck = "";
+        let artistCheck = "";
+        let yearCheck = "";
+        let albumCheck = "";
+
+        if (guessToEvaluate && !guessToEvaluate.isPass) {
+            songCheck = guessToEvaluate.song && isSimilar(guessToEvaluate.song, game.currentSong.answerNames) ? " ✅" : " ❌";
+            artistCheck = guessToEvaluate.artist && isSimilar(guessToEvaluate.artist, game.currentSong.artists) ? " ✅" : " ❌";
+            
+            if (guessToEvaluate.year !== undefined && guessToEvaluate.year !== null) {
+               const diff = Math.abs(guessToEvaluate.year - game.currentSong.year);
+               if (diff === 0) yearCheck = " ✅";
+               else if (diff <= 2) yearCheck = " ☑️"; // Close
+               else if (diff <= 10) yearCheck = " 🟨"; // Partial points
+               else yearCheck = " ❌";
+            } else {
+               yearCheck = " ❌";
+            }
+
+            albumCheck = guessToEvaluate.album && isSimilar(guessToEvaluate.album, game.currentSong.albumAnswers) ? " ✅" : " ❌";
+        } else if (guessToEvaluate && guessToEvaluate.isPass) {
+            songCheck = " ❌ (Pass)";
+            artistCheck = " ❌ (Pass)";
+            yearCheck = " ❌ (Pass)";
+            albumCheck = " ❌ (Pass)";
+        }
+
         resultsEl.innerHTML = `
-          ${raceWinnerText}
-          <h3>Answer:</h3>
-          <p>Song: ${game.currentSong.displayName}</p>
-          <p>Artist: ${game.currentSong.displayArtists}</p>
-          <p>Year: ${game.currentSong.year}</p>
-          <p>Album: ${game.currentSong.album}</p>
+          ${resultHeaderText}
+          <h3>Answer${guesserName ? ` (vs ${guesserName})` : ""}:</h3>
+          <p>Song: ${game.currentSong.displayName}${songCheck}</p>
+          <p>Artist: ${game.currentSong.displayArtists}${artistCheck}</p>
+          <p>Year: ${game.currentSong.year}${yearCheck}</p>
+          <p>Album: ${game.currentSong.album}${albumCheck}</p>
         `;
       } else {
         resultsEl.innerHTML = "";
@@ -730,7 +752,7 @@
 
       // Show game over screen
       if (game.phase === "GAME_OVER") {
-        const winner = game.players.find(p => p.uid === game.winner);
+        const winner = game.players.find(p => String(p.uid) === String(game.winner));
         resultsEl.innerHTML = `
           <h2>🎉 Game Over! 🎉</h2>
           <p>${winner ? `${winner.name} wins!` : "No winner"}</p>
