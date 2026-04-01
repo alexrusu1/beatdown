@@ -18,7 +18,10 @@
     </div>
 
     <div id="song-mixer-container" class="song-selection-container">
-      <h4>The DJ Equalizer</h4>
+      <div class="mixer-header">
+        <h4>The DJ Equalizer</h4>
+        <button id="clear-mixer-btn">Clear All</button>
+      </div>
       <div id="mixer-board">
         <!-- Mixer channels will be rendered here by JavaScript -->
       </div>
@@ -90,6 +93,7 @@
     const albumInput = document.getElementById("album-input") as HTMLInputElement;
 
     const startGameBtn = document.getElementById("start-game") as HTMLButtonElement;
+    const clearMixerBtn = document.getElementById("clear-mixer-btn") as HTMLButtonElement;
     
     const urlParams = new URLSearchParams(window.location.search);
     const gameCode = urlParams.get("code") ?? "";
@@ -111,7 +115,7 @@
     });
 
     // --- Song Selection State and Logic ---
-    const availableYears = ["2020s", "2010s", "2000s", "1990s", "1980s", "1970s", "1960s"];
+    const availableYears = ["2020s", "2010s", "2000s", "1990s", "1980s", "1970s", "≤ 1960s"];
     const availableCategories = ["Rock", "Hip-Hop/Rap", "R&B/Soul", "Pop", "Dance", "Alternative"];
     let currentSongSelections: SongSelection[] = []; // Default to empty (all songs)
 
@@ -189,7 +193,14 @@
   let isFirebaseLoaded = false;
   let isDraggingMixer = false;
 
-  document.addEventListener("mouseup", () => {
+  document.addEventListener("pointerup", () => {
+    if (isDraggingMixer) {
+      isDraggingMixer = false;
+      dispatchInternal({ type: "SET_SONG_SELECTIONS", selections: currentSongSelections });
+    }
+  });
+
+  document.addEventListener("pointercancel", () => {
     if (isDraggingMixer) {
       isDraggingMixer = false;
       dispatchInternal({ type: "SET_SONG_SELECTIONS", selections: currentSongSelections });
@@ -295,19 +306,58 @@
       availableCategories.forEach(category => {
         const channel = document.createElement('div');
         channel.className = 'mixer-channel';
-        channel.addEventListener('click', (e) => {
-          const target = e.target as HTMLElement;
-          if (!target.classList.contains('decade-button')) {
-            handleGenreTitleClick(category);
-          }
-        });
 
         const genreTitle = document.createElement('h5');
         genreTitle.className = 'genre-title';
         genreTitle.textContent = category;
+        genreTitle.addEventListener('click', () => handleGenreTitleClick(category));
         
         const decadeButtons = document.createElement('div');
         decadeButtons.className = 'decade-buttons';
+        decadeButtons.style.touchAction = 'none'; // Prevent scrolling while sliding on mobile
+
+        let dragThresholdMet = false;
+        let startY = 0;
+        let lastDragY = 0;
+
+        decadeButtons.addEventListener('pointerdown', (e) => {
+          isDraggingMixer = true;
+          dragThresholdMet = false;
+          startY = e.clientY;
+          lastDragY = e.clientY;
+          decadeButtons.setPointerCapture(e.pointerId);
+        });
+
+        decadeButtons.addEventListener('pointermove', (e) => {
+          if (!isDraggingMixer) return;
+          const deltaY = e.clientY - lastDragY;
+          if (Math.abs(e.clientY - startY) > 5) dragThresholdMet = true;
+
+          if (dragThresholdMet) {
+            const target = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement;
+            if (target && target.classList.contains('decade-button')) {
+              const year = target.dataset.year!;
+              const cat = target.dataset.category!;
+              if (deltaY < 0) toggleButtonState(target as HTMLButtonElement, year, cat, true); // Dragging UP selects
+              else if (deltaY > 0) toggleButtonState(target as HTMLButtonElement, year, cat, false); // Dragging DOWN unselects
+            }
+            lastDragY = e.clientY;
+          }
+        });
+
+        decadeButtons.addEventListener('pointerup', (e) => {
+          if (!isDraggingMixer) return;
+          decadeButtons.releasePointerCapture(e.pointerId);
+          if (!dragThresholdMet) { // Process as a single click if there was barely any drag
+            const target = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement;
+            if (target && target.classList.contains('decade-button')) {
+              const year = target.dataset.year!;
+              const cat = target.dataset.category!;
+              const existingIndex = currentSongSelections.findIndex(s => s.year === year && s.category === cat);
+              toggleButtonState(target as HTMLButtonElement, year, cat, existingIndex === -1);
+            }
+          }
+        });
 
         availableYears.forEach(year => {
           const button = document.createElement('button');
@@ -320,20 +370,6 @@
           if (isSelected) {
             button.classList.add('active');
           }
-
-          button.addEventListener('mousedown', (e) => {
-            e.preventDefault();
-            isDraggingMixer = true;
-            const existingIndex = currentSongSelections.findIndex(s => s.year === year && s.category === category);
-            toggleButtonState(button, year, category, existingIndex === -1);
-          });
-
-          button.addEventListener('mouseenter', () => {
-            if (isDraggingMixer) {
-              const existingIndex = currentSongSelections.findIndex(s => s.year === year && s.category === category);
-              toggleButtonState(button, year, category, existingIndex === -1);
-            }
-          });
 
           decadeButtons.appendChild(button);
         });
@@ -498,6 +534,11 @@
       }
 
       dispatchInternal({ type: "START_GAME" });
+    });
+
+    clearMixerBtn?.addEventListener("click", () => {
+      currentSongSelections = [];
+      dispatchInternal({ type: "SET_SONG_SELECTIONS", selections: currentSongSelections });
     });
 
     skipBtn.onclick = () => {
@@ -999,6 +1040,32 @@
     max-width: 800px;
     border: 2px solid #444;
   }
+  .mixer-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  .mixer-header h4 {
+    margin: 0 !important;
+  }
+  #clear-mixer-btn {
+    position: absolute;
+    right: 0;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    margin: 0;
+    background: rgba(255, 0, 0, 0.1);
+    color: #ff4136;
+    border: 1px solid rgba(255, 65, 54, 0.5);
+    box-shadow: none;
+    text-shadow: none;
+  }
+  #clear-mixer-btn:hover {
+    background: rgba(255, 65, 54, 0.2);
+    box-shadow: 0 0 10px rgba(255, 65, 54, 0.5);
+  }
   .song-selection-container h4 {
     margin-top: 0;
     margin-bottom: 1rem;
@@ -1028,36 +1095,37 @@
     background: #1e1e1e;
     border-radius: 6px;
     border: 1px solid #444;
-    cursor: pointer;
-    transition: background 0.2s ease;
-  }
-  :global(.mixer-channel:hover) {
-    background: #2a2a2a;
+    cursor: default;
   }
 
   :global(.genre-title) {
-    color: #999;
+    color: #00eaff;
     font-weight: bold;
     text-transform: uppercase;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     writing-mode: vertical-rl;
     text-orientation: mixed;
     transform: rotate(180deg);
     margin: 0;
-    padding: 0.5rem 0;
-    letter-spacing: 1px;
-    cursor: inherit;
-    transition: color 0.2s ease;
+    padding: 1rem 0;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s ease;
     background: transparent;
     border: none;
-    width: auto;
-    text-align: left;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    user-select: none;
   }
 
   :global(.genre-title:hover) {
     color: #fff;
     background: transparent;
     box-shadow: none;
+    text-shadow: 0 0 8px rgba(0, 234, 255, 0.8);
   }
 
   :global(.decade-buttons) {
@@ -1082,14 +1150,17 @@
     user-select: none;
   }
 
-  :global(.decade-button.active) { color: white; }
   :global(.decade-button[data-year="2020s"].active) { background-color: #ff00ff; box-shadow: 0 0 8px #ff00ff, 0 0 15px #ff00ff; }
   :global(.decade-button[data-year="2010s"].active) { background-color: #00ffff; box-shadow: 0 0 8px #00ffff, 0 0 15px #00ffff; }
   :global(.decade-button[data-year="2000s"].active) { background-color: #00ff00; box-shadow: 0 0 8px #00ff00, 0 0 15px #00ff00; }
   :global(.decade-button[data-year="1990s"].active) { background-color: #ffff00; box-shadow: 0 0 8px #ffff00, 0 0 15px #ffff00; color: #333; }
   :global(.decade-button[data-year="1980s"].active) { background-color: #ff00c8; box-shadow: 0 0 8px #ff00c8, 0 0 15px #ff00c8; }
   :global(.decade-button[data-year="1970s"].active) { background-color: #ff8800; box-shadow: 0 0 8px #ff8800, 0 0 15px #ff8800; }
-  :global(.decade-button[data-year="1960s"].active) { background-color: #ff4136; box-shadow: 0 0 8px #ff4136, 0 0 15px #ff4136; }
+  :global(.decade-button[data-year="≤ 1960s"].active) { background-color: #ff4136; box-shadow: 0 0 8px #ff4136, 0 0 15px #ff4136; }
+
+  :global(.decade-button.active) {
+    color: white;
+  }
 
   .button-group {
     display: flex;

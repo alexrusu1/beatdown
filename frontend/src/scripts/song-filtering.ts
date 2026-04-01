@@ -5,6 +5,7 @@ import allSongs from '../data/songs.json';
  * Converts a year (e.g., 1987) into its corresponding decade string (e.g., "1980s").
  */
 function getDecade(year: number): string {
+  if (year < 1970) return "≤ 1960s";
   return `${Math.floor(year / 10) * 10}s`;
 }
 

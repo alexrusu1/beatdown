@@ -23,10 +23,22 @@ def clean_songs_json(filepath):
     # Specific artists to exclude for known covers identified in the dataset
     cover_artists = ["twopilots", "r-swift", "boyce avenue", "jdagxd", "nautylusprod"]
 
+    # Odd categories to exclude
+    odd_categories = ["classical crossover", "classical", "holiday", 
+                      "soundtrack", "jazz", "folk", "spoken word", 
+                      "comedy", "children's music", "Singer/Songwriter",
+                      ]
+
     for song in songs:
         year = song.get("year")
         display_name = song.get("displayName", "").lower()
         display_artists = song.get("displayArtists", "").lower()
+        categories = [c.lower() for c in song.get("categories", [])]
+        
+        has_odd_category = any(odd_cat in categories for odd_cat in odd_categories)
+        if has_odd_category:
+            print(f"Removing odd category song: {song['displayName']} ({categories})")
+            continue
         
         # 1. Skip wrong versions based on keywords (bypassed if released in 2024 or later)
         is_wrong_version = any(kw in display_name or kw in display_artists for kw in wrong_version_keywords)
