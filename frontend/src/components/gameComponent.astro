@@ -151,6 +151,13 @@
       updateSubmitButtonText();
     };
 
+    [songInput, artistInput, yearInput, albumInput].forEach(el => el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        submitGuessBtn.click();
+      }
+    }));
+
     // helper to figure out whose turn it is to guess
     function getActiveGuesserId(): string | null {
       if (game.phase === "SONG_PLAYING") {
@@ -180,6 +187,14 @@
     let guessCountdownInterval: NodeJS.Timeout | null = null;
   let songPlayedThisRound = false;
   let isFirebaseLoaded = false;
+  let isDraggingMixer = false;
+
+  document.addEventListener("mouseup", () => {
+    if (isDraggingMixer) {
+      isDraggingMixer = false;
+      dispatchInternal({ type: "SET_SONG_SELECTIONS", selections: currentSongSelections });
+    }
+  });
 
     // Centralized dispatch function (assigned here, but declared above)
     dispatchInternal = (action: GameAction) => {
@@ -280,11 +295,16 @@
       availableCategories.forEach(category => {
         const channel = document.createElement('div');
         channel.className = 'mixer-channel';
+        channel.addEventListener('click', (e) => {
+          const target = e.target as HTMLElement;
+          if (!target.classList.contains('decade-button')) {
+            handleGenreTitleClick(category);
+          }
+        });
 
         const genreTitle = document.createElement('h5');
         genreTitle.className = 'genre-title';
         genreTitle.textContent = category;
-        genreTitle.addEventListener('click', () => handleGenreTitleClick(category));
         
         const decadeButtons = document.createElement('div');
         decadeButtons.className = 'decade-buttons';
@@ -301,8 +321,18 @@
             button.classList.add('active');
           }
 
-          button.addEventListener('click', () => {
-            handleMixerClick(year, category);
+          button.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            isDraggingMixer = true;
+            const existingIndex = currentSongSelections.findIndex(s => s.year === year && s.category === category);
+            toggleButtonState(button, year, category, existingIndex === -1);
+          });
+
+          button.addEventListener('mouseenter', () => {
+            if (isDraggingMixer) {
+              const existingIndex = currentSongSelections.findIndex(s => s.year === year && s.category === category);
+              toggleButtonState(button, year, category, existingIndex === -1);
+            }
           });
 
           decadeButtons.appendChild(button);
@@ -314,19 +344,15 @@
       });
     }
 
-    function handleMixerClick(year: string, category: string) {
-      const selection = { year, category };
+    function toggleButtonState(btn: HTMLButtonElement, year: string, category: string, targetState: boolean) {
       const existingIndex = currentSongSelections.findIndex(s => s.year === year && s.category === category);
-
-      if (existingIndex > -1) {
-        // If it exists, remove it (toggle off)
+      if (targetState && existingIndex === -1) {
+        currentSongSelections.push({ year, category });
+        btn.classList.add('active');
+      } else if (!targetState && existingIndex > -1) {
         currentSongSelections.splice(existingIndex, 1);
-      } else {
-        // Otherwise, add it
-        currentSongSelections.push(selection);
+        btn.classList.remove('active');
       }
-
-      dispatchInternal({ type: "SET_SONG_SELECTIONS", selections: currentSongSelections });
     }
 
     function handleGenreTitleClick(category: string) {
@@ -411,9 +437,11 @@
 
           // Update selectedCategories from loaded game state
           if (JSON.stringify(game.songSelections) !== JSON.stringify(currentSongSelections)) {
-            currentSongSelections = game.songSelections || [];
-            availableSongsForGame = []; // Clear song cache if selections changed
-            renderMixer();
+            if (!isDraggingMixer) {
+              currentSongSelections = game.songSelections || [];
+              availableSongsForGame = []; // Clear song cache if selections changed
+              renderMixer();
+            }
           }
 
           // Clear inputs at the start of a new round for all clients
@@ -600,7 +628,7 @@
       if (mixerContainer) {
         if (game.phase === "LOBBY") {
           mixerContainer.style.display = 'block';
-          renderMixer(); // Re-render to reflect current state
+          if (!isDraggingMixer) renderMixer(); // Re-render to reflect current state
         } else {
           mixerContainer.style.display = 'none';
         }
@@ -735,9 +763,29 @@
       // Show game over screen
       if (game.phase === "GAME_OVER") {
         const winner = game.players.find(p => p.uid === game.winner);
+        
+        let raceWinnerText = "";
+        if (game.mode === "RACE" && game.roundWinner) {
+          const roundWinner = game.players.find(p => String(p.uid) === game.roundWinner);
+          if (roundWinner) {
+            raceWinnerText = `<h3 style="color: #42d67d;">🏎️ ${roundWinner.name} got the final answer!</h3>`;
+          }
+        }
+        let songInfo = "";
+        if (game.currentSong) {
+          songInfo = `
+            ${raceWinnerText}
+            <h3>Final Answer:</h3>
+            <p>Song: ${game.currentSong.displayName}</p>
+            <p>Artist: ${game.currentSong.displayArtists}</p>
+            <p>Year: ${game.currentSong.year}</p>
+            <p>Album: ${game.currentSong.album}</p>
+          `;
+        }
         resultsEl.innerHTML = `
-          <h2>🎉 Game Over! 🎉</h2>
-          <p>${winner ? `${winner.name} wins!` : "No winner"}</p>
+          <h2 style="font-size: 3rem; text-shadow: 0 0 10px #ff00ff;">🎉 GAME OVER 🎉</h2>
+          <h2 style="color: #00eaff;">${winner ? `👑 ${winner.name} wins the game! 👑` : "It's a draw!"}</h2>
+          ${songInfo}
         `;
       }
 
@@ -980,6 +1028,11 @@
     background: #1e1e1e;
     border-radius: 6px;
     border: 1px solid #444;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  :global(.mixer-channel:hover) {
+    background: #2a2a2a;
   }
 
   :global(.genre-title) {
@@ -993,12 +1046,18 @@
     margin: 0;
     padding: 0.5rem 0;
     letter-spacing: 1px;
-    cursor: pointer;
+    cursor: inherit;
     transition: color 0.2s ease;
+    background: transparent;
+    border: none;
+    width: auto;
+    text-align: left;
   }
 
   :global(.genre-title:hover) {
     color: #fff;
+    background: transparent;
+    box-shadow: none;
   }
 
   :global(.decade-buttons) {
@@ -1020,6 +1079,7 @@
     transition: all 0.2s ease;
     width: 70px;
     text-align: center;
+    user-select: none;
   }
 
   :global(.decade-button.active) { color: white; }

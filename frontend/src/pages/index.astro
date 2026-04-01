@@ -99,6 +99,21 @@ import Layout from '../layouts/Layout.astro';
             playerName = (e.target as HTMLInputElement).value.trim();
         });
 
+        // Add Enter key listeners
+        playerNameInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                submitNameBtn.click();
+            }
+        });
+
+        gameCodeInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                submitCodeBtn.click();
+            }
+        });
+
         // state tracking for two-step flows
         let pendingCode = "";            // holds code when join flow started
         let awaitingNameFor: "create" | "join" | "" = "";

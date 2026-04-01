@@ -271,7 +271,9 @@ export function gameReducer(game: Game, action: GameAction): Game {
               ...game,
               players: updated,
               phase: "GAME_OVER",
-              winner: alive[0]?.uid ?? String(action.playerId)
+              winner: alive[0]?.uid ?? String(action.playerId),
+              roundWinner: String(action.playerId)
+
             };
           }
 
