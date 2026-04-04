@@ -19,6 +19,7 @@
 
     <div id="song-mixer-container" class="song-selection-container">
       <div class="mixer-header">
+        <button id="select-all-btn">Select All</button>
         <h4>The DJ Equalizer</h4>
         <button id="clear-mixer-btn">Clear All</button>
       </div>
@@ -60,6 +61,11 @@
     <button id="resolve-btn" style="display: none;">Continue to Next Round</button>
     <button id="play-again-btn" style="display: none;">Play Again</button>
   </div>
+
+  <!-- Autoplay Blocked Overlay -->
+  <div id="audio-unlock-overlay" style="display: none;">
+    <h2>Tap anywhere to hear the song! 🎵</h2>
+  </div>
 </div>
 
 <script>
@@ -94,6 +100,7 @@
 
     const startGameBtn = document.getElementById("start-game") as HTMLButtonElement;
     const clearMixerBtn = document.getElementById("clear-mixer-btn") as HTMLButtonElement;
+    const selectAllBtn = document.getElementById("select-all-btn") as HTMLButtonElement;
     
     const urlParams = new URLSearchParams(window.location.search);
     const gameCode = urlParams.get("code") ?? "";
@@ -102,6 +109,18 @@
       return;
     }
     document.getElementById("game-code")!.textContent = gameCode;
+
+    // Handle mobile browser autoplay blocking
+    window.addEventListener("audio-autoplay-failed", () => {
+      const overlay = document.getElementById("audio-unlock-overlay");
+      if (overlay) {
+        overlay.style.display = "flex";
+        overlay.onclick = () => {
+          overlay.style.display = "none";
+          player.play().catch(e => console.error("Overlay play failed", e));
+        };
+      }
+    });
 
     player.addEventListener("timeupdate", () => {
       if (!progressBar) return;
@@ -533,11 +552,23 @@
         return;
       }
 
+      availableSongsForGame = []; // Force fresh song list for new game
       dispatchInternal({ type: "START_GAME" });
     });
 
     clearMixerBtn?.addEventListener("click", () => {
       currentSongSelections = [];
+      dispatchInternal({ type: "SET_SONG_SELECTIONS", selections: currentSongSelections });
+    });
+
+    selectAllBtn?.addEventListener("click", () => {
+      const allSelections: SongSelection[] = [];
+      availableCategories.forEach(category => {
+        availableYears.forEach(year => {
+          allSelections.push({ year, category });
+        });
+      });
+      currentSongSelections = allSelections;
       dispatchInternal({ type: "SET_SONG_SELECTIONS", selections: currentSongSelections });
     });
 
@@ -605,6 +636,7 @@
     playAgainBtn?.addEventListener("click", () => {
       const host = game.players.find(p => p.isHost);
       if (host?.uid !== myPlayerId) return; // only the host can choose to play again
+      availableSongsForGame = []; // Ensure fresh song list for next game
       dispatchInternal({ type: "START_GAME" });
     });
 
@@ -1050,6 +1082,22 @@
   .mixer-header h4 {
     margin: 0 !important;
   }
+  #select-all-btn {
+    position: absolute;
+    left: 0;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    margin: 0;
+    background: rgba(66, 214, 125, 0.1);
+    color: #42d67d;
+    border: 1px solid rgba(66, 214, 125, 0.5);
+    box-shadow: none;
+    text-shadow: none;
+  }
+  #select-all-btn:hover {
+    background: rgba(66, 214, 125, 0.2);
+    box-shadow: 0 0 10px rgba(66, 214, 125, 0.5);
+  }
   #clear-mixer-btn {
     position: absolute;
     right: 0;
@@ -1267,7 +1315,7 @@
     .mixer-header h4 {
       font-size: 1.1rem;
     }
-    button#clear-mixer-btn {
+    button#clear-mixer-btn, button#select-all-btn {
       font-size: 0.75rem;
       padding: 0.3rem 0.5rem;
     }
@@ -1288,5 +1336,20 @@
       padding: 0.4rem 0;
       letter-spacing: 0px;
     }
+  }
+  
+  #audio-unlock-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 9999;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  #audio-unlock-overlay h2 {
+    color: #00eaff;
+    text-shadow: 0 0 10px rgba(0, 234, 255, 0.8);
   }
 </style>
