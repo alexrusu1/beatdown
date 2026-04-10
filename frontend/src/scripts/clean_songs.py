@@ -17,7 +17,8 @@ def clean_songs_json(filepath):
     wrong_version_keywords = [
         "glee cast", "symphonic version", "techno version", 
         "karaoke", "lullaby renditions",
-        "made famous by", "tribute", "type beat"
+        "made famous by", "tribute", "type beat", "champion remix",
+        "(Rob Gasser Remix)", "(Phantom Sage Remix)",
     ]
     
     # Specific artists to exclude for known covers identified in the dataset
