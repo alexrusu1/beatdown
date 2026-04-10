@@ -119,6 +119,9 @@ export function handleEngineEffects(
       console.log("Attempting to play audio");
       audioEl.play().catch((err) => {
         console.error("Failed to play audio:", err);
+        if (err.name === "NotAllowedError") {
+          window.dispatchEvent(new Event("audio-autoplay-failed"));
+        }
       });
     } else {
       console.log("Pausing audio");
