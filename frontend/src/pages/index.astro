@@ -31,6 +31,7 @@ import Layout from '../layouts/Layout.astro';
             <button id="submitCodeBtn" type="button">Join Game</button>
         </div>
         <button id="createBtn" type="button">Create Game</button>
+        <button id="soloBtn" type="button">Single Player</button>
 	</div>
 </Layout>
 
@@ -88,7 +89,9 @@ import Layout from '../layouts/Layout.astro';
         const submitCodeBtn = document.getElementById("submitCodeBtn") as HTMLButtonElement;
         const joinForm = document.getElementById("joinForm") as HTMLDivElement;
 
-        if (!createBtn || !gameCodeInput || !submitCodeBtn || !playerNameInput || !nameSection || !submitNameBtn || !joinForm) return;
+        const soloBtn = document.getElementById("soloBtn") as HTMLButtonElement;
+
+        if (!createBtn || !gameCodeInput || !submitCodeBtn || !playerNameInput || !nameSection || !submitNameBtn || !joinForm || !soloBtn) return;
 
         // make sure inline style matches the CSS hiding so computed checks are reliable
         nameSection.style.display = "none";
@@ -121,12 +124,18 @@ import Layout from '../layouts/Layout.astro';
         function showNameInput() {
             // hide everything except name section and submit name button
             nameSection.style.display = "block";
-            createBtn.style.display = "none";
             joinForm.style.display = "none";
+            createBtn.style.display = "none";
+            soloBtn.style.display = "none";
 
             submitNameBtn.style.display = "flex";
             playerNameInput.focus();
         }
+
+        soloBtn.addEventListener("click", async () => {
+            awaitingNameFor = "solo";
+            showNameInput();
+        });
 
         createBtn.addEventListener("click", async () => {
             const hidden = getComputedStyle(nameSection).display === "none";
@@ -187,6 +196,9 @@ import Layout from '../layouts/Layout.astro';
                 if (awaitingNameFor === "create") {
                     const code = await createGame(playerName);
                     window.location.href = `/game?code=${encodeURIComponent(code)}`;
+                } else if (awaitingNameFor === "solo") {
+                    localStorage.setItem('playerName', playerName);
+                    window.location.href = `/game?solo=true`;
                 } else if (awaitingNameFor === "join") {
                     const code = pendingCode;
                     const ok = await joinGame(code, playerName);
@@ -308,6 +320,7 @@ import Layout from '../layouts/Layout.astro';
 
 	#createBtn,
 	#submitCodeBtn,
+	#soloBtn,
 	#submitNameBtn {
 		font-family: "Tilt Neon", sans-serif;
 		width: 80vw;
@@ -334,6 +347,7 @@ import Layout from '../layouts/Layout.astro';
 
 	#createBtn:hover,
 	#submitCodeBtn:hover,
+	#soloBtn:hover,
 	#submitNameBtn:hover {
 		text-shadow:
 			0 0 12px rgba(0, 234, 255, 0.9),
@@ -345,6 +359,7 @@ import Layout from '../layouts/Layout.astro';
 
 	#createBtn:active,
 	#submitCodeBtn:active,
+	#soloBtn:active,
 	#submitNameBtn:active {
 		transform: scale(0.95);
 	}
@@ -354,7 +369,6 @@ import Layout from '../layouts/Layout.astro';
 		flex-direction: column;
 		align-items: center;
 		gap: 1rem;
-		margin-bottom: 5vh;
 	}
 
 	#joinForm label {
@@ -423,6 +437,7 @@ import Layout from '../layouts/Layout.astro';
     @media (max-width: 600px) {
         #createBtn,
         #submitCodeBtn,
+        #soloBtn,
         #submitNameBtn {
             font-size: 2rem;
             padding: 0.75rem 1rem;

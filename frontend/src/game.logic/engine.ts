@@ -10,7 +10,8 @@ export type GamePhase =
   | "WAITING_TO_REVEAL"
   | "RESOLVE_ROUND"
   | "GAME_OVER";
-
+  
+export type Difficulty = "EASY" | "MEDIUM" | "HARD";
 
 export interface Player {
   uid: string | number;   // uid stored as string from Firebase
@@ -68,6 +69,8 @@ export interface Game {
   guessStartTime: number | null; // Timestamp when the current guess phase started (milliseconds)
   guessTimeLimit: number; // Time limit for guessing in seconds
   songSelections: SongSelection[];
+  isSolo?: boolean;
+  difficulty?: Difficulty;
 }
 
 
@@ -81,6 +84,7 @@ export type GameAction =
   | { type: "GUESS_TIMEOUT" }
   | { type: "SET_SONG_SELECTIONS"; selections: SongSelection[] }
   | { type: "REVEAL_ANSWERS" }
+  | { type: "SET_DIFFICULTY"; difficulty: Difficulty }
   | { type: "RESOLVE_ROUND" }
   | { type: "SET_GAME_MODE"; mode: GameMode }
   | { type: "PLAYER_READY"; playerId: string | number }
@@ -213,23 +217,45 @@ export function gameReducer(game: Game, action: GameAction): Game {
         return { ...game, mode: action.mode };
       }
 
-      if (action.type === "START_GAME" && game.players.length >= 2) {
+      if (action.type === "SET_DIFFICULTY") {
+        return { ...game, difficulty: action.difficulty };
+      }
+
+      if (action.type === "START_GAME") {
+        let players = game.players;
+        let turnIndex = game.turnIndex;
+
+        if (game.isSolo) {
+            if (game.players.length !== 1) return game; // UI safeguard
+            const aiPlayer: Player = {
+                uid: "AI_PLAYER",
+                name: `CPU (${game.difficulty || 'MEDIUM'})`,
+                health: 100,
+                alive: true,
+            };
+            players = [...game.players, aiPlayer];
+            turnIndex = Math.floor(Math.random() * players.length);
+        } else {
+            if (game.players.length < 2) return game; // UI safeguard
+            turnIndex = Math.floor(Math.random() * game.players.length);
+        }
+
         return {
-          ...game,
-          phase: "SONG_PLAYING",
-          turnIndex: Math.floor(Math.random() * game.players.length),
-          currentSong: null,
-          originalGuesses: {},
-          circleGuesses: {},
-          preFireGuesses: {}, // Initialize pre-fire guesses
-          guessStartTime: null,
-          guessTimeLimit: 30, // Reset default guess limit
-          answerRevealed: false,
-          songSelections: game.songSelections, // Carry over selections
-          winner: undefined,
-          readyPlayers: [],
-          skipVotes: [],
-          roundWinner: null
+            ...game,
+            players: players,
+            phase: "SONG_PLAYING",
+            turnIndex: turnIndex,
+            currentSong: null,
+            originalGuesses: {},
+            circleGuesses: {},
+            preFireGuesses: {},
+            guessStartTime: null,
+            guessTimeLimit: 30,
+            answerRevealed: false,
+            winner: undefined,
+            readyPlayers: [],
+            skipVotes: [],
+            roundWinner: null
         };
       }
       return game;
@@ -497,7 +523,10 @@ export function gameReducer(game: Game, action: GameAction): Game {
         const newReady = [...new Set([...(game.readyPlayers || []), String(action.playerId)])];
         const alivePlayers = game.players.filter(p => p.alive);
 
-        if (newReady.length >= alivePlayers.length) {
+        // In solo mode, we only need the one human player to be ready.
+        const isReadyConditionMet = game.isSolo ? true : newReady.length >= alivePlayers.length;
+
+        if (isReadyConditionMet) {
           // Everyone is ready! Start next round automatically
           let nextTurn = (game.turnIndex + 1) % game.players.length;
           while (!game.players[nextTurn].alive) {

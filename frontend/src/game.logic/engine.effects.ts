@@ -1,4 +1,4 @@
-import type { Game } from "./engine";
+import type { Game, Difficulty, Song, Guess } from "./engine";
 let getGameInternal: () => Game;
 let dispatchInternal: (action: any) => void;
 let guessTimer: NodeJS.Timeout | null = null;
@@ -35,6 +35,50 @@ export function initEngineEffects(
   audioEl.onloadstart = () => {
     console.log("Audio load started");
   };
+}
+
+// AI Guessing Logic
+function generateAIGuess(difficulty: Difficulty, song: Song): Guess {
+    const guess: Guess = {};
+    const random = Math.random();
+
+    // Probabilities for guessing each part correctly
+    let songChance = 0, artistChance = 0, yearChance = 0, albumChance = 0;
+
+    switch (difficulty) {
+        case "EASY":
+            songChance = 0.6;
+            artistChance = 0.3;
+            break;
+        case "MEDIUM":
+            songChance = 0.85;
+            artistChance = 0.75;
+            yearChance = 0.4;
+            albumChance = 0.15;
+            break;
+        case "HARD":
+            songChance = 1.0;
+            artistChance = 0.9;
+            yearChance = 0.7;
+            albumChance = 0.5;
+            break;
+    }
+
+    if (random < songChance) {
+        guess.song = song.answerNames[0]; // Guess the first answer name
+    }
+    if (random < artistChance) {
+        guess.artist = song.artists[0]; // Guess the first artist
+    }
+    if (random < yearChance) {
+        const yearOffset = difficulty === 'HARD' ? Math.floor(Math.random() * 3) - 1 : Math.floor(Math.random() * 11) - 5;
+        guess.year = song.year + yearOffset;
+    }
+    if (random < albumChance) {
+        guess.album = song.albumAnswers[0];
+    }
+
+    return Object.keys(guess).length > 0 ? guess : { isPass: true };
 }
 
 export function handleEngineEffects(
@@ -127,5 +171,58 @@ export function handleEngineEffects(
       console.log("Pausing audio");
       audioEl.pause();
     }
+  }
+
+  // --- AI Player Logic ---
+  if (next.isSolo && next.currentSong) {
+      // --- AI for CLASSIC mode (turn-based) ---
+      const isAITurnNow = (
+          // Transitioned to AI's original guess turn
+          (prev.phase !== "ORIGINAL_GUESS_TURN" && next.phase === "ORIGINAL_GUESS_TURN" && next.players[next.turnIndex]?.uid === "AI_PLAYER") ||
+          // Transitioned to AI's circle guess turn
+          (next.phase === "CIRCLE_GUESS_TURN" && prev.circleGuessIndex !== next.circleGuessIndex && next.circleGuessIndex !== undefined && next.players[next.circleGuessIndex]?.uid === "AI_PLAYER")
+      );
+
+      if (isAITurnNow) {
+          // In Classic mode, the CPU should answer right away.
+          const thinkTime = 0;
+
+          console.log(`AI's turn (Classic). Guessing in ${thinkTime}ms...`);
+          setTimeout(() => {
+              const currentGame = getGameInternal();
+              if (currentGame.currentSong) {
+                  const aiGuess = generateAIGuess(currentGame.difficulty || "MEDIUM", currentGame.currentSong);
+                  console.log("AI is guessing (Classic):", aiGuess);
+                  dispatchInternal({
+                      type: "SUBMIT_GUESS",
+                      playerId: "AI_PLAYER",
+                      guesses: aiGuess
+                  });
+              }
+          }, thinkTime);
+      }
+
+      // --- AI for RACE mode (real-time) ---
+      const justStartedRaceSong = next.mode === "RACE" && next.phase === "SONG_PLAYING" && prev.phase !== "SONG_PLAYING";
+      
+      if (justStartedRaceSong) {
+          let thinkTime = 7000; // ms, default medium
+          switch (next.difficulty) {
+              case "EASY": thinkTime = 12000 + Math.random() * 6000; break; // Slower for race
+              case "MEDIUM": thinkTime = 7000 + Math.random() * 5000; break;
+              case "HARD": thinkTime = 3000 + Math.random() * 4000; break;
+          }
+
+          console.log(`AI in RACE mode. Will guess in ${thinkTime}ms...`);
+          setTimeout(() => {
+              const currentGame = getGameInternal();
+              // Only guess if the round is still active (player hasn't won yet)
+              if (currentGame.phase === "SONG_PLAYING" && currentGame.currentSong) {
+                  const aiGuess = generateAIGuess(currentGame.difficulty || "MEDIUM", currentGame.currentSong);
+                  console.log("AI is guessing in RACE mode:", aiGuess);
+                  dispatchInternal({ type: "SUBMIT_GUESS", playerId: "AI_PLAYER", guesses: aiGuess });
+              }
+          }, thinkTime);
+      }
   }
 }
