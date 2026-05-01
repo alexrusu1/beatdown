@@ -3,13 +3,26 @@ let getGameInternal: () => Game;
 let dispatchInternal: (action: any) => void;
 let guessTimer: NodeJS.Timeout | null = null;
 
+// Add interface for input elements
+interface InputElements {
+  songInput: HTMLInputElement;
+  artistInput: HTMLInputElement;
+  yearInput: HTMLInputElement;
+  albumInput: HTMLInputElement;
+  submitGuessBtn: HTMLButtonElement;
+}
+
+let inputElements: InputElements;
+
 export function initEngineEffects(
   audioEl: HTMLAudioElement,
   getGame: () => Game,
-  dispatch: (action: any) => void
+  dispatch: (action: any) => void,
+  inputs: InputElements
 ) {
   getGameInternal = getGame;
   dispatchInternal = dispatch;
+  inputElements = inputs;
 
   audioEl.onended = () => {
     console.log("Audio ended, dispatching END_SONG");
@@ -40,15 +53,14 @@ export function initEngineEffects(
 // AI Guessing Logic
 function generateAIGuess(difficulty: Difficulty, song: Song): Guess {
     const guess: Guess = {};
-    const random = Math.random();
 
     // Probabilities for guessing each part correctly
     let songChance = 0, artistChance = 0, yearChance = 0, albumChance = 0;
 
     switch (difficulty) {
         case "EASY":
-            songChance = 0.6;
-            artistChance = 0.3;
+            songChance = 0.5;
+            artistChance = 0.25;
             break;
         case "MEDIUM":
             songChance = 0.85;
@@ -64,21 +76,67 @@ function generateAIGuess(difficulty: Difficulty, song: Song): Guess {
             break;
     }
 
-    if (random < songChance) {
+    if (Math.random() < songChance) {
         guess.song = song.answerNames[0]; // Guess the first answer name
     }
-    if (random < artistChance) {
+    if (Math.random() < artistChance) {
         guess.artist = song.artists[0]; // Guess the first artist
     }
-    if (random < yearChance) {
+    if (Math.random() < yearChance) {
         const yearOffset = difficulty === 'HARD' ? Math.floor(Math.random() * 3) - 1 : Math.floor(Math.random() * 11) - 5;
         guess.year = song.year + yearOffset;
     }
-    if (random < albumChance) {
+    if (Math.random() < albumChance) {
         guess.album = song.albumAnswers[0];
     }
 
     return Object.keys(guess).length > 0 ? guess : { isPass: true };
+}
+
+function animateAIGuess(guess: Guess, onComplete: () => void) {
+    const { songInput, artistInput, yearInput, albumInput } = inputElements;
+    const fields = [
+        { el: songInput, text: guess.song || '' },
+        { el: artistInput, text: guess.artist || '' },
+        { el: yearInput, text: guess.year?.toString() || '' },
+        { el: albumInput, text: guess.album || '' },
+    ];
+
+    // Clear inputs and set placeholders
+    fields.forEach(({ el }) => { // These are the AI's inputs, so they should be cleared before typing
+        el.value = '';
+        el.placeholder = '...';
+    });
+
+    const typingSpeed = 80;
+    const pauseBetweenFields = 300;
+
+    const typeSequentially = (fieldIndex: number) => {
+        if (fieldIndex >= fields.length) {
+            setTimeout(onComplete, 500); // Final pause before submitting
+            return;
+        }
+
+        const { el, text } = fields[fieldIndex];
+        if (!text) {
+            el.placeholder = '';
+            typeSequentially(fieldIndex + 1);
+            return;
+        }
+
+        let charIndex = 0;
+        const intervalId = setInterval(() => {
+            if (charIndex < text.length) {
+                el.value = text.substring(0, charIndex + 1);
+                charIndex++;
+            } else {
+                clearInterval(intervalId);
+                setTimeout(() => typeSequentially(fieldIndex + 1), pauseBetweenFields);
+            }
+        }, typingSpeed);
+    };
+
+    setTimeout(() => typeSequentially(0), 750); // Initial delay before typing starts
 }
 
 export function handleEngineEffects(
@@ -185,42 +243,53 @@ export function handleEngineEffects(
 
       if (isAITurnNow) {
           // In Classic mode, the CPU should answer right away.
-          const thinkTime = 0;
-
-          console.log(`AI's turn (Classic). Guessing in ${thinkTime}ms...`);
-          setTimeout(() => {
-              const currentGame = getGameInternal();
-              if (currentGame.currentSong) {
-                  const aiGuess = generateAIGuess(currentGame.difficulty || "MEDIUM", currentGame.currentSong);
-                  console.log("AI is guessing (Classic):", aiGuess);
-                  dispatchInternal({
-                      type: "SUBMIT_GUESS",
-                      playerId: "AI_PLAYER",
-                      guesses: aiGuess
-                  });
-              }
-          }, thinkTime);
+          const currentGame = getGameInternal();
+          if (currentGame.currentSong) {
+              const aiGuess = generateAIGuess(currentGame.difficulty || "MEDIUM", currentGame.currentSong);
+              
+              console.log(`AI's turn (Classic). Animating guess...`);
+              animateAIGuess(aiGuess, () => {
+                  console.log("AI is submitting guess (Classic):", aiGuess);
+                  const gameAfterAnimation = getGameInternal();
+                  if (gameAfterAnimation.phase === next.phase) { // Only submit if the phase hasn't changed
+                      dispatchInternal({
+                          type: "SUBMIT_GUESS",
+                          playerId: "AI_PLAYER",
+                          guesses: aiGuess
+                      });
+                  }
+              });
+          }
       }
 
       // --- AI for RACE mode (real-time) ---
-      const justStartedRaceSong = next.mode === "RACE" && next.phase === "SONG_PLAYING" && prev.phase !== "SONG_PLAYING";
-      
-      if (justStartedRaceSong) {
+      const justStartedRaceSong = next.mode === "RACE" && next.phase === "SONG_PLAYING" && !prev.currentSong && !!next.currentSong && next.guessStartTime === null;
+      const justStartedGracePeriod = next.mode === "RACE" && next.phase === "SONG_PLAYING" && next.guessStartTime !== null && prev.guessStartTime === null;
+
+      if (justStartedRaceSong || justStartedGracePeriod) {
           let thinkTime = 7000; // ms, default medium
-          switch (next.difficulty) {
-              case "EASY": thinkTime = 12000 + Math.random() * 6000; break; // Slower for race
-              case "MEDIUM": thinkTime = 7000 + Math.random() * 5000; break;
-              case "HARD": thinkTime = 3000 + Math.random() * 4000; break;
+          if (justStartedGracePeriod) {
+              // If it's the grace period (after a skip), AI should guess faster
+              console.log("AI in RACE mode grace period. Thinking fast...");
+              thinkTime = 100; // Guess almost immediately
+          } else { // justStartedRaceSong
+              switch (next.difficulty) {
+                  case "EASY": thinkTime = 20000 + Math.random() * 5000; break; // 20-25 seconds
+                  case "MEDIUM": thinkTime = 16000 + Math.random() * 5000; break; // 16-21 seconds
+                  case "HARD": thinkTime = 12000 + Math.random() * 5000; break; // 12-17 seconds
+              }
           }
 
           console.log(`AI in RACE mode. Will guess in ${thinkTime}ms...`);
           setTimeout(() => {
               const currentGame = getGameInternal();
-              // Only guess if the round is still active (player hasn't won yet)
-              if (currentGame.phase === "SONG_PLAYING" && currentGame.currentSong) {
+              // Only guess if the round is still active (no winner yet) and we are still in the song playing phase
+              if (currentGame.phase === "SONG_PLAYING" && currentGame.currentSong && currentGame.roundWinner === null) {
                   const aiGuess = generateAIGuess(currentGame.difficulty || "MEDIUM", currentGame.currentSong);
                   console.log("AI is guessing in RACE mode:", aiGuess);
                   dispatchInternal({ type: "SUBMIT_GUESS", playerId: "AI_PLAYER", guesses: aiGuess });
+              } else {
+                  console.log("AI decided not to guess.", { phase: currentGame.phase, song: !!currentGame.currentSong, winner: currentGame.roundWinner });
               }
           }, thinkTime);
       }

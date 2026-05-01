@@ -78,7 +78,7 @@
 </div>
 
 <script>
-  import { gameReducer, type Game, type GameAction, type SongSelection, type GameMode, type Difficulty } from "../game.logic/engine";
+  import { gameReducer, type Game, type GameAction, type SongSelection, type GameMode, type Difficulty, isSimilar, isWinningGuess, type Guess, type Player, type Song } from "../game.logic/engine";
   import { initEngineEffects, handleEngineEffects } from "../game.logic/engine.effects";
   import { filterSongs } from "../scripts/song-filtering"; // Corrected path
   import { onAuthStateChanged } from "firebase/auth"; // Import authentication functions
@@ -87,64 +87,6 @@
   import { realtimeDb, auth } from "../libraries/firebase"; // Removed analytics as it's not used
   import allSongsData from "../data/songs.json";
   let currentUser: User | null = null; // Declare currentUser globally
-
-  // START: Functions copied from engine.ts for display logic
-  function levenshteinDistance(a: string, b: string): number {
-    const matrix: number[][] = [];
-
-    for (let i = 0; i <= b.length; i++) {
-      matrix[i] = [i];
-    }
-
-    for (let j = 0; j <= a.length; j++) {
-      matrix[0][j] = j;
-    }
-
-    for (let i = 1; i <= b.length; i++) {
-      for (let j = 1; j <= a.length; j++) {
-        if (b.charAt(i - 1) === a.charAt(j - 1)) {
-          matrix[i][j] = matrix[i - 1][j - 1];
-        } else {
-          matrix[i][j] = Math.min(
-            matrix[i - 1][j - 1] + 1,
-            matrix[i][j - 1] + 1,
-            matrix[i - 1][j] + 1
-          );
-        }
-      }
-    }
-
-    return matrix[b.length][a.length];
-  }
-
-  function isSimilar(guess: string | undefined, correct: string[] | string, threshold: number = 0.6): boolean {
-    if (!guess) return false;
-    
-    const g = guess.toLowerCase().trim();
-    const candidates = Array.isArray(correct) 
-      ? correct.map(s => s.toLowerCase().trim())
-      : [correct.toString().toLowerCase().trim()];
-
-    if (candidates.some(c => g === c)) return true;
-
-    const best = Math.max(...candidates.map(c => {
-      const distance = levenshteinDistance(g, c);
-      const maxLength = Math.max(g.length, c.length);
-      if (maxLength === 0) return 1; // Both are empty strings
-      return 1 - distance / maxLength;
-    }));
-
-    return best >= threshold;
-  }
-
-  function isWinningGuess(guess: any, correct: any): boolean {
-    if (!guess || !correct) return false;
-    return (
-      guess.song !== undefined && isSimilar(guess.song, correct.answerNames, 0.6) &&
-      guess.artist !== undefined && isSimilar(guess.artist, correct.artists, 0.6)
-    );
-  }
-  // END: Functions copied from engine.ts
 
   let myPlayerId: string | null = null; // To store the UID of the current user's player
 
@@ -221,6 +163,7 @@
       mode: "CLASSIC",
       readyPlayers: [],
       skipVotes: [],
+      roundWinner: null,
       players: [],
       turnIndex: 0,
       currentSong: null,
@@ -228,6 +171,7 @@
       circleGuesses: {},
           preFireGuesses: {}, // Initialize preFireGuesses
       answerRevealed: false,
+      winner: null,
       guessStartTime: null,
       guessTimeLimit: 30, // 30 seconds for guessing
       songSelections: [], 
@@ -261,23 +205,23 @@
     }));
 
     // helper to figure out whose turn it is to guess
-    function getActiveGuesserId(): string | null {
-      if (game.phase === "SONG_PLAYING") {
-        return game.players[game.turnIndex]?.uid?.toString() ?? null;
+    function getActiveGuesserId(gameState: Game): string | null {
+      if (gameState.phase === "SONG_PLAYING" && gameState.players[gameState.turnIndex]) {
+        return gameState.players[gameState.turnIndex].uid;
       }
 
-      if (game.phase === "ORIGINAL_GUESS_TURN") {
-        return game.players[game.turnIndex]?.uid?.toString() ?? null;
+      if (gameState.phase === "ORIGINAL_GUESS_TURN" && gameState.players[gameState.turnIndex]) {
+        return gameState.players[gameState.turnIndex].uid;
       }
 
-      if (game.phase === "CIRCLE_GUESS_TURN" && game.circleGuessIndex !== undefined) {
-        return game.players[game.circleGuessIndex]?.uid?.toString() ?? null;
+      if (gameState.phase === "CIRCLE_GUESS_TURN" && gameState.circleGuessIndex !== undefined && gameState.players[gameState.circleGuessIndex]) {
+        return gameState.players[gameState.circleGuessIndex].uid;
       }
 
       return null;
     }
 
-    function renderPlayerGuess(player, guess, correctSong, isWinner) {
+    function renderPlayerGuess(player: Player, guess: Guess, correctSong: Song, isWinner: boolean) {
         if (!guess || Object.keys(guess).length === 0 || guess.isPass) {
             return `<div class="player-guess-result"><strong>${player.name}</strong> passed.</div>`;
         }
@@ -286,12 +230,21 @@
         const artistCorrect = guess.artist && isSimilar(guess.artist, correctSong.artists);
         const albumCorrect = guess.album && isSimilar(guess.album, correctSong.albumAnswers);
         const yearDiff = guess.year !== undefined ? Math.abs(guess.year - correctSong.year) : Infinity;
-        const yearCorrect = yearDiff === 0;
+
+        let yearClass = 'incorrect';
+        if (yearDiff === 0) {
+            yearClass = 'correct';
+        } else if (yearDiff <= 2) {
+            yearClass = 'year-close-2';
+        } else if (yearDiff <= 5) {
+            yearClass = 'year-close-5';
+        } else if (yearDiff <= 10) {
+            yearClass = 'year-close-10';
+        }
 
         const songClass = songCorrect ? 'correct' : 'incorrect';
         const artistClass = artistCorrect ? 'correct' : 'incorrect';
         const albumClass = albumCorrect ? 'correct' : 'incorrect';
-        const yearClass = yearCorrect ? 'correct' : 'incorrect';
 
         const winnerBanner = isWinner ? `<span class="winner-banner">🏆 WINNER!</span>` : '';
 
@@ -345,10 +298,10 @@
         maybeLoadNewSongIntoGame();
       }
 
-      handleEngineEffects(prevGame, game, player);
+      handleEngineEffects(prevGame, game, player); // prevGame is correct here
 
       // Clear previous countdown if phase changes
-      if (game.phase !== prevGame.phase && guessCountdownInterval) {
+      if (game.phase !== prevGame.phase && guessCountdownInterval) { // Use prevGame here
         clearInterval(guessCountdownInterval);
         guessCountdownInterval = null;
         guessTimerEl.style.display = 'none';
@@ -360,7 +313,7 @@
       }
 
       // Update UI
-      renderGame();
+      renderGame(prevGame);
 
       // Sync to Firebase if multiplayer (only if gameCode exists)
       if (gameCode && isFirebaseLoaded) {
@@ -372,7 +325,7 @@
         }
         // Ensure players are stored in Firebase as an object keyed by uid, and handle potential undefined values
         const playersObj: { [key: string]: any } = {}; // Explicitly type playersObj
-        gameToWrite.players.forEach((p: any) => playersObj[p.uid] = { ...p, uid: p.uid.toString() }); // Ensure uid is string
+        gameToWrite.players.forEach((p: any) => playersObj[p.uid] = { ...p });
         gameToWrite.players = playersObj; // Assign the object back
         set(gameRef, gameToWrite)
           .catch((err) => console.error("Failed to sync game to Firebase:", err));
@@ -432,13 +385,13 @@
         if (user) {
           currentUser = user;
           myPlayerId = user.uid; // Store the UID
-          console.log("Authenticated user UID:", myPlayerId); // No need to call maybeLoadSong here, onValue will handle initial state sync
-          renderGame();
+          console.log("Authenticated user UID:", myPlayerId);
+          renderGame(); // Initial render with current state
         } else {
           currentUser = null;
           myPlayerId = null;
           console.warn("No user authenticated. User might have signed out or session expired.");
-          renderGame();
+          renderGame(game);
         }
       });
     }
@@ -558,14 +511,20 @@
     }
 
     // Initialize effects
-    initEngineEffects(player, () => game, dispatchInternal); // Pass dispatchInternal
+    initEngineEffects(player, () => game, dispatchInternal, {
+      songInput,
+      artistInput,
+      yearInput,
+      albumInput,
+      submitGuessBtn
+    });
 
     // Firebase sync for multiplayer
     if (gameCode && !isSolo) {
       const gameRef = ref(realtimeDb, `games/${gameCode}`);
       
       onValue(gameRef, (snapshot) => {
-        const data = snapshot.val();
+        const data: Partial<Game> = snapshot.val();
         if (data) {
           isFirebaseLoaded = true;
           const prevGame = game;
@@ -574,8 +533,8 @@
           const playersArray = data.players
             ? Object.entries(data.players as Record<string, any>)
                 .filter(([, p]) => p != null)
-                .map(([uid, playerObj]) => ({
-                  uid: uid.toString(),
+                .map(([uid, playerObj]) => ({ // Firebase keys are always strings
+                  uid: uid,
                   ...playerObj
                 }))
             : [];
@@ -602,7 +561,7 @@
             phase: data.phase ?? "LOBBY",
             mode: data.mode ?? "CLASSIC",
             readyPlayers: data.readyPlayers || [],
-            skipVotes: data.skipVotes || [],
+            skipVotes: data.skipVotes ?? [],
             roundWinner: data.roundWinner || null,
             players: playersArray,
             turnIndex: data.turnIndex ?? 0,
@@ -613,8 +572,8 @@
             preFireGuesses: data.preFireGuesses || {}, // Ensure preFireGuesses is loaded from Firebase
             answerRevealed: data.answerRevealed ?? false,
             guessStartTime: data.guessStartTime ?? null,
-            guessTimeLimit: data.guessTimeLimit ?? 30, // Default to 30 seconds
-            winner: data.winner ?? undefined, // Default to 'All/All'
+            guessTimeLimit: data.guessTimeLimit ?? 30,
+            winner: data.winner ?? null,
             songSelections: data.songSelections || []
           };
 
@@ -637,8 +596,8 @@
             console.log("Players count changed from", prevGame.players.length, "to", playersArray.length);
           }
 
-          handleEngineEffects(prevGame, game, player);
-          renderGame();
+          handleEngineEffects(prevGame, game, player); // prevGame is correct here
+          renderGame(prevGame);
         } else {
           console.warn("Game data is null or undefined from Firebase.");
         }
@@ -708,7 +667,13 @@
     skipBtn.onclick = () => {
       // Race mode has its own skip logic
       if (game.mode === "RACE" && myPlayerId) {
-        dispatchInternal({ type: "VOTE_SKIP", playerId: myPlayerId });
+        if (isSolo) {
+          // In solo race mode, skipping ends the song and starts a grace period.
+          // This allows the CPU to still make its guess.
+          dispatchInternal({ type: "END_SONG" });
+        } else {
+          dispatchInternal({ type: "VOTE_SKIP", playerId: myPlayerId });
+        }
         return;
       }
 
@@ -723,7 +688,7 @@
     };
 
     playBtn.onclick = () => {
-      const activeId = getActiveGuesserId();
+      const activeId = getActiveGuesserId(game);
       const isMyTurn = myPlayerId === activeId;
 
       // In multiplayer classic, only the active guesser can play/pause.
@@ -781,8 +746,29 @@
       dispatchInternal({ type: "START_GAME" });
     });
 
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.repeat) {
+        // Check which phase-control button is visible and trigger it.
+        // The guess form has its own Enter handler on the inputs themselves.
+        const revealBtn = document.getElementById("reveal-btn") as HTMLButtonElement;
+        const resolveBtn = document.getElementById("resolve-btn") as HTMLButtonElement;
+        const playAgainBtn = document.getElementById("play-again-btn") as HTMLButtonElement;
+
+        if (getComputedStyle(resolveBtn).display !== 'none' && !resolveBtn.disabled) {
+          e.preventDefault();
+          resolveBtn.click();
+        } else if (getComputedStyle(revealBtn).display !== 'none' && !revealBtn.disabled) {
+          e.preventDefault();
+          revealBtn.click();
+        } else if (getComputedStyle(playAgainBtn).display !== 'none' && !playAgainBtn.disabled) {
+          e.preventDefault();
+          playAgainBtn.click();
+        }
+      }
+    });
+
     // Render game state to UI
-    function renderGame() {
+    function renderGame(prevGame: Game = game) {
       
       console.log("Rendering game. Current players in renderGame():", game.players);
 
@@ -792,32 +778,37 @@
       const resultsEl = document.getElementById("results");
       const mixerContainer = document.getElementById("song-mixer-container");
       const lobbyControls = document.getElementById("lobby-controls");
-      const revealBtn = document.getElementById("reveal-btn") as HTMLButtonElement;
+      const revealBtn = document.getElementById("reveal-btn") as HTMLButtonElement; // This was already defined globally, but re-defining locally is fine.
       const resolveBtn = document.getElementById("resolve-btn") as HTMLButtonElement;
-      const playAgainBtn = document.getElementById("play-again-btn") as HTMLButtonElement;
+      const playAgainBtn = document.getElementById("play-again-btn") as HTMLButtonElement; // This was already defined globally, but re-defining locally is fine.
 
-      const activeId = getActiveGuesserId();
+      const activeId = getActiveGuesserId(game);
+      const me = game.players.find(p => p.uid === myPlayerId);
+
+      // If the turn has just changed to the local player in a guessing phase, clear inputs.
+      const prevActiveId = getActiveGuesserId(prevGame);
+      if (
+        (game.phase === 'ORIGINAL_GUESS_TURN' || game.phase === 'CIRCLE_GUESS_TURN') && activeId === myPlayerId && prevActiveId !== myPlayerId
+      ) {
+          console.log("It's my turn to guess, clearing inputs.");
+          clearGuessInputs();
+      }
 
       // Auto-submit pre-fired guess if it is my turn
-      if ((game.phase === "ORIGINAL_GUESS_TURN" || game.phase === "CIRCLE_GUESS_TURN") && activeId === myPlayerId) {
+      if ((game.phase === "ORIGINAL_GUESS_TURN" || game.phase === "CIRCLE_GUESS_TURN") && activeId === myPlayerId && myPlayerId) {
         if (game.preFireGuesses[myPlayerId] !== undefined) {
           console.log("Auto-submitting pre-fired guess for", myPlayerId);
-          setTimeout(() => {
+          setTimeout(() => { // Use timeout to avoid dispatching during a render/reducer cycle
             dispatchInternal({
               type: "SUBMIT_GUESS",
-              playerId: myPlayerId!,
-              guesses: game.preFireGuesses[myPlayerId!]
+              playerId: myPlayerId,
+              guesses: game.preFireGuesses[myPlayerId]
             });
           }, 0);
         }
       }
 
       if (!statusEl || !playerListEl || !resultsEl) return;
-
-      // ADD THIS: Reset song flag when entering SONG_PLAYING phase
-      if (game.phase === "SONG_PLAYING" && songPlayedThisRound) {
-        songPlayedThisRound = false;
-      }
 
       // HIDE LOBBY CONTROLS WHEN GAME STARTS
       if (lobbyControls) {
@@ -913,34 +904,7 @@
       })
       .join("");
 
-      // Show/hide guess form based on phase.
-      const isGuessingPhase = game.phase === "ORIGINAL_GUESS_TURN" || game.phase === "CIRCLE_GUESS_TURN" || (game.phase === "SONG_PLAYING" && game.mode === "RACE");
-      
-      // Determine if the local player has already submitted a guess for this round.
-      // We check preFireGuesses (staged), originalGuesses (processed), and circleGuesses (processed).
-      const hasGuessed = myPlayerId && game.mode !== "RACE" && (
-        game.preFireGuesses[myPlayerId] !== undefined || 
-        game.originalGuesses[myPlayerId] !== undefined || 
-        game.circleGuesses[myPlayerId] !== undefined
-      );
-
-      const activePlayer = game.players.find(p => p.uid === activeId);
-      if (turnIndicator) {
-        if (game.mode === "RACE") {
-          turnIndicator.textContent = "🏎️ RACE MODE - Fastest guess wins!";
-        } else if (activePlayer) {
-          turnIndicator.textContent = `🎤 ${activePlayer.name}'s Turn`;
-        } else {
-          turnIndicator.textContent = "";
-        }
-      }
-
-      if (isGuessingPhase && myPlayerId && !hasGuessed) {
-        guessForm.style.display = "block";
-        updateSubmitButtonText();
-      } else {
-        guessForm.style.display = "none";
-      }
+      // THIS LOGIC HAS BEEN MOVED DOWN to after the player list render
 
       // Update and display guess timer
       const isRacePostSong = game.phase === "SONG_PLAYING" && game.mode === "RACE" && game.guessStartTime !== null;
@@ -1013,29 +977,119 @@
 
         resultsEl.innerHTML = resultsHTML;
       } else {
-        resultsEl.innerHTML = "";
+        resultsEl.innerHTML = '';
+        // This block will handle showing the original guess during circle turns
+        if ((game.phase === "CIRCLE_GUESS_TURN" || game.phase === "WAITING_TO_REVEAL") && game.currentSong) {
+            const originalGuesser = game.players[game.turnIndex];
+            if (originalGuesser && game.originalGuesses[originalGuesser.uid]) {
+                const originalGuess = game.originalGuesses[originalGuesser.uid];
+                const isWinner = isWinningGuess(originalGuess, game.currentSong);
+
+                // Show the original guesser's attempt in the results area
+                resultsEl.innerHTML = renderPlayerGuess(originalGuesser, originalGuess, game.currentSong, isWinner);
+            }
+        }
+      }
+
+      // Show/hide guess form based on phase.
+      let showGuessForm = false;
+      let enableGuessForm = false;
+
+      if (game.mode === "RACE") {
+        // In Race mode, the form is always available during the song for alive players.
+        if (game.phase === "SONG_PLAYING" && me?.alive) {
+          showGuessForm = true;
+          enableGuessForm = true;
+        }
+      } else { // CLASSIC mode
+        const isClassicGuessingPhase = game.phase === "ORIGINAL_GUESS_TURN" || game.phase === "CIRCLE_GUESS_TURN";
+        const hasGuessed = myPlayerId && (
+          game.preFireGuesses[myPlayerId] !== undefined ||
+          game.originalGuesses[myPlayerId] !== undefined ||
+          game.circleGuesses[myPlayerId] !== undefined
+        );
+        const isMyTurn = activeId === myPlayerId;
+        const isAITurn = isClassicGuessingPhase && activeId === 'AI_PLAYER';
+
+        if (isClassicGuessingPhase && (isMyTurn || isAITurn)) {
+            showGuessForm = true;
+            if (isMyTurn && !hasGuessed) {
+                enableGuessForm = true;
+            }
+        }
+      }
+
+      guessForm.style.display = showGuessForm ? "block" : "none";
+      songInput.disabled = !enableGuessForm;
+      artistInput.disabled = !enableGuessForm;
+      yearInput.disabled = !enableGuessForm;
+      albumInput.disabled = !enableGuessForm;
+      submitGuessBtn.disabled = !enableGuessForm;
+
+      if (enableGuessForm) {
+          updateSubmitButtonText();
+      } else if (showGuessForm) { // AI is thinking
+          [songInput, artistInput, yearInput, albumInput].forEach(el => el.placeholder = '...');
+      }
+
+      if (turnIndicator) {
+        const isAITurn = (game.mode === "CLASSIC") && ((game.phase === 'ORIGINAL_GUESS_TURN' && game.players[game.turnIndex]?.uid === 'AI_PLAYER') || (game.phase === 'CIRCLE_GUESS_TURN' && game.circleGuessIndex !== undefined && game.players[game.circleGuessIndex]?.uid === 'AI_PLAYER'));
+        if (isAITurn) {
+          const aiPlayer = game.players.find(p => p.uid === 'AI_PLAYER');
+          turnIndicator.innerHTML = `🤔 ${aiPlayer?.name || 'CPU'} is thinking...`;
+          turnIndicator.classList.add('thinking-animation');
+        } else {
+          turnIndicator.classList.remove('thinking-animation');
+          if (game.mode === "RACE") {
+            turnIndicator.textContent = "🏎️ RACE MODE - Fastest guess wins!";
+          } else if (activeId) {
+            const activePlayer = game.players.find(p => p.uid === activeId);
+            turnIndicator.textContent = `🎤 ${activePlayer?.name || ''}'s Turn`;
+          } else {
+            turnIndicator.textContent = "";
+          }
+        }
       }
 
       // Show game over screen
       if (game.phase === "GAME_OVER") {
         const winner = game.players.find(p => p.uid === game.winner);
-        
-        let raceWinnerText = "";
-        if (game.mode === "RACE" && game.roundWinner) {
-          const roundWinner = game.players.find(p => String(p.uid) === game.roundWinner);
-          if (roundWinner) {
-            raceWinnerText = `<h3 style="color: #42d67d;">🏎️ ${roundWinner.name} got the final answer!</h3>`;
+
+        let finalGuessHTML = "";
+        if (game.currentSong) {
+          if (game.mode === "RACE" && game.roundWinner) {
+            const roundWinnerPlayer = game.players.find(p => String(p.uid) === game.roundWinner);
+            const finalGuess = game.originalGuesses[game.roundWinner];
+            if (roundWinnerPlayer && finalGuess) {
+              finalGuessHTML = `<h3>Final Guess:</h3>` + renderPlayerGuess(roundWinnerPlayer, finalGuess, game.currentSong, true);
+            }
+          } else if (game.mode === "CLASSIC") {
+              const allGuesses = { ...game.originalGuesses, ...game.circleGuesses };
+              const playerIdsWhoGuessed = Object.keys(allGuesses);
+
+              if (playerIdsWhoGuessed.length > 0) {
+                  finalGuessHTML += `<h3>Final Round Guesses:</h3>`;
+                  game.players.forEach(p => {
+                      const guess = allGuesses[p.uid];
+                      if (guess) {
+                          const isWinner = isWinningGuess(guess, game.currentSong!);
+                          finalGuessHTML += renderPlayerGuess(p, guess, game.currentSong!, isWinner);
+                      }
+                  });
+              }
           }
         }
+
         let songInfo = "";
         if (game.currentSong) {
           songInfo = `
-            ${raceWinnerText}
             <h3>Final Answer:</h3>
             <p>Song: ${game.currentSong.displayName}</p>
             <p>Artist: ${game.currentSong.displayArtists}</p>
             <p>Year: ${game.currentSong.year}</p>
             <p>Album: ${game.currentSong.album}</p>
+            <hr style="border-color: #444; margin: 1rem 0;"/>
+            ${finalGuessHTML}
           `;
         }
         resultsEl.innerHTML = `
@@ -1066,8 +1120,6 @@
       }
 
       // Enable/disable music controls based on phase and active guesser
-      const me = game.players.find(p => p.uid === myPlayerId);
-
       const musicControls = document.getElementById("music-controls");
       if (musicControls) {
         musicControls.style.display = game.phase === "SONG_PLAYING" ? "block" : "none";
@@ -1083,23 +1135,23 @@
 
       const origGuesserId = game.players[game.turnIndex]?.uid;
       if (skipBtn) {
-        if (game.mode === "RACE") {
-          const alivePlayers = game.players.filter(p => p.alive).length;
-          const hasVoted = !!(myPlayerId && game.skipVotes?.includes(myPlayerId));
-          skipBtn.style.display = game.phase === "SONG_PLAYING" && myPlayerId && game.players.find(p => p.uid === myPlayerId)?.alive ? "inline-block" : "none";
-          skipBtn.textContent = hasVoted ? `Skip (${game.skipVotes?.length || 0}/${alivePlayers})` : "Vote Skip";
-          skipBtn.disabled = hasVoted;
+        const isRaceGracePeriod = game.mode === "RACE" && game.guessStartTime !== null;
+        if (game.mode === "RACE" && isSolo) {
+            // Show skip button only before the grace period starts
+            skipBtn.style.display = (game.phase === "SONG_PLAYING" && !isRaceGracePeriod) ? "inline-block" : "none";
+            skipBtn.textContent = "Skip Song";
+            skipBtn.disabled = false;
+        } else if (game.mode === "RACE" && !isSolo) {
+            const alivePlayers = game.players.filter(p => p.alive).length;
+            const hasVoted = !!(myPlayerId && game.skipVotes?.includes(myPlayerId));
+            skipBtn.style.display = game.phase === "SONG_PLAYING" && myPlayerId && game.players.find(p => p.uid === myPlayerId)?.alive ? "inline-block" : "none";
+            skipBtn.textContent = hasVoted ? `Skip (${game.skipVotes?.length || 0}/${alivePlayers})` : "Vote Skip";
+            skipBtn.disabled = hasVoted;
         } else { // Classic mode
-          // Show for the active guesser in multiplayer, or always for the player in solo.
-          const canControl = isSolo || origGuesserId === myPlayerId;
-          skipBtn.style.display = (
-            game.phase === "SONG_PLAYING" &&
-            game.currentSong &&
-            game.currentSong.hasBeenPlayed &&
-            canControl
-          ) ? "inline-block" : "none";
-          skipBtn.textContent = "Skip Song";
-          skipBtn.disabled = false;
+            const canControl = isSolo || origGuesserId === myPlayerId;
+            skipBtn.style.display = (game.phase === "SONG_PLAYING" && game.currentSong && game.currentSong.hasBeenPlayed && canControl) ? "inline-block" : "none";
+            skipBtn.textContent = "Skip Song";
+            skipBtn.disabled = false;
         }
 
       }
@@ -1115,7 +1167,7 @@
     }
 
     // Initial render
-    renderGame();
+    renderGame(game);
   });
 </script>
 
@@ -1145,6 +1197,18 @@
   }
   :global(.correct) {
     color: #42d67d; /* green */
+    font-weight: bold;
+  }
+  :global(.year-close-2) {
+    color: #a3ff75; /* light green */
+    font-weight: bold;
+  }
+  :global(.year-close-5) {
+    color: #ffff75; /* yellow */
+    font-weight: bold;
+  }
+  :global(.year-close-10) {
+    color: #ffc375; /* orange */
     font-weight: bold;
   }
   :global(.incorrect) {
@@ -1590,4 +1654,20 @@
     color: #00eaff;
     text-shadow: 0 0 10px rgba(0, 234, 255, 0.8);
   }
+  
+  .simulated-click {
+    transform: scale(0.95);
+    box-shadow: 0 0 5px rgba(0, 234, 255, 0.5);
+  }
+
+  .thinking-animation {
+    animation: pulse 1.5s infinite ease-in-out;
+  }
+
+  @keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+  }
+
 </style>

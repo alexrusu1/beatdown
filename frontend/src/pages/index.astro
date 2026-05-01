@@ -42,7 +42,6 @@ import Layout from '../layouts/Layout.astro';
 	import type { User } from "firebase/auth"
 
 	let currentUser: User | null = null;
-	let playerName: string = "";
 
 	onAuthStateChanged(auth, (user) => {
 		currentUser = user;
@@ -97,11 +96,6 @@ import Layout from '../layouts/Layout.astro';
         nameSection.style.display = "none";
         submitNameBtn.style.display = "none";
 
-        // Update playerName when input changes
-        playerNameInput.addEventListener("input", (e) => {
-            playerName = (e.target as HTMLInputElement).value.trim();
-        });
-
         // Add Enter key listeners
         playerNameInput.addEventListener("keydown", (e) => {
             if (e.key === "Enter") {
@@ -119,7 +113,7 @@ import Layout from '../layouts/Layout.astro';
 
         // state tracking for two-step flows
         let pendingCode = "";            // holds code when join flow started
-        let awaitingNameFor: "create" | "join" | "" = "";
+        let awaitingNameFor: "create" | "join" | "solo" | "" = "";
 
         function showNameInput() {
             // hide everything except name section and submit name button
@@ -187,6 +181,7 @@ import Layout from '../layouts/Layout.astro';
 
         // final submission after entering name
         submitNameBtn.addEventListener("click", async () => {
+            const playerName = playerNameInput.value.trim();
             if (!playerName) {
                 alert("Please enter your name");
                 return;
@@ -241,11 +236,20 @@ import Layout from '../layouts/Layout.astro';
 		// write full initial game state in one shot
 		const initialState = {
 			phase: "LOBBY",
+			mode: "CLASSIC",
+			difficulty: "MEDIUM",
 			turnIndex: 0,
 			currentSong: null,
 			originalGuesses: {},
 			circleGuesses: {},
+			preFireGuesses: {},
 			answerRevealed: false,
+			readyPlayers: [],
+			skipVotes: [],
+			roundWinner: null,
+			winner: null,
+			guessStartTime: null,
+			guessTimeLimit: 30,
 			players: {
 				[hostId]: {
 					name: name,
@@ -255,7 +259,8 @@ import Layout from '../layouts/Layout.astro';
 					alive: true
 				},
 			},
-			songSelections: []
+			songSelections: [],
+			isSolo: false,
 		};
 
 		await set(gameRef, initialState);

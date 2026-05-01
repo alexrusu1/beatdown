@@ -10251,7 +10251,8 @@
   {
     "displayName": "S.O.S.",
     "answerNames": [
-      "s.o.s."
+      "s.o.s.",
+      "sos"
     ],
     "answerName": "s.o.s.",
     "album": "The Family Business",
@@ -39662,57 +39663,6 @@
     ]
   },
   {
-    "displayName": "Poison",
-    "answerNames": [
-      "poison"
-    ],
-    "answerName": "poison",
-    "album": "Poison - Single",
-    "albumAnswers": [
-      "poison",
-      "poison single",
-      "Poison - Single"
-    ],
-    "albumAnswer": "poison single",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/15/c6/2e/15c62ef4-6290-1b87-7231-c80367330ad9/859717911228_cover.jpg/600x600bb.jpg",
-    "year": 2016,
-    "displayArtists": "Brent Faiyaz",
-    "artists": [
-      "brent faiyaz"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/fe/a0/5c/fea05c00-dc8e-f028-ef91-4b9ca5c7a11c/mzaf_8530557359020514415.plus.aac.p.m4a",
-    "categories": [
-      "R&B/Soul"
-    ]
-  },
-  {
-    "displayName": "Insecure (feat. Brent Faiyaz & Atu)",
-    "answerNames": [
-      "insecure",
-      "Insecure (feat. Brent Faiyaz & Atu)"
-    ],
-    "answerName": "insecure",
-    "album": "D.T.S.N.T. - EP",
-    "albumAnswers": [
-      "d.t.s.n.t.",
-      "d.t.s.n.t. ep",
-      "D.T.S.N.T. - EP"
-    ],
-    "albumAnswer": "d.t.s.n.t. ep",
-    "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/ba/9d/f2/ba9df25b-07b5-434d-55a8-b6877395454a/0617465748554.jpg/600x600bb.jpg",
-    "year": 2016,
-    "displayArtists": "Stwo",
-    "artists": [
-      "brent faiyaz",
-      "stwo",
-      "atu"
-    ],
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/6a/74/b7/6a74b70a-2b79-d52c-dbdd-a3d97aa2a130/mzaf_7276414110735650001.plus.aac.p.m4a",
-    "categories": [
-      "Electronic"
-    ]
-  },
-  {
     "displayName": "Let Me Know",
     "answerNames": [
       "let me know"
@@ -44870,7 +44820,7 @@
     ],
     "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/82/59/69/8259692b-c195-229f-9e8b-59c8fe9f4e8b/mzaf_3223877004764686167.plus.aac.p.m4a",
     "categories": [
-      "Pop"
+      "R&B/Soul"
     ]
   },
   {
@@ -50748,14 +50698,16 @@
   {
     "displayName": "On & On",
     "answerNames": [
-      "on & on"
+      "on & on",
+      "on and on"
     ],
     "answerName": "on & on",
     "album": "On & On - Single",
     "albumAnswers": [
       "on & on",
       "on & on single",
-      "On & On - Single"
+      "On & On - Single",
+      "on and on"
     ],
     "albumAnswer": "on & on single",
     "albumCover": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f5/80/6e/f5806eb6-2539-0255-9996-ef7d3ad630c4/8721465219043.png/600x600bb.jpg",
