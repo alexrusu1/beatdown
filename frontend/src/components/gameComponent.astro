@@ -665,13 +665,22 @@
     });
 
     skipBtn.onclick = () => {
+      const isRaceGracePeriod = game.mode === "RACE" && game.guessStartTime !== null;
       // Race mode has its own skip logic
       if (game.mode === "RACE" && myPlayerId) {
         if (isSolo) {
-          // In solo race mode, skipping ends the song and starts a grace period.
-          // This allows the CPU to still make its guess.
-          dispatchInternal({ type: "END_SONG" });
+          if (isRaceGracePeriod) {
+            // This handles clicking "Skip Wait", though it should no longer be visible.
+            dispatchInternal({ type: "GUESS_TIMEOUT" });
+          } else {
+            // This handles clicking "Skip Song". It should start the grace period
+            // and then almost immediately time it out, giving the AI a moment to guess.
+            dispatchInternal({ type: "END_SONG" });
+            setTimeout(() => dispatchInternal({ type: "GUESS_TIMEOUT" }), 200);
+          }
         } else {
+          // In multiplayer, vote-skip is always the action.
+          // The reducer handles skipping the song or the grace period.
           dispatchInternal({ type: "VOTE_SKIP", playerId: myPlayerId });
         }
         return;
@@ -720,6 +729,12 @@
 
       // Clear all input fields after submitting
       clearGuessInputs();
+
+      // In Race mode, refocus the song input so the player can guess again quickly.
+      if (game.mode === "RACE" && game.phase === "SONG_PLAYING") {
+        // Use a small timeout to ensure focus happens after any re-render
+        setTimeout(() => songInput.focus(), 0);
+      }
     };
 
     // PHASE PROGRESSION BUTTONS
@@ -748,6 +763,12 @@
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && !e.repeat) {
+        const target = e.target as HTMLElement;
+        // Do not trigger if the user is typing in an input field.
+        if (target && target.tagName.toUpperCase() === 'INPUT') {
+            return;
+        }
+
         // Check which phase-control button is visible and trigger it.
         // The guess form has its own Enter handler on the inputs themselves.
         const revealBtn = document.getElementById("reveal-btn") as HTMLButtonElement;
@@ -1020,11 +1041,18 @@
       }
 
       guessForm.style.display = showGuessForm ? "block" : "none";
+
+      const wasDisabled = songInput.disabled; // Check state before we change it
       songInput.disabled = !enableGuessForm;
       artistInput.disabled = !enableGuessForm;
       yearInput.disabled = !enableGuessForm;
       albumInput.disabled = !enableGuessForm;
       submitGuessBtn.disabled = !enableGuessForm;
+
+      // If the form was just enabled, focus the first input
+      if (wasDisabled && enableGuessForm) {
+        setTimeout(() => songInput.focus(), 50);
+      }
 
       if (enableGuessForm) {
           updateSubmitButtonText();
@@ -1137,15 +1165,16 @@
       if (skipBtn) {
         const isRaceGracePeriod = game.mode === "RACE" && game.guessStartTime !== null;
         if (game.mode === "RACE" && isSolo) {
-            // Show skip button only before the grace period starts
+            // Show skip button only before the grace period starts.
             skipBtn.style.display = (game.phase === "SONG_PLAYING" && !isRaceGracePeriod) ? "inline-block" : "none";
             skipBtn.textContent = "Skip Song";
             skipBtn.disabled = false;
         } else if (game.mode === "RACE" && !isSolo) {
             const alivePlayers = game.players.filter(p => p.alive).length;
             const hasVoted = !!(myPlayerId && game.skipVotes?.includes(myPlayerId));
+            const buttonText = isRaceGracePeriod ? "Vote Skip Wait" : "Vote Skip";
             skipBtn.style.display = game.phase === "SONG_PLAYING" && myPlayerId && game.players.find(p => p.uid === myPlayerId)?.alive ? "inline-block" : "none";
-            skipBtn.textContent = hasVoted ? `Skip (${game.skipVotes?.length || 0}/${alivePlayers})` : "Vote Skip";
+            skipBtn.textContent = hasVoted ? `Skipping... (${game.skipVotes?.length || 0}/${alivePlayers})` : buttonText;
             skipBtn.disabled = hasVoted;
         } else { // Classic mode
             const canControl = isSolo || origGuesserId === myPlayerId;

@@ -124,6 +124,10 @@ import Layout from '../layouts/Layout.astro';
 
             submitNameBtn.style.display = "flex";
             playerNameInput.focus();
+            const savedName = localStorage.getItem('playerName');
+            if (savedName) {
+                playerNameInput.value = savedName;
+            }
         }
 
         soloBtn.addEventListener("click", async () => {

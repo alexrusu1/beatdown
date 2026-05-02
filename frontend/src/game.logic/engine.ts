@@ -324,12 +324,15 @@ export function gameReducer(game: Game, action: GameAction): Game {
       }
       if (action.type === "END_SONG") {
         if (game.mode === "RACE") {
-          // If the song ends, start a 20-second grace period for final guesses
+          // If the song ends, start a grace period. In solo mode, this is very
+          // short, as the UI will fast-forward it after the AI gets a chance to guess.
+          const guessTimeLimit = 20;
           return { 
             ...game, 
             guessStartTime: Date.now(), 
-            guessTimeLimit: 20,
-            currentSong: game.currentSong ? { ...game.currentSong, isPlaying: false } : null
+            guessTimeLimit: guessTimeLimit,
+            currentSong: game.currentSong ? { ...game.currentSong, isPlaying: false } : null,
+            skipVotes: [] // Reset votes for the grace period
           };
         }
         return {
